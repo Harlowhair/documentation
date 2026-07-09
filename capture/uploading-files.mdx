@@ -1,36 +1,31 @@
 ---
-title: "Uploading Files to Cortex: Formats, Limits, and Duplicates"
-sidebarTitle: "Upload Files"
-description: "Drag in a document and Cortex extracts the text straight away. Supported formats, size limits, and duplicate handling explained in one place."
+title: "Uploading files"
+description: "Drag in a document and let Cortex read it"
 ---
 
-The simplest way to put something in a brain is to upload it. Open the brain's **Inbox**, drag a file in, or use the upload button. It arrives as a new inbox item with its text already extracted, ready to be filed into a page.
+The simplest way to put something in a brain is to upload it. Open the brain's **Inbox** and drag a file in, or use the upload button. It arrives as a new inbox item with its text extracted, ready to be filed.
 
-## Supported formats
+## What you can upload
 
-| Format | What Cortex does with it |
+| Format | What happens |
 |---|---|
-| Markdown and plain text | Used as-is, no conversion needed. |
-| PDF | Text is extracted, including across multi-page documents. |
+| Markdown and plain text | Used as-is. |
+| PDF | The text is extracted, including from multi-page documents. |
 | Word (`.docx`) | The document's text is extracted. |
-| PowerPoint (`.pptx`) | Text from every slide is extracted. |
+| PowerPoint (`.pptx`) | The text from every slide is extracted. |
 
-Each file can be up to 50 MB. Whatever you upload, Cortex pulls out the words so the content becomes searchable and your agent can recall it.
+Each file can be up to 50 MB. Whatever you upload, Cortex pulls out the words so the content becomes searchable, even a slide deck becomes text your agent can recall.
 
 ## What extraction does, and does not, do
 
-Extraction reads the words on the page. It does not interpret images, charts, or the visual layout of a document. If a crucial fact exists only as a picture, a diagram, or a chart label, it will not be captured. For anything text-based, extraction is reliable.
-
-<Note>
-If your document relies heavily on visuals to convey information, consider adding a plain-text summary to the file before uploading, or creating a brief note page in the brain that describes what the visual shows.
-</Note>
+Extraction reads the words. It does not try to interpret images, charts, or the visual layout of a page. If a crucial fact only exists as a picture, it will not be captured. For anything text-based, extraction is reliable.
 
 ## Duplicates
 
-Upload the same file twice and Cortex recognises it rather than creating a second copy. It points you back to the item you already have. This means you can re-upload without worrying about clutter.
+Upload the same file twice and Cortex recognises it rather than making a second copy. It points you back to the item you already have. This means you can re-upload without worrying about clutter. [More on how duplicates are handled.](/capture/the-inbox#duplicates-take-care-of-themselves)
 
-<CardGroup cols={1}>
-  <Card title="The Inbox" icon="inbox" href="/capture/the-inbox">
-    Understand how inbox items are staged, filed, and traced back to their source.
-  </Card>
-</CardGroup>
+## Try it
+
+1. Open a brain's Inbox and drag in a PDF.
+2. Open the new item and read the extracted text.
+3. Drag the same PDF in again and watch Cortex point you back to the first item.

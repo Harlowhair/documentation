@@ -1,40 +1,20 @@
 ---
-title: "Webhooks, Scripts, and Other Ways to Capture to Cortex"
-sidebarTitle: "Other Sources"
-description: "Use webhooks or direct API calls to push content from any tool or script into a brain, and see what built-in connectors are on the roadmap."
+title: "Other sources"
+description: "Connecting other tools, and what's coming"
 ---
 
-Files, meetings, and agent conversations cover most of what people put into Cortex. For anything else, there are two more routes available today, plus more coming.
+Files, meetings and agent conversations cover most of what people put into Cortex. For anything else, there are two more routes.
 
 ## Push from any tool with a webhook
 
-Any tool that can send a web request when something happens can push content into a brain. You create a source on the brain, Cortex gives you a secure address and a signing secret, and the tool sends new items to that address.
+Any tool that can send a web request when something happens can push content into a brain. You create a source on the brain, Cortex gives you a secure address and a secret, and the tool sends new items to that address. This is how you would wire up, say, a form tool or an automation platform to feed a brain.
 
-This is how you would wire up a form tool, an automation platform, or any service that supports outgoing webhooks. When something new arrives at the address, Cortex treats it as an inbox item and files it from there like anything else.
-
-<Tip>
-Good candidates for the webhook route include form builders that fire on submission, project management tools that can notify on task completion, and platforms like Zapier or Make that sit between many services.
-</Tip>
-
-This is a more technical setup than the rest of Cortex, so the full details live in the reference section.
+This is a more technical setup than the rest of Cortex, so it lives in the reference section. See [receiving webhooks](/reference/webhooks) for the details.
 
 ## Push from your own scripts
 
-If you write your own automations, you can post directly to the Cortex API using a [service credential](/connect/service-credentials). This is exactly the same route that agent-conversation capture uses, so if you have already set that up, the pattern will be familiar.
+If you write your own automations, you can post directly to the Cortex API using a [service credential](/connect/service-credentials). This is the same route the agent-conversation capture uses.
 
 ## On the roadmap
 
-More ready-made connectors are planned so popular tools work with a click rather than a webhook. For now, if a tool is not covered by a built-in source, the webhook route can connect it today.
-
-<Warning>
-Webhook sources expose a public address tied to a brain. Keep the signing secret private. If a secret is compromised, delete the source and create a new one to rotate it.
-</Warning>
-
-<CardGroup cols={2}>
-  <Card title="Receiving Webhooks" icon="webhook" href="/reference/webhooks">
-    Full reference for setting up and securing a webhook source.
-  </Card>
-  <Card title="Service Credentials" icon="key" href="/connect/service-credentials">
-    Create the credentials your scripts need to post to the Cortex API.
-  </Card>
-</CardGroup>
+More ready-made connectors are planned, so that popular tools work with a click rather than a webhook. For now, if a tool is not covered by a built-in source, the webhook route connects it today.

@@ -1,34 +1,30 @@
 ---
-title: "Connecting One Agent to Multiple Cortex Brains Safely"
-sidebarTitle: "Multiple Brains"
-description: "Add your personal brain and a team brain to the same agent as separate connections, and understand why a confused agent can never leak private content."
+title: "Using multiple brains"
+description: "Connecting one agent to several brains, safely"
 ---
 
-You can connect the same agent to more than one brain: your personal brain and a team brain, say, or several project brains. You do it by adding each brain as its own connection, so the agent ends up with several Cortex connections side by side, each named for its brain. The filing cabinet analogy holds: the agent has a key ring, but each key still opens exactly one cabinet.
+You can connect the same agent to more than one brain: your personal brain plus a team brain, say, or several project brains. You do it by adding each brain as its own connection, so the agent ends up with several Cortex connections side by side, each named for its brain.
 
 ## What it looks like
 
-In your agent, each brain is a separate connection with its own name. In Claude Code, for example, you might have entries called `cortex-personal` and `cortex-team`. When you ask the agent to search or file something, it chooses which connection to use in the same way it would choose between any two tools.
+In your agent, each brain is a separate connection with its own name. In Claude Code, for example, you might have connections called `cortex-personal` and `cortex-team`. When you ask the agent to search or file, it chooses which connection to use, the same way it would choose between any two tools.
 
-Naming your connections clearly -- include the brain name in the label -- makes this reliable. The agent, and you, can tell at a glance which brain each connection reaches.
+Naming your connections clearly (include the brain name) makes this reliable: the agent, and you, can tell at a glance which brain each one reaches.
 
 ## Will my agent get confused?
 
-Occasionally an agent may reach for the wrong brain, search the team brain when you meant the personal one, and come back with "I didn't find anything". That is a miss, and you simply point it at the right one.
+Occasionally an agent may reach for the wrong brain, search the team brain when you meant the personal one, and come back with "I didn't find anything". That is a miss, and you just point it at the right one.
 
-Here is the part that matters: **a wrong choice can never leak private information.** Because each connection key physically reaches only its own brain, the worst a confused agent can do is look in the wrong place or file something into the wrong brain among the ones you have connected. The key to your personal brain cannot write to a shared brain. There is no reasoning slip that can turn a private note into a shared one.
+Here is the part that matters: **a wrong choice can never leak private information.** Because each connection's key physically reaches only its own brain, the worst a confused agent can do is look in the wrong place or file into the wrong brain among the ones you connected. The key to your personal brain cannot write to a shared brain, full stop. There is no reasoning slip that can turn a private note into a shared one.
 
 ## Keeping context manageable
 
-Each connection adds a small amount to what your agent has to keep in mind. In practice this is a non-issue for the handful of brains an agent actually needs: your personal brain plus one or two projects you are actively working in. Connect the brains a given agent needs for the work in front of it, rather than every brain you own, and you will not notice any overhead.
+Each connection adds a little to what your agent has to keep in mind. In practice this is a non-issue for the handful of brains an agent actually needs, your personal brain plus the one or two projects you are working in. Connect the brains a given agent needs for the work in front of it, rather than every brain you have, and you will not notice the overhead.
 
-If you find yourself wanting one agent to reach across many brains at once, that is a signal to think about structure. Often a single well-organised shared brain serves better than many small, narrow ones.
+If you find yourself wanting one agent to reach across many brains at once, that is a sign to think about structure: often a single well-organised shared brain serves better than many small ones.
 
-<CardGroup cols={2}>
-  <Card title="How Connections Work" icon="circle-info" href="/connect/how-connections-work">
-    Why each key reaches exactly one brain and what that means for privacy.
-  </Card>
-  <Card title="Shared Brains" icon="users" href="/brains/shared-brains">
-    Organising knowledge across a team in one place.
-  </Card>
-</CardGroup>
+## Try it
+
+1. Connect your agent to your personal brain and one shared brain, naming each connection clearly.
+2. Ask it to search "my personal brain" for something, then "the team brain" for something else.
+3. Notice it uses the matching connection each time, and that neither can see the other's contents.

@@ -1,38 +1,26 @@
 ---
-title: "Connect Any MCP-Capable Client to Your Cortex Brain"
-sidebarTitle: "Other Clients"
-description: "Cortex uses the open Model Context Protocol, so Cursor and any other MCP-capable tool can connect to a brain using the same URL and approval flow."
+title: "Other MCP clients"
+description: "Connect Cursor, or anything that speaks MCP"
 ---
 
-Cortex connects over the Model Context Protocol (MCP), an open standard for giving AI tools access to external systems. Any MCP-capable client can connect to a Cortex brain -- not just the ones with their own dedicated guide. If your tool can add a remote MCP server by URL, the steps below apply to it.
+Cortex connects over the Model Context Protocol (MCP), an open standard for giving AI tools access to external systems. Any MCP-capable client can connect to a Cortex brain, not just the ones with their own guide.
 
 ## The general shape
 
-Every Cortex connection works the same way, regardless of which client you are using:
+Every Cortex connection works the same way:
 
-1. **The endpoint** is your brain's URL, `https://api.oncortex.ai/mcp/your-brain`, shown on the brain's Connect page under the generic tab. It uses the standard streamable HTTP transport.
-2. **Sign-in is automatic.** Cortex advertises how to authenticate using standard MCP discovery, so any client with sign-in support will send you to Cortex to approve the connection, then connect itself. There are no API keys to paste for interactive use.
-3. **One connection reaches one brain.** As with every Cortex connection, add a separate connection for each brain you want the client to use.
+1. **The endpoint** is your brain's URL, `https://api.oncortex.ai/mcp/your-brain`, shown on the brain's **Connect** page under the generic tab. It uses the standard streamable HTTP transport.
+2. **Sign-in is automatic.** Cortex advertises how to authenticate using standard MCP discovery, so a client with sign-in support will send you to Cortex to approve, then connect itself. There are no API keys to paste for interactive use.
+3. **One connection reaches one brain.** As everywhere in Cortex, add a separate connection per brain.
 
 ## Cursor
 
-Cursor supports MCP servers in its settings. Add a new MCP server using the Cortex connection URL from the brain's Connect page. When Cursor first uses it, approve the connection in the browser. After that, Cursor can search and file into that brain during any session.
+Cursor supports MCP servers in its settings. Add a new MCP server using the Cortex connection URL from the brain's Connect page. When Cursor first uses it, approve the connection in the browser. After that, Cursor can search and file into that brain.
 
 ## Anything else
 
-For any other MCP-capable client, the recipe is the same: give it your brain's connection URL, let it walk you through the browser approval, and you are connected.
-
-If your client cannot complete the browser sign-in step (for example, an automated script or a server with no human present), use a service credential instead. A service credential is a static key you create yourself and paste directly into the automation.
+For any other MCP client, the recipe is the same: give it the connection URL, let it walk you through the browser approval, and you are connected. If your client cannot do the browser sign-in step (for example an automated script or a server with no human present), use a [service credential](/connect/service-credentials) instead.
 
 ## Compatibility
 
-MCP client support is moving quickly. The reliable test is simple: if your tool can add a remote or custom MCP connector by URL and supports browser sign-in, it works with Cortex. If it can only use static keys, connect it as an automation with a service credential.
-
-<CardGroup cols={2}>
-  <Card title="Service Credentials" icon="key" href="/connect/service-credentials">
-    Static keys for scripts and automations that cannot sign in through a browser.
-  </Card>
-  <Card title="How Connections Work" icon="circle-info" href="/connect/how-connections-work">
-    The rules every connection follows, regardless of client.
-  </Card>
-</CardGroup>
+MCP client support is moving quickly. The reliable test is simple: if your tool can add a remote or custom MCP connector by URL and supports sign-in, it works with Cortex. If it can only use static keys, connect it as an automation with a service credential.

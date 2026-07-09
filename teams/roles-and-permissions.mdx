@@ -1,59 +1,29 @@
 ---
-title: "Brain Roles and Permissions in Cortex: A Complete Guide"
-sidebarTitle: "Roles & Permissions"
-description: "Access in Cortex is granted per Brain, not per workspace. Here is exactly what each role can do and how agent connections inherit those limits."
+title: "Roles and permissions"
+description: "Who can do what, in plain words"
 ---
 
-Access in Cortex is granted per Brain. Being a member of a workspace does not automatically give you access to any of its shared Brains. Instead, you are added to each Brain individually with a role that defines precisely what you can do there. The librarian only lets you into the sections you have been given a pass for.
+Access in Cortex is granted per brain. Being in a workspace does not give you access to its shared brains automatically; you are added to each brain with a role that says what you can do there.
 
 ## Brain roles
 
-| Role | What you can do |
+| Role | Can do |
 |---|---|
-| **Read** | Browse Pages, search the Brain, and read the Inbox. Cannot change anything. |
-| **Write** | Everything Read can do, plus add items to the Inbox, file items, and create or edit Pages. |
-| **Admin** | Everything Write can do, plus manage the Brain's members, Connections, and settings. |
-| **Owner** | Everything Admin can do, plus change the Brain's filing mode and delete the Brain entirely. Every Brain has exactly one Owner. |
-
-<Note>
-  You can hold different roles on different Brains. Being an Admin on a project Brain does not affect your role on any other Brain.
-</Note>
+| **Read** | Browse pages, search, and read the inbox. Cannot change anything. |
+| **Write** | Everything Read can do, plus add to the inbox, file items, and create or edit pages. |
+| **Admin** | Everything Write can do, plus manage the brain's members, connections and settings. |
+| **Owner** | Everything Admin can do, plus change the brain's filing mode and delete the brain. Every brain has an Owner. |
 
 ## The questions people actually ask
 
-<AccordionGroup>
-  <Accordion title="Can a Reader's agent write to the Brain?">
-    No. An agent Connection can never do more than the person who made it. If you connect an agent while you hold a Read role on a Brain, that agent gets read-only access. Promoting yourself to Write later does not automatically upgrade existing Connections: you would need to reconnect or update the Connection separately.
-  </Accordion>
+**Can a Reader's agent write to the brain?** No. An agent connection can never do more than the person who made it. A Reader connecting an agent grants read-only access.
 
-  <Accordion title="Can a Writer delete Pages?">
-    A Writer can create and edit Pages, but edits keep a full version history, so nothing is ever truly lost. Deleting Pages and managing the Brain itself (including its members and settings) is an Admin and Owner responsibility.
-  </Accordion>
+**Can a Writer delete pages?** A Writer can create and edit pages, and edits keep full [version history](/filing/pages-and-structure#nothing-is-lost-to-an-edit) so nothing is truly lost. Managing the brain itself, including its members and settings, is an Admin and Owner responsibility.
 
-  <Accordion title="Who can change how much gets filed automatically?">
-    The Brain's Owner sets its filing mode. Only the Owner can move a Brain between Propose, Review, and Automatic. This keeps one person clearly accountable for how the shared filing cabinet organises itself.
-  </Accordion>
+**Who can change how much gets filed automatically?** The brain's Owner sets its [filing mode](/filing/auto-ingest).
 
-  <Accordion title="Can anyone see my personal Brain?">
-    No one can see your personal Brain, ever, regardless of any role they hold anywhere in Cortex. Personal Brains have no members and cannot be shared. This is not a permission setting: it is built into how Cortex works at a structural level.
-  </Accordion>
-</AccordionGroup>
+**Can anyone see my personal brain?** No one, ever, regardless of their role anywhere. [Personal brains](/brains/your-personal-brain) are outside this system entirely: they have no members and cannot be shared.
 
 ## Connections carry a role too
 
-When you connect an agent to a Brain, that Connection is granted a role, shown clearly on the approval screen before you confirm. A Connection can never be granted a role higher than your own access on that Brain.
-
-You can revoke any single Connection at any time without affecting your Brain membership or any of your other agent Connections. Each Connection is independent.
-
-<Warning>
-  If you are removed from a Brain, any Connections you made to that Brain stop working immediately. The Connection inherits your access: if your access is gone, so is the Connection's.
-</Warning>
-
-<CardGroup cols={2}>
-  <Card title="Workspaces" icon="building" href="/teams/workspaces">
-    Understand the workspace layer that sits above individual Brain membership.
-  </Card>
-  <Card title="How Connections Work" icon="plug" href="/connect/how-connections-work">
-    Learn how agent Connections are approved, scoped, and revoked.
-  </Card>
-</CardGroup>
+When you connect an agent to a brain, the connection is granted a role as well, shown on the approval screen. A connection can never exceed your own access, and you can revoke any single connection without affecting your membership or your other agents. [More on connections.](/connect/how-connections-work)
