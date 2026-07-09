@@ -1,0 +1,51 @@
+---
+title: "Connect Claude to a Cortex Brain for Persistent Memory"
+sidebarTitle: "Claude"
+description: "Add a Cortex brain as a custom connector in claude.ai or the Claude desktop app, then recall and save knowledge in any conversation."
+---
+
+Connecting Claude to a Cortex brain lets you ask it to remember and recall things across every conversation. You ask a question, it searches your brain and answers with what it finds. You ask it to save something, it files a page using the same skills as everything else, so your brain stays consistently organised. This works in Claude on the web at claude.ai and in the Claude desktop app.
+
+## What you need
+
+- A Cortex account with at least one brain (you always have your personal brain).
+- Claude on a plan that supports custom connectors.
+
+<Steps>
+  <Step title="Copy your brain's connection URL">
+    In Cortex, open the brain you want to connect and go to its **Connect** page. Under the connection options, choose the **claude.ai** tab and copy the URL. It looks like `https://api.oncortex.ai/mcp/your-brain`.
+
+    The URL ends in your brain's name, because it reaches that brain and only that brain.
+  </Step>
+
+  <Step title="Add it as a custom connector in Claude">
+    In Claude, go to **Settings → Connectors → Add custom connector** and paste the URL. Give it a recognisable name such as "Cortex - Personal" so you can tell it apart if you connect more than one brain later.
+  </Step>
+
+  <Step title="Approve the connection">
+    Claude sends you to Cortex to approve. The approval screen names the brain and the access level you are granting. Confirm, and you are returned to Claude with the connection live.
+
+    This is the moment the key is cut. It reaches this one brain, at the access level shown, and nothing else.
+  </Step>
+
+  <Step title="Test it">
+    Ask Claude something like *"Using my Cortex connection, what do you know about me?"* or *"Search my brain for anything about last week's meeting."* Claude will search the brain and answer with what it finds.
+  </Step>
+</Steps>
+
+## Using it day to day
+
+Once connected, you can ask Claude to both recall and remember:
+
+- **Recall:** "What did we decide about pricing?" or "Find my notes on the Acme account."
+- **Remember:** "Save this summary to my brain" or "File these notes as a page about onboarding."
+
+When Claude files something, it follows the same [skills](/core-concepts#skill) everything else uses, so its filing stays consistent with the rest of your brain.
+
+## Managing the connection
+
+The connection appears under **Connected Agents** on the brain's Connect page. To disconnect, revoke it there, or remove the connector in Claude's settings. Revoking on the Cortex side takes effect immediately, regardless of what Claude's settings show.
+
+## Connecting more than one brain
+
+Add each brain as its own connector, with its own URL and its own approval step. Claude will then have several Cortex connections, each reaching exactly one brain. See [using multiple brains](/connect/multiple-brains) for how Claude chooses between them, and why a mix-up can never leak private content.

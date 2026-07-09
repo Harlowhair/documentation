@@ -1,0 +1,51 @@
+---
+title: "How Cortex Connections Work: One Agent, One Brain Key"
+sidebarTitle: "How Connections Work"
+description: "Connecting an AI agent to a Cortex brain gives it a scoped, revocable key that can only ever open that one brain. Here is how it works."
+---
+
+Connecting an AI agent to Cortex is how your agent gains a memory. Once connected, it can search a brain, read its pages, and file new things into it, all in the course of a normal conversation. Think of it as handing your agent a key to one specific filing cabinet -- the librarian knows exactly which drawer to open, and which ones to leave alone.
+
+The single most important rule is this: **a connection links one agent to one brain, and it can only ever reach that one brain.** Not "one at a time by default", not "unless you change a setting". The key is cut for one cabinet, and it opens nothing else.
+
+```mermaid
+flowchart LR
+    A1[Claude] -->|approved key| B1[(Personal brain)]
+    A2[Claude Code] -->|approved key| B2[(Team brain)]
+    A1 -.->|cannot reach| B2
+    A2 -.->|cannot reach| B1
+```
+
+## Approving a connection
+
+When you connect an agent, Cortex shows you an approval screen before anything is granted. It names two things in plain sight:
+
+- **Which brain** the agent is asking to reach.
+- **What it will be allowed to do** there -- its access level (read, or read and write).
+
+You confirm, and the agent receives a key scoped to exactly that brain at exactly that access level. It never receives a master key, and it can never widen its own access. If an agent only asked to reach one brain, that is all its key will ever open.
+
+## Why one brain per connection
+
+It would be simpler to hand an agent one connection and let it choose a brain per request. Cortex deliberately does not work that way, because that would put the privacy boundary in the agent's hands: a single slip in the agent's reasoning could write your private notes into a shared brain.
+
+Instead the boundary is physical. Each connection carries a key that reaches one brain, so the worst an agent can do by getting confused is look in the wrong place. It cannot leak private content into a shared brain, because the key for your personal brain simply cannot write anywhere else. See [using multiple brains](/connect/multiple-brains) for how to connect one agent to several brains safely.
+
+## Taking access back
+
+Every connection is listed on the brain's Connect page under **Connected Agents**, and each one can be revoked individually. Revoking a connection destroys exactly that key and nothing else: your other agents keep working, and the revoked agent immediately loses all access to that brain.
+
+<CardGroup cols={2}>
+  <Card title="Connect Claude" icon="comment" href="/connect/claude">
+    claude.ai and Claude Desktop.
+  </Card>
+  <Card title="Connect Claude Code" icon="terminal" href="/connect/claude-code">
+    The command-line agent.
+  </Card>
+  <Card title="Connect ChatGPT" icon="robot" href="/connect/chatgpt">
+    Custom connectors in ChatGPT.
+  </Card>
+  <Card title="Other MCP Clients" icon="plug" href="/connect/other-clients">
+    Cursor and anything MCP-capable.
+  </Card>
+</CardGroup>

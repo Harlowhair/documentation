@@ -1,0 +1,65 @@
+---
+title: "Connect Claude Code to a Cortex Brain for Project Memory"
+sidebarTitle: "Claude Code"
+description: "Give Anthropic's command-line agent a searchable brain so every coding session builds on what previous sessions learned and recorded."
+---
+
+Claude Code is Anthropic's command-line agent. Connecting it to a Cortex brain means it can search your knowledge and file new findings as it works, so what one coding session learns is there for the next. Rather than re-explaining your architecture, conventions, or past decisions at the start of every session, you simply ask Claude Code to check your brain first.
+
+## What you need
+
+- A Cortex account with at least one brain.
+- Claude Code installed and working in a project.
+
+<Steps>
+  <Step title="Get the connection config">
+    In Cortex, open the brain you want to connect and go to its **Connect** page. Choose the **Claude Code** tab. It shows a JSON block with your brain's URL already filled in:
+
+    ```json
+    {
+      "mcpServers": {
+        "cortex": {
+          "type": "http",
+          "url": "https://api.oncortex.ai/mcp/your-brain"
+        }
+      }
+    }
+    ```
+
+    Copy the block.
+  </Step>
+
+  <Step title="Add it to your project">
+    Paste the block into a `.mcp.json` file in the root of your project, merging it in if the file already exists. Claude Code reads this file and offers the connection the next time it starts in that project.
+
+    Prefer a one-liner? From the project directory, run:
+
+    ```bash
+    claude mcp add --transport http cortex https://api.oncortex.ai/mcp/your-brain
+    ```
+
+    This writes the same entry for you.
+  </Step>
+
+  <Step title="Approve the connection">
+    The first time Claude Code uses the connection, it opens your browser for approval. The Cortex approval screen names the brain and the access level. Confirm, and Claude Code is connected.
+  </Step>
+
+  <Step title="Use it">
+    Ask Claude Code to draw on the brain during your session:
+
+    - *"Search my Cortex brain for how we handle authentication."*
+    - *"File a summary of what we changed today as a page in my brain."*
+    - *"What decisions have we recorded about this project?"*
+  </Step>
+</Steps>
+
+## A memory that keeps itself
+
+The most useful pattern is to have Claude Code record its own work as it goes, so your brain fills up without you copying anything by hand. At the end of a session it can write a short page covering what it built, what it decided, and what is still open. The next session searches that page before starting.
+
+See [capturing agent conversations](/capture/agent-conversations) for how to set that up with a project hook.
+
+## Managing the connection
+
+The connection appears under **Connected Agents** on the brain's Connect page and can be revoked there at any time. To connect a second brain, add another entry to `.mcp.json` with that brain's URL; each connection reaches exactly one brain.

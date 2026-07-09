@@ -1,0 +1,123 @@
+---
+title: "REST API reference for pushing content into Cortex"
+sidebarTitle: "REST API"
+description: "Push pages and files into any brain from your own scripts using the Cortex REST API, the same surface automatic capture and webhooks use underneath."
+---
+
+The Cortex REST API gives you a direct, scriptable route for sending content into a brain from your own code. It is a small, focused surface: its primary job is pushing items into an inbox, managing their status, and archiving them when you are done. If you want an outside tool to send content to Cortex rather than calling this API yourself, use a [webhook source](/reference/webhooks) instead.
+
+<Info>
+  This is a technical reference for developers. If you want to connect an AI tool to a brain, you do not need the API at all. Use a [connection](/connect/how-connections-work) instead, which requires no code.
+</Info>
+
+## Base URL and authentication
+
+All endpoints sit under the base URL below.
+
+```text
+https://api.oncortex.ai/api/v1
+```
+
+Authenticate every request with a service credential as a bearer token:
+
+```bash
+Authorization: Bearer ck_your_key_here
+```
+
+A credential is scoped to one brain and one access level. Endpoints that write content require a read-and-write credential. You can create and manage credentials from the [service credentials](/connect/service-credentials) page.
+
+## Push to your default brain
+
+The quickest way to capture something is to post to the default inbox. Cortex routes the item to the brain the credential is scoped to (for a personal credential, that is your personal brain).
+
+```bash
+curl https://api.oncortex.ai/api/v1/inbox \
+  -H "Authorization: Bearer ck_your_key_here" \
+  -H "Content-Type: application/json" \
+  -d '{"filename": "note.md", "content": "The text to capture", "externalId": "unique-id-123"}'
+```
+
+<Tip>
+  Set `externalId` to a stable value per item. If you re-send the same item, Cortex recognises the duplicate and does not create a second inbox entry.
+</Tip>
+
+<ParamField body="filename" type="string" required>
+  The name to give the item in the inbox, including its file extension (for example `note.md`).
+</ParamField>
+
+<ParamField body="content" type="string" required>
+  The text content to capture.
+</ParamField>
+
+<ParamField body="externalId" type="string">
+  A stable identifier you control. Cortex uses it to deduplicate repeated submissions of the same item.
+</ParamField>
+
+## Work with a specific brain's inbox
+
+Use these endpoints when you need to target a particular brain by ID rather than relying on the credential's default.
+
+| Action | Request |
+|---|---|
+| List inbox items | `GET /api/v1/brains/{brainId}/inbox` (optionally `?status=`) |
+| Get one item | `GET /api/v1/brains/{brainId}/inbox/{itemId}` |
+| Upload an item | `POST /api/v1/brains/{brainId}/inbox` |
+| Update an item's status | `PUT /api/v1/brains/{brainId}/inbox/{itemId}/status` |
+| Archive an item | `POST /api/v1/brains/{brainId}/inbox/{itemId}/archive` |
+
+Uploads accept either a JSON body or multipart form data for binary files, up to 50 MB per item.
+
+**JSON body fields for uploads:**
+
+<ParamField body="filename" type="string" required>
+  The name for the inbox item.
+</ParamField>
+
+<ParamField body="content" type="string" required>
+  The text content to store.
+</ParamField>
+
+<ParamField body="externalId" type="string">
+  Optional stable ID for deduplication.
+</ParamField>
+
+**Example: upload text to a named brain's inbox:**
+
+```bash
+curl https://api.oncortex.ai/api/v1/brains/{brainId}/inbox \
+  -H "Authorization: Bearer ck_your_key_here" \
+  -H "Content-Type: application/json" \
+  -d '{"filename": "report.md", "content": "..."}'
+```
+
+**Response fields:**
+
+<ResponseField name="id" type="string">
+  The unique identifier assigned to the new inbox item.
+</ResponseField>
+
+<ResponseField name="brainId" type="string">
+  The ID of the brain the item was placed into.
+</ResponseField>
+
+<ResponseField name="filename" type="string">
+  The filename you supplied at upload.
+</ResponseField>
+
+<ResponseField name="status" type="string">
+  The current status of the item (for example `pending` or `filed`).
+</ResponseField>
+
+<ResponseField name="externalId" type="string">
+  The external ID you provided, if any.
+</ResponseField>
+
+## Receiving from third-party tools
+
+If you want an outside tool to push content into Cortex rather than calling this API from your own code, use the [webhook route](/reference/webhooks). Webhooks have their own authentication model designed for tool-to-tool delivery.
+
+<CardGroup>
+  <Card title="Service credentials" icon="key" href="/connect/service-credentials">
+    Create and manage the credentials you use to authenticate API requests.
+  </Card>
+</CardGroup>

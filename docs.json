@@ -1,0 +1,117 @@
+{
+  "$schema": "https://mintlify.com/docs.json",
+  "theme": "willow",
+  "name": "Cortex",
+  "description": "A private, searchable memory that you and your AI agents build together.",
+  "colors": {
+    "primary": "#0c8b99",
+    "light": "#14a6b4",
+    "dark": "#0c8b99"
+  },
+  "favicon": "/favicon.svg",
+  "logo": {
+    "light": "/logo/light.svg",
+    "dark": "/logo/dark.svg"
+  },
+  "navbar": {
+    "primary": {
+      "type": "button",
+      "label": "Open Cortex",
+      "href": "https://app.oncortex.ai"
+    }
+  },
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Documentation",
+        "groups": [
+          {
+            "group": "Get Started",
+            "pages": ["index", "quickstart", "core-concepts"]
+          },
+          {
+            "group": "Brains",
+            "pages": [
+              "brains/what-is-a-brain",
+              "brains/your-personal-brain",
+              "brains/shared-brains",
+              "brains/templates",
+              "brains/promoting"
+            ]
+          },
+          {
+            "group": "Capturing Information",
+            "pages": [
+              "capture/the-inbox",
+              "capture/uploading-files",
+              "capture/meetings-granola",
+              "capture/agent-conversations",
+              "capture/other-sources"
+            ]
+          },
+          {
+            "group": "Filing & Recall",
+            "pages": [
+              "filing/skills",
+              "filing/auto-ingest",
+              "filing/review-queue",
+              "filing/pages-and-structure",
+              "filing/search-and-recall"
+            ]
+          },
+          {
+            "group": "Connecting Your AI",
+            "pages": [
+              "connect/how-connections-work",
+              "connect/claude",
+              "connect/claude-code",
+              "connect/chatgpt",
+              "connect/other-clients",
+              "connect/multiple-brains",
+              "connect/service-credentials"
+            ]
+          },
+          {
+            "group": "Teams",
+            "pages": [
+              "teams/workspaces",
+              "teams/roles-and-permissions",
+              "teams/team-patterns"
+            ]
+          },
+          {
+            "group": "Account",
+            "pages": [
+              "account/signin-and-mfa",
+              "account/data-and-privacy"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Reference",
+        "groups": [
+          {
+            "group": "API & Integrations",
+            "pages": [
+              "reference/api",
+              "reference/webhooks"
+            ]
+          },
+          {
+            "group": "Resources",
+            "pages": [
+              "faq",
+              "changelog"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "footer": {
+    "socials": {
+      "website": "https://app.oncortex.ai"
+    }
+  }
+}

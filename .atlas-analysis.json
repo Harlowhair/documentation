@@ -1,0 +1,123 @@
+{
+  "projectType": "saas",
+  "projectName": "Cortex",
+  "projectDescription": "Cortex is a private, searchable memory for you and your AI agents — everything you capture is filed and made instantly recallable through any connected AI tool.",
+  "theme": "willow",
+  "primaryColor": "#0c8b99",
+  "lightColor": "#14a6b4",
+  "darkColor": "#0c8b99",
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Documentation",
+        "groups": [
+          {
+            "group": "Get Started",
+            "pages": ["index", "quickstart", "core-concepts"]
+          },
+          {
+            "group": "Brains",
+            "pages": [
+              "brains/what-is-a-brain",
+              "brains/your-personal-brain",
+              "brains/shared-brains",
+              "brains/templates",
+              "brains/promoting"
+            ]
+          },
+          {
+            "group": "Capturing Information",
+            "pages": [
+              "capture/the-inbox",
+              "capture/uploading-files",
+              "capture/meetings-granola",
+              "capture/agent-conversations",
+              "capture/other-sources"
+            ]
+          },
+          {
+            "group": "Filing & Recall",
+            "pages": [
+              "filing/skills",
+              "filing/auto-ingest",
+              "filing/review-queue",
+              "filing/pages-and-structure",
+              "filing/search-and-recall"
+            ]
+          },
+          {
+            "group": "Connecting Your AI",
+            "pages": [
+              "connect/how-connections-work",
+              "connect/claude",
+              "connect/claude-code",
+              "connect/chatgpt",
+              "connect/other-clients",
+              "connect/multiple-brains",
+              "connect/service-credentials"
+            ]
+          },
+          {
+            "group": "Teams",
+            "pages": [
+              "teams/workspaces",
+              "teams/roles-and-permissions",
+              "teams/team-patterns"
+            ]
+          },
+          {
+            "group": "Account",
+            "pages": [
+              "account/signin-and-mfa",
+              "account/data-and-privacy"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Reference",
+        "groups": [
+          {
+            "group": "API & Integrations",
+            "pages": [
+              "reference/api",
+              "reference/webhooks"
+            ]
+          },
+          {
+            "group": "Resources",
+            "pages": [
+              "faq",
+              "changelog"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "keyFeatures": [
+    "Private personal brain that can never be shared, by design",
+    "Shared team brains with role-based access (Read / Write / Admin / Owner)",
+    "Universal inbox — every capture lands there first, nothing files behind your back",
+    "Automatic, Propose, and Off filing modes per brain",
+    "Semantic search — find things by meaning, not just keywords",
+    "MCP-based connections to Claude, Claude Code, ChatGPT, Cursor, and any MCP client",
+    "Built-in filing skills for meetings, documents, conversations, and promoting to shared brains",
+    "Granola integration for automatic meeting note capture",
+    "Review queue for human oversight of uncertain filings",
+    "Service credentials for unattended scripts and automations",
+    "Webhook ingestion from third-party tools with HMAC guard rules",
+    "Full version history — no edit ever loses content"
+  ],
+  "publicApiSurface": [
+    "POST https://api.oncortex.ai/api/v1/inbox — push to default brain inbox",
+    "GET https://api.oncortex.ai/api/v1/brains/{brainId}/inbox — list inbox items",
+    "GET https://api.oncortex.ai/api/v1/brains/{brainId}/inbox/{itemId} — get one item",
+    "POST https://api.oncortex.ai/api/v1/brains/{brainId}/inbox — upload item to brain",
+    "PUT https://api.oncortex.ai/api/v1/brains/{brainId}/inbox/{itemId}/status — update item status",
+    "POST https://api.oncortex.ai/api/v1/brains/{brainId}/inbox/{itemId}/archive — archive item",
+    "POST https://api.oncortex.ai/api/ingest/{brainId} — webhook ingestion endpoint",
+    "MCP endpoint: https://api.oncortex.ai/mcp/{brainId} — streamable HTTP MCP server per brain",
+    "Service credentials (ck_ bearer tokens) — scoped read or read-write keys for automation"
+  ]
+}

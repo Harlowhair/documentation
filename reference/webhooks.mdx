@@ -1,0 +1,73 @@
+---
+title: "Webhook sources: let outside tools push into a brain"
+sidebarTitle: "Webhooks"
+description: "Configure a webhook source so any tool that can send an HTTP request delivers content straight into a brain's inbox, with authentication and guard rules."
+---
+
+A webhook source gives any tool that can send an HTTP request a secure address it can use to push content into a brain. You create the source in Cortex, Cortex gives you a URL and a secret, and the sending tool posts new items to that address. Cortex authenticates each delivery, checks it against any guard rules you have set, and drops accepted items into the inbox.
+
+<Info>
+  This is a technical reference for developers wiring up external tools. For a non-technical walkthrough of connecting outside sources, see [other sources](/capture/other-sources).
+</Info>
+
+## Setting up
+
+Create a webhook source in the brain's ingest sources settings. As part of setup, choose how deliveries will be authenticated:
+
+- **Shared secret:** Cortex gives you a secret. The sending tool includes it in a header on every request. This is the simplest option to configure.
+- **Signature (HMAC):** the sending tool signs each request body with a shared key. This is more secure, and the right choice if the tool supports it.
+
+Once created, Cortex gives you the ingest URL and the secret or signing key to paste into the sending tool.
+
+## Sending a delivery
+
+Post content as the raw request body to the brain's ingest endpoint.
+
+```text
+POST https://api.oncortex.ai/api/ingest/{brainId}
+```
+
+Include the appropriate headers depending on your authentication mode:
+
+| Header | Purpose |
+|---|---|
+| `X-Ingest-Secret` | The shared secret (shared-secret mode). |
+| `X-Cortex-Signature` | `sha256=<hex>`, the HMAC of the raw request body (signature mode). |
+| `X-Filename` | A name for the item as it will appear in the inbox. |
+| `X-Ingest-External-Id` | Optional. A stable ID per item to prevent duplicates on re-delivery. |
+| `X-Ingest-Senders` | Optional. Comma-separated sender addresses, used by guard rules. |
+
+**Example delivery using shared-secret authentication:**
+
+```bash
+curl https://api.oncortex.ai/api/ingest/{brainId} \
+  -H "X-Ingest-Secret: your-source-secret" \
+  -H "X-Filename: form-submission.md" \
+  -H "X-Ingest-External-Id: submission-4821" \
+  --data-binary @payload.txt
+```
+
+## Guard rules
+
+A webhook source can carry guard rules that control which deliveries Cortex accepts. A common rule is to allow only items from specific sender addresses, supplied in the `X-Ingest-Senders` header. Any delivery that fails a guard rule is rejected outright and never stored in the brain.
+
+<Note>
+  Guard rules are the right way to protect a public-facing webhook. Without them, anyone who discovers the URL could push arbitrary content into your brain's inbox.
+</Note>
+
+## Idempotency
+
+Set `X-Ingest-External-Id` to a stable, unique value for each item you send. If the same ID arrives more than once, Cortex recognises the repeat and does not create a second inbox item. This makes it safe to use with tools that automatically retry failed deliveries.
+
+<Warning>
+  If you omit `X-Ingest-External-Id`, every delivery creates a new inbox item, even if the content is identical. Set it whenever the sending tool may retry.
+</Warning>
+
+<CardGroup>
+  <Card title="Other sources" icon="plug" href="/capture/other-sources">
+    A non-technical guide to connecting outside sources to a brain.
+  </Card>
+  <Card title="REST API" icon="code" href="/reference/api">
+    Use the REST API to push content from your own scripts rather than from a third-party tool.
+  </Card>
+</CardGroup>

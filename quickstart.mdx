@@ -1,0 +1,91 @@
+---
+title: "Get Started with Cortex: Account, Brain, and Agent"
+sidebarTitle: "Quick Start"
+description: "Create your account, file your first item in your personal brain, and connect an AI agent that can search and recall your knowledge."
+---
+
+Cortex is a private, searchable memory for you and your AI agents. This guide walks you through creating your account, capturing your first piece of knowledge in your Personal Brain, and connecting an agent so it can search and recall what you store, all in about ten minutes.
+
+<Steps>
+  <Step title="Create your account">
+    Go to [app.oncortex.ai](https://app.oncortex.ai) and register with your email address, or sign in with Google. If you register by email, confirm your address from the message we send you, then sign in and complete your profile: your name and a workspace name (your company name, or simply your own name works just fine).
+  </Step>
+
+  <Step title="Meet your Personal Brain">
+    Open **Brains** from the sidebar. You already have one, called **Personal**. It was created automatically when your account was, and it is private to you permanently: it cannot be shared and it cannot be deleted. Think of it as your own filing cabinet: everything you capture lands here unless you deliberately send it somewhere else.
+
+    <Info>
+      You can create or join additional shared brains later, but your Personal Brain is always your private default.
+    </Info>
+  </Step>
+
+  <Step title="Capture your first item">
+    Open your Personal Brain and select its **Inbox**. Drag in a file: meeting notes, a PDF, a Word document, anything with words in it. The item appears in the inbox straight away, with its text extracted and ready to file.
+
+    <Note>
+      Nothing goes straight into the brain. The inbox is the tray on top of the filing cabinet: every item waits there until it is filed.
+    </Note>
+  </Step>
+
+  <Step title="Watch it get filed">
+    Cortex reads each inbox item and decides how to handle it:
+
+    - **Straightforward items** are filed automatically. A Page is created in the right part of the brain, written in plain language, with a citation recording where the information came from.
+    - **Uncertain items** are parked in the review queue instead, with a suggested filing location and the reasoning behind it, waiting for your approval.
+
+    You can also file items yourself at any time, or ask your connected agent to do it.
+  </Step>
+
+  <Step title="Connect your agent">
+    Open your Personal Brain's **Connect** page. You will see a connection URL unique to this brain. Add it to your AI tool of choice:
+
+    <Tabs>
+      <Tab title="Claude (web or desktop)">
+        Add the URL as a connector inside Claude's settings and approve the connection when Cortex asks. The approval screen names the brain and the access level so you always know exactly what you are granting.
+      </Tab>
+      <Tab title="Claude Code">
+        Copy the one-line command shown on the Connect page, which looks like this:
+
+        ```bash
+        claude mcp add <your-connection-url>
+        ```
+
+        Run it in your terminal, then approve the connection in the browser window that opens.
+      </Tab>
+      <Tab title="Any MCP-compatible tool">
+        Paste the connection URL as a remote MCP server in your tool's settings. Any client that speaks the Model Context Protocol can connect this way.
+      </Tab>
+    </Tabs>
+
+    <Tip>
+      One connection reaches exactly one brain. If you want an agent to access a shared brain as well, you create a separate connection for that brain.
+    </Tip>
+  </Step>
+
+  <Step title="Ask your agent to remember">
+    In your agent, try a prompt such as:
+
+    ```text
+    Search my brain for what I uploaded earlier.
+    ```
+
+    or
+
+    ```text
+    What do you know about me so far?
+    ```
+
+    The agent searches your Personal Brain and replies with what it finds, citing the Pages it read. From this point on, anything you tell your agent to save, and anything you drop into the inbox, becomes part of what it can recall.
+  </Step>
+</Steps>
+
+## Where next
+
+<CardGroup cols={2}>
+  <Card title="Understand the five core concepts" icon="brain" href="/core-concepts">
+    Brain, Page, Inbox, Skill, Connection: every concept explained clearly in plain language.
+  </Card>
+  <Card title="The inbox in depth" icon="inbox" href="/capture/the-inbox">
+    Item statuses, the review queue, duplicate handling, and everything else the inbox does.
+  </Card>
+</CardGroup>
