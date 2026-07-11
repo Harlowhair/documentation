@@ -1,45 +1,107 @@
 ---
 title: "Capturing agent conversations"
-description: "Turn your AI conversations into memory automatically"
+description: "Turn your AI conversations into memory"
 ---
 
-The conversations you have with your AI agents are full of knowledge: decisions, reasoning, things you worked out together. Cortex can capture those conversations into your brain automatically, so your agent's memory builds itself as you work.
+The conversations you have with your AI agents are full of knowledge: decisions, reasoning, things you worked out together. There are two ways to keep them in your brain, an easy one that works today, and an automatic one for when you want it to happen without thinking.
 
-The idea is simple. When a conversation ends, a short summary of it is posted to your inbox, where it gets filed like anything else. You do not copy anything by hand; it just accumulates.
+## The easy way: just ask
 
-## The default destination
+At the end of a conversation, tell your connected agent to save it:
 
-There is a special inbox address that always lands in **your default brain**: for you, that is your personal brain. This is what makes automatic capture safe. Everything your agents record about your work arrives somewhere only you can see, and you decide later what, if anything, belongs in a shared brain.
+> *"Save a summary of what we worked out to my brain."*
 
-## Setting it up in Claude Code
+The agent writes a tidy page into your brain, following the [ingest skill](/filing/skills), the same as any other [thing you ask it to save](/capture/asking-your-agent). No setup, nothing to install. This is all most people need.
 
-Claude Code can run a command when a session ends. You point that command at your default inbox, using a [service credential](/connect/service-credentials) so it can post without a browser.
+It lands in your personal brain by default, so anything captured this way is private to you until you decide to [promote](/brains/promoting) it.
+
+## The automatic way: a session hook (advanced)
+
+If you would rather have every session captured without asking each time, Claude Code can do it for you with a **hook**: a small command it runs automatically when a session ends. Setting this up means creating a short script and editing a settings file, so it is a step up in effort. If you are comfortable with a terminal it takes a few minutes; if not, it is a good one to hand to a developer, or just use the easy way above.
 
 <Steps>
   <Step title="Create a service credential">
-    In your personal brain's service credentials, create a read-and-write credential labelled something like "claude-code-capture" and copy its `ck_` key.
+    In your personal brain's [service credentials](/connect/service-credentials), create a read-and-write credential labelled "claude-code-capture" and copy its `ck_` key. This lets the hook post to Cortex without a browser.
   </Step>
-  <Step title="Add a session hook">
-    In your Claude Code settings, add a hook that runs when a session ends and posts the transcript to your default inbox:
+
+  <Step title="Create the capture script">
+    Save this as `.claude/hooks/cortex-capture.sh` in your project. It reads the finished conversation and sends it to your default inbox:
 
     ```bash
+    #!/usr/bin/env bash
+    set -euo pipefail
+
+    # Claude Code sends details about the finished session on stdin.
+    input=$(cat)
+    transcript_path=$(echo "$input" | jq -r '.transcript_path')
+    session_id=$(echo "$input" | jq -r '.session_id')
+
+    # Build the request safely and post the transcript to Cortex.
+    body=$(jq -n \
+      --arg filename "claude-code-$session_id.jsonl" \
+      --arg externalId "$session_id" \
+      --rawfile content "$transcript_path" \
+      '{filename: $filename, content: $content, externalId: $externalId}')
+
     curl -s https://api.oncortex.ai/api/v1/inbox \
-      -H "Authorization: Bearer ck_your_key_here" \
+      -H "Authorization: Bearer $CORTEX_TOKEN" \
       -H "Content-Type: application/json" \
-      -d "{\"filename\": \"session-$(date +%Y%m%d-%H%M).md\", \"content\": $(jq -Rs . < transcript.md)}"
+      -d "$body" > /dev/null
     ```
 
-    The exact wiring depends on your setup, but the shape is always the same: when the session ends, send its summary to `/api/v1/inbox` with your credential.
+    Then make it runnable:
+
+    ```bash
+    chmod +x .claude/hooks/cortex-capture.sh
+    ```
+
+    (This uses `jq`, a small tool for handling JSON. If you do not have it, install it with `brew install jq` on a Mac or `sudo apt install jq` on Linux.)
   </Step>
+
+  <Step title="Store your credential">
+    Put the `ck_` key in `.claude/settings.local.json` so it stays out of any shared files:
+
+    ```json
+    {
+      "env": {
+        "CORTEX_TOKEN": "ck_your_key_here"
+      }
+    }
+    ```
+  </Step>
+
+  <Step title="Register the hook">
+    Add this to `.claude/settings.json`, which tells Claude Code to run the script when a session ends:
+
+    ```json
+    {
+      "hooks": {
+        "SessionEnd": [
+          {
+            "hooks": [
+              {
+                "type": "command",
+                "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/cortex-capture.sh"
+              }
+            ]
+          }
+        ]
+      }
+    }
+    ```
+
+    To capture sessions across every project rather than just this one, put the same hook in `~/.claude/settings.json` and use the script's full path.
+  </Step>
+
   <Step title="Let it run">
-    From now on, each session's summary lands in your personal inbox and is filed into your brain. Ask your next session *"what did we work on last time?"* and it can tell you.
+    From now on, each session's transcript lands in your personal inbox and is filed into your brain automatically. Ask your next session *"what did we work on last time?"* and it can tell you.
   </Step>
 </Steps>
 
 ## Other agents
 
-Any agent or tool that can run a command or call a web address when it finishes can do the same thing: post the conversation to `https://api.oncortex.ai/api/v1/inbox` with a service credential. The default-inbox address means you never have to name a brain; it always goes to your private one.
+Any tool that can run a command or call a web address when it finishes can capture the same way: post the conversation to `https://api.oncortex.ai/api/v1/inbox` with a [service credential](/connect/service-credentials). The default-inbox address means you never name a brain; it always goes to your private one.
 
 ## Keeping it tidy
 
-Captured conversations are filed by the [conversation skill](/filing/skills), which pulls out the substance and files it, rather than dumping raw transcripts. If two sessions capture the same thing, [duplicate handling](/capture/the-inbox#duplicates-take-care-of-themselves) keeps your brain from filling up with repeats.
+Captured conversations are filed by the [conversation skill](/filing/skills), which pulls out the substance rather than dumping raw transcripts. If two sessions capture the same thing, [duplicate handling](/capture/the-inbox#duplicates-take-care-of-themselves) stops your brain filling up with repeats.

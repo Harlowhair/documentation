@@ -38,6 +38,7 @@
       {
         "group": "How Information Gets In",
         "pages": [
+          "capture/asking-your-agent",
           "capture/the-inbox",
           "capture/uploading-files",
           "capture/meetings-granola",
