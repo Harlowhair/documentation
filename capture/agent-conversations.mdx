@@ -19,13 +19,25 @@ It lands in your personal brain by default, so anything captured this way is pri
 
 If you would rather have every session captured without asking each time, Claude Code can do it for you with a **hook**: a small command it runs automatically when a session ends. Setting this up means creating a short script and editing a settings file, so it is a step up in effort. If you are comfortable with a terminal it takes a few minutes; if not, it is a good one to hand to a developer, or just use the easy way above.
 
+First, the one step that is the same on every system:
+
 <Steps>
   <Step title="Create a service credential">
     In your personal brain's [service credentials](/connect/service-credentials), create a read-and-write credential labelled "claude-code-capture" and copy its `ck_` key. This lets the hook post to Cortex without a browser.
   </Step>
+</Steps>
 
-  <Step title="Create the capture script">
-    Save this as `.claude/hooks/cortex-capture.sh` in your project. It reads the finished conversation and sends it to your default inbox:
+Then follow the tab for your operating system. Each one creates a small script, stores your credential, and registers the hook.
+
+<Tabs>
+  <Tab title="macOS">
+    The script uses `curl` (already on macOS) and `jq`, a small JSON tool. Install `jq` once:
+
+    ```bash
+    brew install jq
+    ```
+
+    **1. Save this as `.claude/hooks/cortex-capture.sh`:**
 
     ```bash
     #!/usr/bin/env bash
@@ -36,7 +48,7 @@ If you would rather have every session captured without asking each time, Claude
     transcript_path=$(echo "$input" | jq -r '.transcript_path')
     session_id=$(echo "$input" | jq -r '.session_id')
 
-    # Build the request safely and post the transcript to Cortex.
+    # Build the request safely and post the transcript to your default inbox.
     body=$(jq -n \
       --arg filename "claude-code-$session_id.jsonl" \
       --arg externalId "$session_id" \
@@ -49,29 +61,21 @@ If you would rather have every session captured without asking each time, Claude
       -d "$body" > /dev/null
     ```
 
-    Then make it runnable:
+    Make it runnable:
 
     ```bash
     chmod +x .claude/hooks/cortex-capture.sh
     ```
 
-    (This uses `jq`, a small tool for handling JSON. If you do not have it, install it with `brew install jq` on a Mac or `sudo apt install jq` on Linux.)
-  </Step>
-
-  <Step title="Store your credential">
-    Put the `ck_` key in `.claude/settings.local.json` so it stays out of any shared files:
+    **2. Store your credential** in `.claude/settings.local.json` (kept out of shared files):
 
     ```json
     {
-      "env": {
-        "CORTEX_TOKEN": "ck_your_key_here"
-      }
+      "env": { "CORTEX_TOKEN": "ck_your_key_here" }
     }
     ```
-  </Step>
 
-  <Step title="Register the hook">
-    Add this to `.claude/settings.json`, which tells Claude Code to run the script when a session ends:
+    **3. Register the hook** in `.claude/settings.json`:
 
     ```json
     {
@@ -89,14 +93,133 @@ If you would rather have every session captured without asking each time, Claude
       }
     }
     ```
+  </Tab>
 
-    To capture sessions across every project rather than just this one, put the same hook in `~/.claude/settings.json` and use the script's full path.
-  </Step>
+  <Tab title="Linux">
+    The script uses `curl` and `jq`, a small JSON tool. Install `jq` once with your package manager:
 
-  <Step title="Let it run">
-    From now on, each session's transcript lands in your personal inbox and is filed into your brain automatically. Ask your next session *"what did we work on last time?"* and it can tell you.
-  </Step>
-</Steps>
+    ```bash
+    sudo apt install jq    # Debian / Ubuntu
+    sudo dnf install jq    # Fedora
+    ```
+
+    **1. Save this as `.claude/hooks/cortex-capture.sh`:**
+
+    ```bash
+    #!/usr/bin/env bash
+    set -euo pipefail
+
+    # Claude Code sends details about the finished session on stdin.
+    input=$(cat)
+    transcript_path=$(echo "$input" | jq -r '.transcript_path')
+    session_id=$(echo "$input" | jq -r '.session_id')
+
+    # Build the request safely and post the transcript to your default inbox.
+    body=$(jq -n \
+      --arg filename "claude-code-$session_id.jsonl" \
+      --arg externalId "$session_id" \
+      --rawfile content "$transcript_path" \
+      '{filename: $filename, content: $content, externalId: $externalId}')
+
+    curl -s https://api.oncortex.ai/api/v1/inbox \
+      -H "Authorization: Bearer $CORTEX_TOKEN" \
+      -H "Content-Type: application/json" \
+      -d "$body" > /dev/null
+    ```
+
+    Make it runnable:
+
+    ```bash
+    chmod +x .claude/hooks/cortex-capture.sh
+    ```
+
+    **2. Store your credential** in `.claude/settings.local.json` (kept out of shared files):
+
+    ```json
+    {
+      "env": { "CORTEX_TOKEN": "ck_your_key_here" }
+    }
+    ```
+
+    **3. Register the hook** in `.claude/settings.json`:
+
+    ```json
+    {
+      "hooks": {
+        "SessionEnd": [
+          {
+            "hooks": [
+              {
+                "type": "command",
+                "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/cortex-capture.sh"
+              }
+            ]
+          }
+        ]
+      }
+    }
+    ```
+  </Tab>
+
+  <Tab title="Windows">
+    Windows uses PowerShell, which is built in, so there is nothing extra to install. Claude Code runs the hook without any change to your execution policy.
+
+    **1. Save this as `.claude/hooks/cortex-capture.ps1`:**
+
+    ```powershell
+    # Claude Code sends details about the finished session on stdin.
+    $data = [Console]::In.ReadToEnd() | ConvertFrom-Json
+    $transcript = Get-Content -Path $data.transcript_path -Raw
+
+    # Build the request and post the transcript to your default inbox.
+    $body = @{
+      filename   = "claude-code-$($data.session_id).jsonl"
+      content    = $transcript
+      externalId = $data.session_id
+    } | ConvertTo-Json -Depth 10
+
+    Invoke-RestMethod -Uri "https://api.oncortex.ai/api/v1/inbox" `
+      -Method Post `
+      -Headers @{ Authorization = "Bearer $env:CORTEX_TOKEN" } `
+      -ContentType "application/json" `
+      -Body $body | Out-Null
+    ```
+
+    **2. Store your credential** in `.claude/settings.local.json` (kept out of shared files):
+
+    ```json
+    {
+      "env": { "CORTEX_TOKEN": "ck_your_key_here" }
+    }
+    ```
+
+    **3. Register the hook** in `.claude/settings.json`. The `"shell": "powershell"` line is what tells Claude Code to run the `.ps1` script:
+
+    ```json
+    {
+      "hooks": {
+        "SessionEnd": [
+          {
+            "hooks": [
+              {
+                "type": "command",
+                "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/cortex-capture.ps1",
+                "shell": "powershell"
+              }
+            ]
+          }
+        ]
+      }
+    }
+    ```
+
+    Use forward slashes in the path even on Windows; Claude Code converts them. Needs PowerShell 5.1 or newer, which ships with Windows 10 and 11.
+  </Tab>
+</Tabs>
+
+To capture sessions across every project rather than just the current one, put the same hook in your user-level `~/.claude/settings.json` and use the script's full path.
+
+From then on, each session's transcript lands in your personal inbox and is filed into your brain automatically. Ask your next session *"what did we work on last time?"* and it can tell you.
 
 ## Other agents
 
