@@ -1,4 +1,20 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
   <rect width="32" height="32" rx="7" fill="#0c8b99"/>
-  <text x="16" y="23" text-anchor="middle" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="20" font-weight="700" fill="#ffffff">C</text>
+  <g fill="#ffffff">
+    <ellipse cx="16" cy="15.5" rx="7.5" ry="8.5"/>
+    <circle cx="11.8" cy="9.8" r="4.4"/>
+    <circle cx="20.2" cy="9.8" r="4.4"/>
+    <circle cx="9" cy="15" r="4"/>
+    <circle cx="23" cy="15" r="4"/>
+    <circle cx="10.8" cy="20.2" r="4.2"/>
+    <circle cx="21.2" cy="20.2" r="4.2"/>
+    <circle cx="16" cy="22.2" r="4.4"/>
+  </g>
+  <g fill="none" stroke="#0c8b99" stroke-width="1.5" stroke-linecap="round">
+    <path d="M16 6.5 Q15.2 11 16 16 Q16.8 21 16 25.6"/>
+    <path d="M15.6 10.5 Q13 10.8 11.6 9.4"/>
+    <path d="M15.5 16.8 Q12.4 17.4 10.6 15.8"/>
+    <path d="M16.5 13 Q19.4 13.4 21 12"/>
+    <path d="M16.4 20.3 Q18.8 20.8 20 19.6"/>
+  </g>
 </svg>
