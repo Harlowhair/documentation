@@ -1,22 +1,22 @@
 ---
 title: "Connect ChatGPT"
-description: "Add a Cortex brain as a custom connector in ChatGPT"
+description: "Add Cortex as a custom connector in ChatGPT"
 ---
 
 <Info>
 This guide covers ChatGPT's custom connector support, which is available on some ChatGPT plans and may differ by account. If a step does not match what you see, your plan may not yet offer custom MCP connectors.
 </Info>
 
-ChatGPT can connect to a Cortex brain as a custom connector, giving it the ability to search your knowledge and recall it in conversation.
+ChatGPT can connect to Cortex as a custom connector, giving it the ability to search your knowledge and recall it in conversation.
 
 ## What you need
 
-- A Cortex account with at least one brain.
+- A Cortex account.
 - A ChatGPT plan that supports adding custom connectors.
 
 <Steps>
-  <Step title="Copy your brain's connection URL">
-    In Cortex, open the brain and go to its **Connect** page. Copy the connection URL (the same one the claude.ai and generic tabs show): `https://api.oncortex.ai/mcp/your-brain`.
+  <Step title="Copy your workspace's connection URL">
+    In Cortex, open any brain's **Connect** page. Copy the connection URL (the same one the claude.ai and generic tabs show): `https://api.oncortex.ai/t/your-workspace-id/mcp`.
   </Step>
 
   <Step title="Add it as a connector in ChatGPT">
@@ -24,15 +24,15 @@ ChatGPT can connect to a Cortex brain as a custom connector, giving it the abili
   </Step>
 
   <Step title="Approve the connection">
-    ChatGPT sends you to Cortex to approve. The approval screen names the brain and the access level. Confirm, and the connector is live.
+    ChatGPT sends you to Cortex to approve. The approval screen names the workspace and shows that the connector will act as you. Confirm, and the connector is live.
   </Step>
 
   <Step title="Test it">
-    Ask ChatGPT to use the connector: *"Search my Cortex brain and tell me what's there."*
+    Ask ChatGPT to use the connector: *"Search my Cortex brains and tell me what's there."*
   </Step>
 </Steps>
 
 ## Good to know
 
-- The connection reaches one brain only, exactly like every other Cortex connection. Add a separate connector for each brain you want ChatGPT to use.
-- Manage or revoke it from **Connected Agents** on the brain's Connect page.
+- One connection covers every brain you can access in the workspace, at the roles you hold; results say which brain they came from.
+- Manage or revoke it from **Connected Agents** on the Connect page.

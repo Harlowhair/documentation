@@ -13,7 +13,7 @@ At the end of a conversation, tell your connected agent to save it:
 
 The agent writes a tidy page into your brain, following the [ingest skill](/filing/skills), the same as any other [thing you ask it to save](/capture/asking-your-agent). No setup, nothing to install. This is all most people need.
 
-It lands in your personal brain by default, so anything captured this way is private to you until you decide to [promote](/brains/promoting) it.
+It lands in your own work brain, so anything captured this way stays yours until you decide to [promote](/brains/promoting) it.
 
 ## The automatic way: a session hook (advanced)
 
@@ -23,7 +23,7 @@ First, the one step that is the same on every system:
 
 <Steps>
   <Step title="Create a service credential">
-    In your personal brain's [service credentials](/connect/service-credentials), create a read-and-write credential labelled "claude-code-capture" and copy its `ck_` key. This lets the hook post to Cortex without a browser.
+    In your work brain's [service credentials](/connect/service-credentials), create a read-and-write credential labelled "claude-code-capture" and copy its `ck_` key. This lets the hook post to Cortex without a browser.
   </Step>
 </Steps>
 
@@ -223,7 +223,7 @@ From then on, each session's transcript lands in your personal inbox and is file
 
 ## Other agents
 
-Any tool that can run a command or call a web address when it finishes can capture the same way: post the conversation to `https://api.oncortex.ai/api/v1/inbox` with a [service credential](/connect/service-credentials). The default-inbox address means you never name a brain; it always goes to your private one.
+Any tool that can run a command or call a web address when it finishes can capture the same way: post the conversation to `https://api.oncortex.ai/api/v1/inbox` with a [service credential](/connect/service-credentials). The default-inbox address means you never name a brain; it goes to the credential's brain.
 
 ## Keeping it tidy
 

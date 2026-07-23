@@ -3,29 +3,40 @@ title: "Workspaces"
 description: "How teams share Cortex"
 ---
 
-Your account lives in a workspace. On your own, the workspace is just you. When you work with a team, you share one workspace, and within it you build shared brains together while each keeping your own private personal brain.
+Your account lives in a workspace. On your own, the workspace is just you. When you work with a team, you share one workspace, and within it you build shared brains together while each keeping a brain of your own.
 
 <Info>
-Inviting people to a workspace is a team feature and depends on your plan.
+Inviting people to a workspace is a team feature, and the number of members and guests depends on your plan.
 </Info>
 
 ## What a workspace holds
 
-- **Shared brains** that members build together, each with its own membership and roles.
-- **Every member's personal brain**, which stays private to that member. Being in a shared workspace never exposes your personal brain to anyone, not even a workspace administrator.
+- **Brains**, each with its own member list and roles. Who can see a brain is exactly who is on it: a brain whose only member is you is private to you.
+- **Members and guests.** Members are your team; guests are outside collaborators who see only the brains they are explicitly granted.
+- **Connections.** Agents connect to the workspace, acting as the person who approved them, and are listed and revocable in one place.
 
-The workspace is the boundary of collaboration: people in it can be given access to shared brains; people outside it cannot.
+The workspace is the boundary of collaboration: brains never span workspaces, and people outside the workspace cannot be granted anything inside it.
 
 ## Inviting someone
 
-Invite a person by email from your workspace's team settings. They receive an invite, join with their own login (or create one), and become a member. From then on you can add them to shared brains with whatever role fits.
+Invite a person by email from your workspace's team settings (an admin action). The invite carries everything about how they will start:
+
+- **Their workspace role**: admin, editor, basic, or guest.
+- **Whether to create a brain for them.** Tick it and they arrive with their own brain, ready to capture into ("My Work Brain" by default; you can name it and pick its template).
+- **Access to existing brains.** Choose the brains and roles they should start with, and those grants are applied the moment they accept, on your behalf.
+
+Nothing is created until they accept, so an unaccepted invite costs nothing. Guests are just invites with no brain of their own and only the grants you chose.
 
 ## What a new member sees
 
-A person you invite sees the shared brains you give them access to, and nothing else. They do not see your personal brain, your other private content, or shared brains they have not been added to. Access is always granted deliberately, brain by brain.
+A person you invite sees the brains you gave them access to, plus their own brain if you created one, and nothing else. Access is always granted deliberately, brain by brain.
+
+## When someone leaves
+
+Removing a member is an admin action, and Cortex makes the consequences explicit. If the leaver has a brain that was created for them, or is the last Owner of any brain, you decide what happens to each: archive it, take ownership of it, or delete it, with the option to download a zip export first. All their access ends the moment they are removed, including every agent they had connected.
 
 ## Try it
 
-1. Open your workspace's team settings and invite a colleague by email.
-2. Once they join, add them to a shared brain as a Reader.
-3. Confirm they can see that brain, and cannot see your personal one.
+1. Open your workspace's team settings and invite a colleague, ticking "create a brain" for them.
+2. Grant them Read on a shared brain in the same invite.
+3. Once they accept, confirm they see the shared brain and their own new brain, and nothing else.

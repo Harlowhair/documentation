@@ -21,7 +21,7 @@ A credential is scoped to one brain and one access level. Writing endpoints need
 
 ## Push to your default brain
 
-The quickest way to capture something: post to the default inbox, which lands in the credential's brain (or, for a personal credential, your personal brain).
+The quickest way to capture something: post to the default inbox, which lands in the credential's brain (or, for a signed-in user, their single writable brain when they have exactly one).
 
 ```bash
 curl https://api.oncortex.ai/api/v1/inbox \

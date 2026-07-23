@@ -1,44 +1,44 @@
 ---
 title: "How connections work"
-description: "One agent, one brain, one key you can take back"
+description: "One connection per workspace, acting as you, revocable at any time"
 ---
 
-Connecting an AI agent to Cortex is how your agent gains a memory. Once connected, it can search a brain, read its pages, and file new things into it, all in the course of a normal conversation.
+Connecting an AI agent to Cortex is how your agent gains a memory. Once connected, it can search your brains, read their pages, and file new things into them, all in the course of a normal conversation.
 
-The single most important rule is this: **a connection links one agent to one brain, and it can only ever reach that one brain.** Not "one at a time by default", not "unless you change a setting". The key is cut for one cabinet, and it opens nothing else.
+A connection links an agent to your **workspace**, acting as you. Through that one connection the agent can reach every brain your access list allows, with exactly the role you hold on each: read where you can read, write where you can write, and nothing at all where you have no access. It never receives more than you have, and it can never widen its own access.
 
 ```mermaid
 flowchart LR
-    A1[Claude] -->|approved key| B1[(Personal brain)]
-    A2[Claude Code] -->|approved key| B2[(Team brain)]
-    A1 -.->|cannot reach| B2
-    A2 -.->|cannot reach| B1
+    A[Your agent] -->|one approved connection| W{Workspace}
+    W -->|your role: Owner| B1[(My Work Brain)]
+    W -->|your role: Write| B2[(Team brain)]
+    W -.->|no access, invisible| B3[(Another team's brain)]
 ```
 
 ## Approving a connection
 
 When you connect an agent, Cortex shows you an approval screen before anything is granted. It names two things in plain sight:
 
-- **Which brain** the agent is asking to reach.
-- **What it will be allowed to do** there, its access level (read, or read and write).
+- **Which workspace** the agent is asking to join.
+- **Who it will act as**: you, with your workspace role shown.
 
-You approve, and the agent gets a key scoped to exactly that. It never receives a master key, and it can never widen its own access. If an agent only asked for one brain, that is all its key will ever open.
+You approve, and the agent gets a key scoped to that workspace. What it can do inside is not frozen into the key: every call the agent makes is checked live against your current brain memberships. If a teammate grants you a new brain, your agent can use it on its next request. If your access to a brain is removed, the agent loses it just as fast.
 
-## Why one brain per connection
+## How the agent knows what it can reach
 
-It would be simpler to hand an agent one connection and let it pick a brain per request. Cortex deliberately does not, because that would put the privacy boundary in the agent's hands: a single slip in the agent's reasoning could write your private notes into a shared brain.
+On connecting, the agent can ask Cortex who it is and what it can see. It gets back the workspace, your role, and the list of brains you can access, each with its purpose and your role there. Tools that write require the agent to name the brain it is writing to, and Cortex only offers it the brains you can actually write. Asked to write somewhere it cannot, the agent gets a clear refusal that explains the alternatives, such as [promoting](/brains/promoting) from a brain it can write to.
 
-Instead the boundary is physical. Each connection carries a key that reaches one brain, so the worst an agent can do by getting confused is look in the wrong place. It cannot leak private content into a shared brain, because the key for your personal brain simply cannot write anywhere else. [More on using several brains at once.](/connect/multiple-brains)
+This is why a brain's description matters: it is what your agents read to decide where things belong. A one-line description of what a brain is for pays for itself every day.
 
 ## Taking access back
 
-Every connection is listed on the brain's Connect page under Connected Agents, and each one can be revoked on its own. Revoking a connection destroys exactly that key and nothing else: your other agents keep working, and the agent you revoked immediately loses all access to that brain.
+Every connection is listed under **Connected Agents** on the Connect page, and each one can be revoked on its own. Revoking a connection destroys exactly that key and nothing else: your other agents keep working, and the revoked agent immediately loses access to the workspace. Removing your access to a single brain, meanwhile, does not need any revoking, because access is checked live: the agent simply stops being able to reach that brain.
 
 ## Try it
 
-1. Open any brain's **Connect** page and find the Connected Agents list.
+1. Open a brain's **Connect** page and find the Connected Agents list.
 2. Connect an agent (see the guides that follow), then refresh and see it appear.
-3. Revoke it, and confirm the agent can no longer reach the brain.
+3. Revoke it, and confirm the agent can no longer reach your brains.
 
 <CardGroup cols={2}>
   <Card title="Connect Claude" icon="comment" href="/connect/claude">

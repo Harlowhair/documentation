@@ -3,19 +3,19 @@ title: "Other MCP clients"
 description: "Connect Cursor, or anything that speaks MCP"
 ---
 
-Cortex connects over the Model Context Protocol (MCP), an open standard for giving AI tools access to external systems. Any MCP-capable client can connect to a Cortex brain, not just the ones with their own guide.
+Cortex connects over the Model Context Protocol (MCP), an open standard for giving AI tools access to external systems. Any MCP-capable client can connect to Cortex, not just the ones with their own guide.
 
 ## The general shape
 
 Every Cortex connection works the same way:
 
-1. **The endpoint** is your brain's URL, `https://api.oncortex.ai/mcp/your-brain`, shown on the brain's **Connect** page under the generic tab. It uses the standard streamable HTTP transport.
+1. **The endpoint** is your workspace's URL, `https://api.oncortex.ai/t/your-workspace-id/mcp`, shown on any brain's **Connect** page under the generic tab. It uses the standard streamable HTTP transport.
 2. **Sign-in is automatic.** Cortex advertises how to authenticate using standard MCP discovery, so a client with sign-in support will send you to Cortex to approve, then connect itself. There are no API keys to paste for interactive use.
-3. **One connection reaches one brain.** As everywhere in Cortex, add a separate connection per brain.
+3. **The connection acts as you.** It reaches every brain you can access in the workspace, at your roles, checked live on every call.
 
 ## Cursor
 
-Cursor supports MCP servers in its settings. Add a new MCP server using the Cortex connection URL from the brain's Connect page. When Cursor first uses it, approve the connection in the browser. After that, Cursor can search and file into that brain.
+Cursor supports MCP servers in its settings. Add a new MCP server using the Cortex connection URL from the Connect page. When Cursor first uses it, approve the connection in the browser. After that, Cursor can search and file across your brains.
 
 ## Anything else
 

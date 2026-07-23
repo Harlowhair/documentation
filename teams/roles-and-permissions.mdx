@@ -3,7 +3,18 @@ title: "Roles and permissions"
 description: "Who can do what, in plain words"
 ---
 
-Access in Cortex is granted per brain. Being in a workspace does not give you access to its shared brains automatically; you are added to each brain with a role that says what you can do there.
+There are two layers of role in Cortex: your role in the **workspace** (what you can do to the workspace itself) and your role on each **brain** (what you can do inside it). Being in a workspace does not open its brains to you; you are added to each brain with a role that says what you can do there.
+
+## Workspace roles
+
+| Role | In plain words |
+|---|---|
+| **Admin** | Runs the workspace: invites and removes people, creates brains, manages billing and connections. |
+| **Editor** | A regular member. Works in the brains they have been given access to. |
+| **Basic** | A regular member with the same shape as Editor, typically given read-heavy access. |
+| **Guest** | An outside collaborator. Sees only the brains they are explicitly granted, and nothing else of the workspace. |
+
+Creating brains is an admin action. Everyone gets brains by being added to them: by an admin, by a brain's own Admin or Owner, or automatically through their [invite](/teams/workspaces).
 
 ## Brain roles
 
@@ -11,19 +22,21 @@ Access in Cortex is granted per brain. Being in a workspace does not give you ac
 |---|---|
 | **Read** | Browse pages, search, and read the inbox. Cannot change anything. |
 | **Write** | Everything Read can do, plus add to the inbox, file items, and create or edit pages. |
-| **Admin** | Everything Write can do, plus manage the brain's members, connections and settings. |
+| **Admin** | Everything Write can do, plus manage the brain's members and settings. |
 | **Owner** | Everything Admin can do, plus change the brain's filing mode and delete the brain. Every brain has an Owner. |
 
 ## The questions people actually ask
 
-**Can a Reader's agent write to the brain?** No. An agent connection can never do more than the person who made it. A Reader connecting an agent grants read-only access.
+**Can a Reader's agent write to the brain?** No. Your agents act as you, with your roles, checked live on every call. A Reader's agent can only read.
 
 **Can a Writer delete pages?** A Writer can create and edit pages, and edits keep full [version history](/filing/pages-and-structure#nothing-is-lost-to-an-edit) so nothing is truly lost. Managing the brain itself, including its members and settings, is an Admin and Owner responsibility.
 
 **Who can change how much gets filed automatically?** The brain's Owner sets its [filing mode](/filing/auto-ingest).
 
-**Can anyone see my personal brain?** No one, ever, regardless of their role anywhere. [Personal brains](/brains/your-personal-brain) are outside this system entirely: they have no members and cannot be shared.
+**Can teammates see my work brain?** Only if you add them. A brain is visible to its members and no one else, and [your work brain](/brains/your-personal-brain) starts with a member list of one: you. Workspace admins administer brains as part of running the workspace (for example when someone leaves), but they are not members of your brain and do not see it in daily use.
 
-## Connections carry a role too
+**What can a guest do?** Exactly what their brain roles say, in the brains they were granted, and nothing more. Guests do not see the workspace's team directory or its other brains.
 
-When you connect an agent to a brain, the connection is granted a role as well, shown on the approval screen. A connection can never exceed your own access, and you can revoke any single connection without affecting your membership or your other agents. [More on connections.](/connect/how-connections-work)
+## Your agents inherit your roles
+
+A connected agent acts as you: it sees the brains you can see and holds the role you hold on each, resolved live. If your role on a brain changes, every agent you have connected changes with it, immediately. [More on connections.](/connect/how-connections-work)

@@ -3,32 +3,32 @@ title: "Connect Claude"
 description: "Give Claude on the web or desktop a memory"
 ---
 
-Connecting Claude to a Cortex brain lets you ask Claude to remember and recall things across every conversation. This works in Claude on the web (claude.ai) and in the Claude desktop app.
+Connecting Claude to Cortex lets you ask Claude to remember and recall things across every conversation. This works in Claude on the web (claude.ai) and in the Claude desktop app.
 
 ## What you need
 
-- A Cortex account with at least one brain (you always have your personal brain).
+- A Cortex account (you always have at least your own brain).
 - Claude on a plan that supports custom connectors.
 
 <Steps>
-  <Step title="Copy your brain's connection URL">
-    In Cortex, open the brain you want to connect and go to its **Connect** page. Under the connection options, choose the **claude.ai** tab and copy the URL. It looks like `https://api.oncortex.ai/mcp/your-brain`.
+  <Step title="Copy your workspace's connection URL">
+    In Cortex, open any brain's **Connect** page. Under the connection options, choose the **claude.ai** tab and copy the URL. It looks like `https://api.oncortex.ai/t/your-workspace-id/mcp`.
 
-    The URL ends in your brain's name, because it reaches that brain and only that brain.
+    The URL identifies your workspace: one connection covers every brain you can access there.
   </Step>
 
   <Step title="Add it as a custom connector in Claude">
-    In Claude, go to **Settings, then Connectors, then Add custom connector**, and paste the URL. Give it a recognisable name like "Cortex - Personal" so you can tell it apart if you connect more than one brain later.
+    In Claude, go to **Settings, then Connectors, then Add custom connector**, and paste the URL. Give it a recognisable name like "Cortex".
   </Step>
 
   <Step title="Approve the connection">
-    Claude sends you to Cortex to approve. The approval screen names the brain and the access level you are granting. Confirm, and you are returned to Claude with the connection live.
+    Claude sends you to Cortex to approve. The approval screen names the workspace and shows that Claude will act as you, with your role. Confirm, and you are returned to Claude with the connection live.
 
-    This is the moment the key is cut. It reaches this one brain, at the access level shown, and nothing else.
+    From here Claude reaches exactly the brains you can reach, at the access you actually hold, checked live on every request.
   </Step>
 
   <Step title="Test it">
-    Ask Claude something like *"Using my Cortex connection, what do you know about me?"* or *"Search my brain for anything about last week's meeting."* Claude will search the brain and answer with what it finds.
+    Ask Claude something like *"Using my Cortex connection, what brains can you see?"* or *"Search my brains for anything about last week's meeting."* Claude will search and answer with what it finds, saying which brain each thing came from.
   </Step>
 </Steps>
 
@@ -37,14 +37,10 @@ Connecting Claude to a Cortex brain lets you ask Claude to remember and recall t
 Once connected, you can ask Claude to both recall and remember:
 
 - **Recall:** "What did we decide about pricing?" or "Find my notes on the Acme account."
-- **Remember:** "Save this summary to my brain" or "File these notes as a page about onboarding."
+- **Remember:** "Save this summary to my work brain" or "File these notes in the team handbook."
 
-When Claude files something, it follows the same [skills](/core-concepts#skill) everything else does, so its filing stays consistent with the rest of your brain.
+When Claude files something, it names the destination brain and follows the same [skills](/core-concepts#skill) everything else does, so its filing stays consistent with the rest of your brains.
 
 ## Managing the connection
 
-The connection appears under **Connected Agents** on the brain's Connect page. To disconnect, revoke it there, or remove the connector in Claude's settings. Revoking on the Cortex side takes effect immediately.
-
-## Connecting more than one brain
-
-Add each brain as its own connector, with its own URL and its own approval. Claude will then have several Cortex connections, each reaching exactly one brain. See [using multiple brains](/connect/multiple-brains) for how Claude chooses between them and why a mix-up can never leak private content.
+The connection appears under **Connected Agents** on the Connect page. To disconnect, revoke it there, or remove the connector in Claude's settings. Revoking on the Cortex side takes effect immediately.
