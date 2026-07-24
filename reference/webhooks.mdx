@@ -24,6 +24,8 @@ Post the content as the raw request body to the brain's ingest endpoint:
 POST https://api.oncortex.ai/api/ingest/{brainId}
 ```
 
+You can add `?path=some/folder` to suggest where the content should file. It is recorded as a hint for the filing pass, not an order, and the payload itself can never choose its own destination. A source can also carry a standing target folder in its settings; the per-delivery `path` wins when both are present.
+
 Headers:
 
 | Header | Purpose |

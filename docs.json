@@ -23,7 +23,11 @@
     "groups": [
       {
         "group": "Getting Started",
-        "pages": ["index", "quickstart", "core-concepts"]
+        "pages": [
+          "index",
+          "quickstart",
+          "core-concepts"
+        ]
       },
       {
         "group": "Brains",
@@ -41,7 +45,7 @@
           "capture/asking-your-agent",
           "capture/the-inbox",
           "capture/uploading-files",
-          "capture/meetings-granola",
+          "capture/meeting-transcripts",
           "capture/agent-conversations",
           "capture/other-sources"
         ]

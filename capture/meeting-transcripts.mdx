@@ -1,0 +1,47 @@
+---
+title: "Meeting transcripts"
+description: "Push meetings from any tool into a brain"
+---
+
+Cortex does not tie you to one meeting tool. Instead it defines a simple **transcript format**, and accepts it from anything that can make an HTTP request: your note-taker's export, a script, a webhook, an automation platform. If a tool can POST a file, it can feed your brain.
+
+## The format
+
+A markdown file with a small header block, then the transcript itself:
+
+```markdown
+---
+kind: transcript
+title: "Acme weekly sync"
+startedAt: 2026-07-24T10:00:00Z
+source: my-notes-tool
+externalId: note_12345
+attendees:
+  - { name: "Jane Doe", email: "jane@acme.com" }
+  - { name: "Rob Harlow", email: "rob@example.com" }
+actionItems:
+  - "Jane to send the revised pricing"
+---
+[00:00] Jane: ...
+[00:41] Rob: ...
+```
+
+Two fields matter most:
+
+- **`attendees` with email addresses.** The meeting skill resolves people by email, not by guessing names from the dialogue, so filled-in attendees make the difference between "linked to the right Jane" and "a new page for a second Jane".
+- **`externalId`.** A stable id from the source tool. If the same transcript is sent twice, Cortex recognises it and does not create a duplicate.
+
+Everything else is optional. Even a bare transcript with no header works; the filing just has less to go on.
+
+## Where to send it
+
+Any of the normal entry points. The transcript lands in the brain's inbox and is filed like anything else, by your agent, by [auto-ingest](/filing/auto-ingest), or by you in the [review queue](/filing/review-queue).
+
+- **The API**, with a service credential: `POST /api/v1/inbox` (your default brain) or `POST /api/v1/brains/{brain}/inbox` (a named brain). See the [API reference](/reference/api).
+- **A webhook source** on the brain: `POST /api/ingest/{brainId}` with the source's secret. See [webhooks](/reference/webhooks).
+
+You can add `?path=meetings` (or any folder) to either URL to suggest where the meeting should file. It is a hint for the filing pass, not an order; the content itself can never choose its own destination.
+
+## Duplicates and retries
+
+Send the same transcript twice, or let a flaky integration retry: as long as `externalId` (or simply the identical content) matches, Cortex returns the existing item instead of creating a copy.
