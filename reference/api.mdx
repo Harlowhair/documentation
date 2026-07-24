@@ -32,6 +32,11 @@ curl https://api.oncortex.ai/api/v1/inbox \
 
 Set `externalId` to a stable value so that re-sending the same thing does not create a duplicate.
 
+Two optional query parameters:
+
+- `?brain={slugOrId}` names a destination brain explicitly (it must be one the credential can write to; a brain-scoped credential can only name its own brain).
+- `?path={folder}` suggests where the content should file. It is recorded as a hint for the filing pass, not an order; the content itself can never choose its own destination.
+
 ## Work with a specific brain's inbox
 
 | Do this | Request |
@@ -42,7 +47,7 @@ Set `externalId` to a stable value so that re-sending the same thing does not cr
 | Update an item's status | `PUT /api/v1/brains/{brainId}/inbox/{itemId}/status` |
 | Archive an item | `POST /api/v1/brains/{brainId}/inbox/{itemId}/archive` |
 
-Uploads accept either a JSON body (`filename`, `content`, optional `externalId`) or multipart form data for binary files, up to 50 MB.
+Uploads accept either a JSON body (`filename`, `content`, optional `externalId` and `targetFolder`) or multipart form data for binary files, up to 50 MB. The `?path={folder}` hint works here too.
 
 ```bash
 # Upload text to a named brain's inbox
