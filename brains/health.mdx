@@ -1,0 +1,50 @@
+---
+title: "Brain health"
+description: "Check that a brain is complete, connected and searchable - and fix it when it is not"
+---
+
+Every brain has a **Health** page (in the brain's sidebar) that answers one question: is
+everything that went in actually findable? It is worth a glance now and then, and it is
+the first place to look when a search misses something you know is there.
+
+## The numbers
+
+| Stat | What it means |
+|---|---|
+| **Pages** | Live pages in the brain - the same count the workspace tree shows. |
+| **Broken links** | `[[wikilinks]]` pointing at pages that do not exist. Each one is listed below with a link to the page that needs fixing. |
+| **Orphans** | Pages nothing links to. Not wrong, but unlinked knowledge is harder to rediscover. |
+| **Embed coverage** | How much of the brain semantic search can see (below). |
+| **Inbox pending** | Items waiting in the inbox or review queue. |
+| **Last activity** | The most recent write, human or agent. |
+
+## Embed coverage
+
+Search works two ways at once: keyword match, and semantic match against an embedding of
+each page. Embeddings are generated automatically when a page is saved, and an hourly
+maintenance pass picks up any that were missed. Coverage is the share of pages (of those
+with anything to embed) that semantic search can currently see.
+
+A healthy brain reads **100% and stays there** - green from 90%, amber from 60%, red
+below. A brief dip after importing a lot of pages at once is normal; the hourly pass
+catches it up. A low number that does not climb on its own is worth fixing: press
+**Run dream** to run the maintenance pass now, and if the number still will not move,
+contact support.
+
+## The buttons
+
+- **Run dream** runs the hourly maintenance pass immediately: resolves links, and fills
+  in any missing search data and embeddings. Harmless to press whenever - repeated
+  presses coalesce into one pass.
+- **Repair structure** rebuilds what the brain's template provisioned: its instructions,
+  schema and folder index pages. Use it if the Health page warns about stuck page writes
+  or template folders are missing. It never touches pages you or your agents wrote.
+
+Both need Admin on the brain.
+
+## Try it
+
+1. Open a brain's Health page and check embed coverage is green.
+2. Fix one broken link: open the listed page, correct the `[[wikilink]]`, watch the
+   count drop.
+3. Press **Run dream** and refresh after a minute to see the counts settle.
