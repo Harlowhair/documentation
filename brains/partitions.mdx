@@ -1,0 +1,48 @@
+---
+title: "Partitions"
+description: "One brain, many clients, and nothing filed under the wrong one"
+---
+
+Some brains hold knowledge about many separate things that must never blur into each other: an agency's clients, a builder's sites, a law firm's matters. A **partitioned brain** gives each of them its own folder inside one brain, and makes two promises about that folder: nothing files into it unless it exists, and every item that arrives is told which one it belongs to, or says it does not know.
+
+This page uses clients as the example, because the Client template ships partitioned. The word is the template's: a brain built for sites says "sites" everywhere you read "clients" below.
+
+## What a partition is
+
+A partition is a folder under the brain's root folder, `clients/acme/`, with a **hub page** at the top (the first thing to read about that client), the template's sub-folders (knowledge, meetings, contacts), and a record of the **email domains** and **other names** that identify it. The brain's sidebar shows them on a **Clients** page: search, create, edit, archive, import from CSV.
+
+Everything else in the brain sits in a shared folder such as `reference/`, which is for material that belongs to no single client.
+
+## The promise: nothing files under the wrong client
+
+When you, your agent or Cortex files a page, the brain checks the path. A page under `clients/acme/` is accepted only if the Acme partition exists and is active. A page under a client that does not exist is refused, and the refusal lists the clients that do, so an agent can correct itself. Creating a client is always a deliberate act, on the Clients page or through the API; filing never creates one by accident.
+
+Search, the page index and your agent's tools can all be narrowed to one client, so a job working on Acme reads Acme.
+
+## How an item learns its client
+
+Every item arriving in the inbox is matched to a client, in this order, before anything else happens:
+
+1. **The sender said so.** A `?partition=acme` on the upload or webhook address, a source pinned to a client, or the client named by your agent.
+2. **The attendees said so.** A meeting transcript whose attendees are at `acme.com`, and no other client's domain, is Acme's. Your own company's domains are ignored, so a call with two of your colleagues and one person from Acme resolves to Acme.
+3. **The title said so.** A client's name or one of its other names appearing whole in the title.
+
+If none of those decides it, the item waits as **needs a client**: in the inbox with any candidates it found ("acme? two attendees at acme.com"), on the brain card as a badge, in your agent's view of the brain, and in the morning digest. Assigning it is one click, and the assignment can **remember the domain**, so the next call from that domain resolves on its own. The document itself never gets a say: a line inside a file claiming to belong to Acme is ignored.
+
+Cortex proposes a client only when it cannot decide; it never files on a guess. When automatic filing drafts pages for an item whose client was not known at arrival, the drafts wait in the review queue with the guess attached, however confident the guess.
+
+## Archive and purge
+
+A finished engagement is **archived**: its pages stay readable, nothing new can be filed under it, search leaves it out unless asked, and a transcript from its domain becomes a "needs a client" item with an "archived" hint rather than filing quietly.
+
+**Purge** is for the rare case where a client's data must be gone, for example a contract that requires it. It deletes every page under the client with every version, every inbox item with its original, and the client itself, and it cannot be undone. Only a brain owner can purge, only an archived client, and only after typing its key. Archive first, purge later, is the expected order.
+
+## Bringing in a client list
+
+The Clients page imports a CSV: key, name, domains, other names, external reference. Existing clients are updated when something differs and skipped when identical; new ones are created with their folder. The same import is on the API, so a won deal in your CRM can create the client before the first transcript arrives.
+
+## Try it
+
+1. Create a brain from the Client template and add a client with its email domain.
+2. Push a transcript with an attendee from that domain (see [meeting transcripts](/capture/meeting-transcripts)) and watch it arrive already assigned.
+3. Push one from an unknown domain, assign it with "remember this domain" ticked, and push another from the same domain.

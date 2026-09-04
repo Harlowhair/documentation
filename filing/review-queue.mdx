@@ -28,6 +28,12 @@ Waiting items are surfaced wherever you happen to be:
 - **In your agent:** connected agents can see the same counts, and will mention parked items and offer to walk you through them - you can review and accept entirely in conversation.
 - **By email:** if items have been waiting more than a day, brain admins get a short morning digest listing which brains need attention, with links.
 
+## Assigning a client
+
+In a [partitioned brain](/brains/partitions), an item that arrived without a known client waits as "needs a client". The inbox shows these first, each with the candidates Cortex found and why ("acme? one attendee at acme.com"). Open one, pick the client, leave "remember this domain" ticked, and assign: from then on that domain resolves by itself. Your agent can do the same from conversation.
+
+A proposal drafted for such an item carries Cortex's best guess at the client, and it always waits for you: accepting it settles the client as well as the pages. If the client it names does not exist or is archived, the queue says so and the proposal cannot be accepted until the client is created or restored.
+
 ## When something will not file
 
 Occasionally an item resists filing: it is malformed, or Cortex keeps failing to make sense of it. Rather than retrying forever, Cortex gives up after a few attempts and parks the item for you to handle by hand. A stuck item is always surfaced, never silently dropped.

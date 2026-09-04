@@ -16,6 +16,10 @@ description: "Common questions about how Cortex works"
     It always knows which brain is which: search results say which brain they came from, and every write names its destination. The agent can only write where you can write, so a brain you keep to yourself stays yours whatever it does. Clear brain names and descriptions make its choices even more reliable. [More on using multiple brains.](/connect/multiple-brains)
   </Accordion>
 
+  <Accordion title="Can my agent file something under the wrong client?">
+    Not in a partitioned brain. Every page write is checked against the client folders that exist, and a write under a client that does not exist, or one that is archived, is refused with the list of clients that do. An item's client is decided when it arrives, from what the sender said or from the attendee emails, and an item nobody could place waits as "needs a client" rather than being filed on a guess. [More on partitions.](/brains/partitions)
+  </Accordion>
+
   <Accordion title="What file types can I upload?">
     Markdown, plain text, PDF, Word (`.docx`) and PowerPoint (`.pptx`), up to 50 MB each. Cortex extracts the text so it becomes searchable. [More on uploading.](/capture/uploading-files)
   </Accordion>

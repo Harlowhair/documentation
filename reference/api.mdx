@@ -36,6 +36,7 @@ Two optional query parameters:
 
 - `?brain={slugOrId}` names a destination brain explicitly (it must be one the credential can write to; a brain-scoped credential can only name its own brain).
 - `?path={folder}` suggests where the content should file. It is recorded as a hint for the filing pass, not an order; the content itself can never choose its own destination.
+- `?partition={key}` names the client (or site, or matter) in a [partitioned brain](/brains/partitions). An unknown or archived key is refused with a 422 that lists the existing keys. Without it, the attendee emails decide, or the item waits as "needs a client".
 
 ## Work with a specific brain's inbox
 
@@ -56,6 +57,23 @@ curl https://api.oncortex.ai/api/v1/brains/{brainId}/inbox \
   -H "Content-Type: application/json" \
   -d '{"filename": "report.md", "content": "..."}'
 ```
+
+## Partitions
+
+In a [partitioned brain](/brains/partitions) the clients (or sites, or matters) are managed here as well as on the Clients page. Roles are the caller's role on the brain: a service credential carries the role it was issued with, so a Write credential can push and assign, an Admin credential can manage partitions, and only an Owner credential or an owner's connection can purge.
+
+| Do this | Request | Role |
+|---|---|---|
+| List, searchable | `GET /api/v1/brains/{brainId}/partitions?query=&status=` | Read |
+| Get one | `GET /api/v1/brains/{brainId}/partitions/{key}` | Read |
+| Create with its folder | `POST /api/v1/brains/{brainId}/partitions` with `{ "name", "key"?, "domains"?, "aliases"?, "externalRef"? }` | Admin |
+| Update | `PUT /api/v1/brains/{brainId}/partitions/{key}` | Admin |
+| Archive or restore | `POST /api/v1/brains/{brainId}/partitions/{key}/archive` or `/restore` | Admin |
+| Import many | `POST /api/v1/brains/{brainId}/partitions/import` with an array of the same fields | Admin |
+| Purge, permanently | `DELETE /api/v1/brains/{brainId}/partitions/{key}?purge=true` (refused without the flag; the partition must be archived) | Owner |
+| Assign an inbox item | `POST /api/v1/brains/{brainId}/inbox/{itemId}/partition` with `{ "key", "rememberDomains" }` | Write |
+
+Inbox listing takes `?partition={key}` and `?unassigned=true`. Search takes `?partition=`, `?folder=` and `?includeArchived=true` (archived partitions are left out of results unless asked for).
 
 ## Receiving from third-party tools
 

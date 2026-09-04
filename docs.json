@@ -37,6 +37,7 @@
           "brains/shared-brains",
           "brains/templates",
           "brains/promoting",
+          "brains/partitions",
           "brains/health"
         ]
       },

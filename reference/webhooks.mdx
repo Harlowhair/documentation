@@ -34,7 +34,8 @@ Headers:
 | `X-Cortex-Signature` | `sha256=<hex>`, the HMAC of the raw body (signature mode). |
 | `X-Filename` | A name for the item. |
 | `X-Ingest-External-Id` | Optional. A stable id so re-delivery does not duplicate. |
-| `X-Ingest-Senders` | Optional. Comma-separated sender addresses, for guard rules. |
+| `X-Ingest-Senders` | Optional. Comma-separated sender addresses, for guard rules and, in a partitioned brain, for deciding the client by domain. |
+| `X-Ingest-Partition` | Optional. The client (or site, or matter) key in a [partitioned brain](/brains/partitions); `?partition=` on the address does the same. Unknown or archived keys are refused. A source can also be pinned to one partition in its settings. |
 
 ```bash
 curl https://api.oncortex.ai/api/ingest/{brainId} \

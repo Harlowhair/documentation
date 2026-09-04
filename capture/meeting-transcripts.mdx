@@ -42,6 +42,16 @@ Any of the normal entry points. The transcript lands in the brain's inbox and is
 
 You can add `?path=meetings` (or any folder) to either URL to suggest where the meeting should file. It is a hint for the filing pass, not an order; the content itself can never choose its own destination.
 
+## Which client is this?
+
+In a [partitioned brain](/brains/partitions) (a clients brain, say), every transcript is matched to a client when it arrives. Add `?partition=acme` to the address if the sender already knows. Otherwise the attendee email domains decide: a call with people from `acme.com` and nobody from another client's domain is Acme's, and your own company's domains never count. A transcript that cannot be placed waits as "needs a client" with its candidates, one click to assign, and the assignment can remember the domain for next time.
+
+Attendees with email addresses are therefore doubly valuable in a partitioned brain: they identify the people and they identify the client.
+
+## A reference pusher for Granola
+
+If your team records calls with Granola, the Cortex repository ships a small script, the Granola collector, that reads each person's notes through the Granola API, writes them in the format above and pushes them in. It routes by attendee: a call with anyone outside your own domains goes to the shared clients brain and Cortex decides the client; a call with only your own people goes to that person's own brain, or nowhere. It runs on your side, on a schedule, with your Granola tokens; Cortex never polls Granola itself.
+
 ## Duplicates and retries
 
 Send the same transcript twice, or let a flaky integration retry: as long as `externalId` (or simply the identical content) matches, Cortex returns the existing item instead of creating a copy.
