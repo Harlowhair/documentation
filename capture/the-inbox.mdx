@@ -45,6 +45,14 @@ If an item repeatedly fails to file cleanly, Cortex stops retrying and parks it 
 
 Sending the same thing twice does not create two copies. Cortex recognises repeats, both by content and by the sending tool's own reference, and points you back to the existing item instead. Connected tools can safely resend without cluttering your brain.
 
+## A newer version of a document
+
+Documents get edited. When an item arrives that Cortex can tell is the same document as one it already holds, because it came with the same link or the same provider id, it is kept as a **revision**: a new item, linked to the earlier one, with the earlier one marked as superseded. Both stay in Sources, so a citation made from the earlier version still points at exactly what was read.
+
+Whoever files the new version is told which pages the earlier one fed and shown what changed between the two, so an update rewrites those pages rather than starting again. Nothing is filed automatically just because a document changed: the brain's [filing mode](/filing/auto-ingest) applies as for any new item, so in a shared brain on Suggest the update waits in the [review queue](/filing/review-queue) for a person.
+
+Sending the same version twice is still a duplicate, and points you back to the item you already have.
+
 ## Practical limits
 
 Uploads can be Markdown, plain text, PDF, Word or PowerPoint files, up to 50 MB each. Text is extracted on arrival, so even a slide deck becomes searchable words.

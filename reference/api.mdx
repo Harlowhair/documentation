@@ -32,6 +32,32 @@ curl https://api.oncortex.ai/api/v1/inbox \
 
 Set `externalId` to a stable value so that re-sending the same thing does not create a duplicate.
 
+### Say where the document lives
+
+Four optional fields record where a document lives, so the source record shows the link and later versions are linked as revisions:
+
+| Field | Purpose |
+|---|---|
+| `canonicalUrl` | The human link (an absolute http or https URL). Anything else is refused with a 400. |
+| `provider` | Optional. `sharepoint`, `onedrive`, `gdrive`, `confluence`, `notion` or any name of your own; inferred from the link's host when omitted. |
+| `providerItemId` | Optional. The stable id at the provider (a Graph drive item id, a Drive file id, a Confluence page id). Parsed from Google Drive links when omitted. |
+| `version` | Optional. The etag or version at fetch time. Without it, a changed document still counts as a new version, by its content. |
+
+When you give a reference and no `externalId`, Cortex derives one as `{provider}:{itemId}@{version}`, so re-sending the same version is a no-op and a new version becomes a new item linked to the earlier one. The response of a GET on the new item carries `revisionOf` (the earlier item, its status and the pages it was filed to) and `revisionDiff`, a line diff of the two extractions.
+
+### Send the file itself
+
+A JSON body can carry the document as base64 instead of text:
+
+```bash
+curl https://api.oncortex.ai/api/v1/inbox \
+  -H "Authorization: Bearer ck_your_key_here" \
+  -H "Content-Type: application/json" \
+  -d '{"filename": "brief.docx", "contentBase64": "<base64>", "canonicalUrl": "https://sopro.sharepoint.com/sites/cs/brief.docx", "version": "3"}'
+```
+
+`contentBase64` and `content` are mutually exclusive. The decoded size is capped at 10 MB on this route; larger files go as multipart form data, up to 50 MB, where the same four fields are accepted as form fields. The same rules apply to your agent's `upload_to_inbox` tool.
+
 Two optional query parameters:
 
 - `?brain={slugOrId}` names a destination brain explicitly (it must be one the credential can write to; a brain-scoped credential can only name its own brain).
@@ -48,7 +74,7 @@ Two optional query parameters:
 | Update an item's status | `PUT /api/v1/brains/{brainId}/inbox/{itemId}/status` |
 | Archive an item | `POST /api/v1/brains/{brainId}/inbox/{itemId}/archive` |
 
-Uploads accept either a JSON body (`filename`, `content`, optional `externalId` and `targetFolder`) or multipart form data for binary files, up to 50 MB. The `?path={folder}` hint works here too.
+Uploads accept either a JSON body (`filename`, `content` or `contentBase64`, optional `externalId`, `targetFolder` and the four reference fields above) or multipart form data for binary files, up to 50 MB, with `canonicalUrl`, `provider`, `providerItemId` and `version` as form fields. The `?path={folder}` hint works here too. Items carry `sourceReference`, `supersedesItemId` and `supersededByItemId`; a GET on one item adds `revisionOf` and `revisionDiff`.
 
 ```bash
 # Upload text to a named brain's inbox

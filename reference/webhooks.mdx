@@ -35,6 +35,10 @@ Headers:
 | `X-Filename` | A name for the item. |
 | `X-Ingest-External-Id` | Optional. A stable id so re-delivery does not duplicate. |
 | `X-Ingest-Senders` | Optional. Comma-separated sender addresses, for guard rules and, in a partitioned brain, for deciding the client by domain. |
+| `X-Ingest-Canonical-Url` | Optional. Where the document lives (an absolute http or https link). Kept on the source record beside the copy that was received. |
+| `X-Ingest-Provider` | Optional. `sharepoint`, `onedrive`, `gdrive`, `confluence`, `notion` or a name of your own; inferred from the link when omitted. |
+| `X-Ingest-Provider-Item-Id` | Optional. The stable id at the provider. With the version, it identifies revisions of one document. |
+| `X-Ingest-Version` | Optional. The etag or version at delivery. A new version of a known document becomes a new item linked to the earlier one; the same version again is a repeat. |
 | `X-Ingest-Partition` | Optional. The client (or site, or matter) key in a [partitioned brain](/brains/partitions); `?partition=` on the address does the same. Unknown or archived keys are refused. A source can also be pinned to one partition in its settings. |
 
 ```bash
@@ -51,4 +55,4 @@ A source can carry guard rules that decide which deliveries to accept, for examp
 
 ## Idempotency
 
-Set `X-Ingest-External-Id` to a stable value per item. If the same id arrives twice, Cortex recognises the repeat and does not create a second inbox item, so a tool that retries deliveries stays safe.
+Set `X-Ingest-External-Id` to a stable value per item. If the same id arrives twice, Cortex recognises the repeat and does not create a second inbox item, so a tool that retries deliveries stays safe. When you send the reference headers and no external id, Cortex derives one from them (`{provider}:{itemId}@{version}`), which is what makes a document's updates arrive as linked revisions: a Power Automate flow on a SharePoint library needs nothing more than the drive item id and the etag in those headers.
