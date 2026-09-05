@@ -9,9 +9,20 @@ This page uses clients as the example, because the Client template ships partiti
 
 ## What a partition is
 
-A partition is a folder under the brain's root folder, `clients/acme/`, with a **hub page** at the top (the first thing to read about that client), the template's sub-folders (knowledge, meetings, contacts), and a record of the **email domains** and **other names** that identify it. The brain's sidebar shows them on a **Clients** page: search, create, edit, archive, import from CSV.
+A partition is a folder under the brain's root folder, `clients/acme/`, with a **hub page** at the top (the first thing to read about that client), the template's sub-folders (knowledge, meetings, contacts, described below), and a record of the **email domains** and **other names** that identify it. The brain's sidebar shows them on a **Clients** page: search, create, edit, archive, import from CSV.
 
 Everything else in the brain sits in a shared folder such as `reference/`, which is for material that belongs to no single client.
+
+## What a client folder looks like
+
+Every client starts with the same shape, so a CSM picking up an account, or an agent asked about it, always knows where to look:
+
+- **The hub page** (`clients/acme/_index`) is the first page anyone reads. It has fixed sections: a summary of who they are and what you do for them, key facts, a **contacts table** (name, role, email, last seen, each name linking to the person's page), the current engagement, links to the knowledge topics, and a **timeline** of dated one-line entries, newest first, each linking to the meeting or decision it came from. Detail lives in the pages it links to; the hub stays short.
+- **knowledge/** holds a small, fixed set of living topic pages, each the current state of one topic with its sources cited: strategy, messaging, learnings and decisions. A topic page appears the first time there is something real to say and is rewritten as things change, so it never becomes a pile of dated notes.
+- **meetings/** holds one page per call or meeting, named by date. Each meeting adds a line to the hub timeline and to the people on the call.
+- **contacts/** holds one page per person who matters, with their role, email and a dated record of what they said and agreed. Someone who appears once on a call gets a mention on the meeting page, not a page of their own.
+
+Folders inside a client know what type of page belongs in them, so a page created in `meetings/` is a meeting and one in `contacts/` is a contact without anyone typing it. Your agent sees the same shape in the brain's schema.
 
 ## The promise: nothing files under the wrong client
 
