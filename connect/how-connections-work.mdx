@@ -30,6 +30,10 @@ On connecting, the agent can ask Cortex who it is and what it can see. It gets b
 
 This is why a brain's description matters: it is what your agents read to decide where things belong. A one-line description of what a brain is for pays for itself every day.
 
+## How long a connection lasts
+
+A connection does not need renewing while it is in use. Behind the scenes the agent holds a short-lived access token (an hour) and a refresh token good for 90 days. Every time the agent refreshes, it gets a fresh 90-day window, so an agent that runs at least once every three months stays connected without anyone touching a browser. An agent that sits idle for longer than that has to be approved again. Each refresh also re-checks that you are still a member of the workspace, so leaving a workspace ends every connection you made to it, even before the tokens expire.
+
 ## Taking access back
 
 Every connection is listed under **Connected Agents** on the Connect page, and each one can be revoked on its own. Revoking a connection destroys exactly that key and nothing else: your other agents keep working, and the revoked agent immediately loses access to the workspace. Removing your access to a single brain, meanwhile, does not need any revoking, because access is checked live: the agent simply stops being able to reach that brain.

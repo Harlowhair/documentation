@@ -3,6 +3,10 @@ title: "Changelog"
 description: "What's new in Cortex"
 ---
 
+<Update label="September 2026" description="Service credentials in the audit trail, and connection lifetimes">
+  A page written with a **service credential** now shows up in the brain's audit trail as that credential, by its id and label, instead of with no author. Nothing changes for the credential itself. And **how long a connection lasts** is now a stated rule rather than a library default: an agent stays connected while it is used at least once every 90 days, and is asked to approve again if it sits idle longer. See [how connections work](/connect/how-connections-work).
+</Update>
+
 <Update label="September 2026" description="Where a document lives, and revisions">
   Every inbox item can now say **where its document lives**: a link to the original on SharePoint, OneDrive, Google Drive, Confluence or anywhere on the web, with the provider, its id and the version at the time. The source record shows the copy that was read beside a link to the live document, and page citations carry both. Your agent can send the **file itself** over its connection rather than a text conversion, so the archived original is the document. And when a newer version of a known document arrives it is kept as a **revision**: linked to the earlier item, which is marked superseded, with a line diff of what changed handed to whoever files it. Nothing is filed automatically because a document changed; the brain's filing mode applies as for any new item.
 </Update>
