@@ -3,6 +3,10 @@ title: "Changelog"
 description: "What's new in Cortex"
 ---
 
+<Update label="September 2026" description="Name the filing skill and skip the triage check">
+  Every way into the inbox can now **say what the item is**: a "File as" choice on the web upload, a `skill` field on the API and your agent's upload tool, an `X-Ingest-Skill` header on webhooks, and a standing default on a webhook source. When you name the skill, the automatic filer skips its "is this worth filing" check for that item, spends nothing on it, and files with the skill you chose; the item's log says so. Leave it unset and ambient captures are checked exactly as before. A name that is not a skill is refused with the list. See [uploading files](/capture/uploading-files), the [API reference](/reference/api) and [webhooks](/reference/webhooks).
+</Update>
+
 <Update label="September 2026" description="Adding to a page, what changed, the graph tools, moves, and one search tool">
   Agents and integrations can now **add to one part of a page** instead of replacing it: a timeline line at the top of a section, a topic or todo under a heading, a note at the end, or a frontmatter key, with everything else on the page left exactly as it was. If the page changed under them, the edit is refused and they retry. A **changes feed** tells an agent what was created, updated or deleted since it last looked, with the inbox counts, so a morning briefing reads only what is new. Four **graph and timeline tools** join the connection: who links to a page, the pages within a few hops of it, a page's timeline as dated entries, and a check that the names an agent is about to link actually exist (with near misses when they do not), plus a one-call way to add a dated timeline line. **Moving or renaming a page** now keeps the graph whole: every page that linked to the old name is rewritten, and a move never overwrites. And search is **one tool with a mode**: exact for names, ids and phrases, semantic for meaning, hybrid for both; the separate exact-search tool is retired. The operating manual (1.7.0) explains all of it. See the [API reference](/reference/api).
 </Update>

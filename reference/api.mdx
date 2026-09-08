@@ -63,6 +63,7 @@ Two optional query parameters:
 - `?brain={slugOrId}` names a destination brain explicitly (it must be one the credential can write to; a brain-scoped credential can only name its own brain).
 - `?path={folder}` suggests where the content should file. It is recorded as a hint for the filing pass, not an order; the content itself can never choose its own destination.
 - `?partition={key}` names the client (or site, or matter) in a [partitioned brain](/brains/partitions). An unknown or archived key is refused with a 422 that lists the existing keys. Without it, the attendee emails decide, or the item waits as "needs a client".
+- `?skill={name}` (or `skill` in the JSON body or as a form field) pins the filing skill: `ingest`, `ingest-meeting`, `ingest-doc` or `ingest-conversation`. A deliberate upload that names its skill skips the automatic filer's "is this worth filing" check and goes straight to that skill; leave it out for ambient captures (a session hook, say) so the check still runs. A name that is not a skill is refused with a 400 that lists the skills. The same `skill` argument is on your agent's `upload_to_inbox` tool.
 
 ## Work with a specific brain's inbox
 
@@ -74,7 +75,7 @@ Two optional query parameters:
 | Update an item's status | `PUT /api/v1/brains/{brainId}/inbox/{itemId}/status` |
 | Archive an item | `POST /api/v1/brains/{brainId}/inbox/{itemId}/archive` |
 
-Uploads accept either a JSON body (`filename`, `content` or `contentBase64`, optional `externalId`, `targetFolder` and the four reference fields above) or multipart form data for binary files, up to 50 MB, with `canonicalUrl`, `provider`, `providerItemId` and `version` as form fields. The `?path={folder}` hint works here too. Items carry `sourceReference`, `supersedesItemId` and `supersededByItemId`; a GET on one item adds `revisionOf` and `revisionDiff`.
+Uploads accept either a JSON body (`filename`, `content` or `contentBase64`, optional `externalId`, `targetFolder`, `skill` and the four reference fields above) or multipart form data for binary files, up to 50 MB, with `canonicalUrl`, `provider`, `providerItemId`, `version` and `skill` as form fields. The `?path={folder}` and `?skill={name}` hints work here too. Items carry `skillHint` (the pinned skill, or null), `sourceReference`, `supersedesItemId` and `supersededByItemId`; a GET on one item adds `revisionOf` and `revisionDiff`.
 
 ```bash
 # Upload text to a named brain's inbox
