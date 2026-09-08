@@ -123,6 +123,19 @@ In a [partitioned brain](/brains/partitions) the clients (or sites, or matters) 
 
 Inbox listing takes `?partition={key}` and `?unassigned=true`. Search takes `?partition=`, `?folder=` and `?includeArchived=true` (archived partitions are left out of results unless asked for).
 
+## Members
+
+A brain's access list can be managed here as well as on its Members page, so onboarding a person or an agent can be scripted. The caller needs Admin or Owner on the brain: a service credential counts with the role it was issued, so a read-and-write credential is refused with a 403 and can never widen anyone's access. Only workspace members can be granted (invite them to the workspace first); one grant per person; the last Owner cannot be demoted or removed. Name the person by their user id or their email.
+
+| Do this | Request | Role |
+|---|---|---|
+| List members | `GET /api/v1/brains/{brainId}/members` (user id, email, display name, role, when granted) | Admin |
+| Grant access | `POST /api/v1/brains/{brainId}/members` with `{ "email" or "userId", "role" }` (`Read`, `Write`, `Admin` or `Owner`; `Read` when omitted) | Admin |
+| Change a role | `PUT /api/v1/brains/{brainId}/members/{userId}` with `{ "role" }` (the email works in place of the id) | Admin |
+| Revoke access | `DELETE /api/v1/brains/{brainId}/members/{userId}` | Admin |
+
+A grant for someone who already has access is refused with a 409; a grant for someone who is not in the workspace, a demotion of the last Owner, or an unknown role is a 400 with the reason. There is no agent tool for any of this, on purpose: an agent in a conversation cannot add or remove members.
+
 ## Receiving from third-party tools
 
 If instead you want an outside tool to push into Cortex (rather than calling the API from your own code), use the [webhook route](/reference/webhooks), which is designed for that and has its own authentication.

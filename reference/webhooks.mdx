@@ -11,10 +11,16 @@ A webhook source lets any tool that can send an HTTP request push content into a
 
 ## Setting up
 
-Create a webhook source in the brain's ingest sources settings. Choose how deliveries will be authenticated:
+Open the brain's **Settings** page and choose **Ingest sources** (you need to be an Admin or Owner of the brain). This is not the Sources page in the brain's side navigation, which is the archive of items that have already arrived; the settings block manages the senders.
 
-- **Shared secret:** Cortex gives you a secret; the sender includes it in a header. Simplest to set up.
-- **Signature (HMAC):** the sender signs each request body with a shared key. More secure, and the right choice if the sending tool supports it.
+1. Click **New source** and give it a label, such as the name of the tool that will send.
+2. Choose how deliveries will be authenticated. This cannot be changed later:
+   - **Shared secret:** Cortex gives you a secret; the sender includes it in a header. Simplest to set up.
+   - **Signature (HMAC):** the sender signs each request body with the secret. More secure, and the right choice if the sending tool supports it.
+3. Optionally add guard rules (allowed content types, a size cap, allowed sender domains), a target folder, a client to pin the source to on a [partitioned brain](/brains/partitions), and a default filing skill.
+4. Click **Create source**. Cortex shows the secret **once**, with the delivery URL, the headers to send and a ready-made `curl` example. Copy the secret now; it is stored encrypted and never shown again. If you lose it, delete the source and create another.
+
+The list shows every source with its guard, folder, client pin, default skill and delivery URL. **Edit** changes everything except the kind, authentication mode and secret. **Delete** asks you to type the source's label, revokes the secret at once, and leaves the items the source already delivered untouched.
 
 ## Sending a delivery
 
@@ -52,7 +58,7 @@ curl https://api.oncortex.ai/api/ingest/{brainId} \
 
 ## Guard rules
 
-A source can carry guard rules that decide which deliveries to accept, for example only from certain senders. A delivery that fails the guard is rejected outright and never stored: nothing that does not match your rules gets into the brain. This keeps a public-facing webhook from becoming a way to dump arbitrary content into your knowledge.
+A source can carry guard rules, set when you create it or from **Edit**, that decide which deliveries to accept, for example only from certain senders. A delivery that fails the guard is rejected outright and never stored: nothing that does not match your rules gets into the brain. This keeps a public-facing webhook from becoming a way to dump arbitrary content into your knowledge.
 
 ## Idempotency
 

@@ -3,6 +3,14 @@ title: "Changelog"
 description: "What's new in Cortex"
 ---
 
+<Update label="September 2026" description="Manage a brain's members from the API">
+  Onboarding can now be **scripted**. The public API lists a brain's members and grants, changes or revokes access by email or user id, with the same rules as the Members page: Admin or Owner on the brain to manage it, workspace members only, one grant per person, and the last Owner stays. A service credential counts with the role it was issued, so a read-and-write credential cannot widen access. This is deliberately not something an agent can do from inside a conversation. See the [API reference](/reference/api#members).
+</Update>
+
+<Update label="September 2026" description="Ingest sources on the Settings page">
+  Webhook sources now have a **screen**: Settings > Ingest sources on any brain you administer. Create a source with its label, authentication mode, guard rules, target folder, client pin and default filing skill, and copy the secret, the delivery URL, the headers and a ready-made `curl` example from the one-time reveal panel. Edit a source's rules and hints later without re-issuing the secret, and delete one by typing its label; what it already delivered stays put. The block is not the Sources archive in the side navigation, and says so. See [receiving webhooks](/reference/webhooks).
+</Update>
+
 <Update label="September 2026" description="Name the filing skill and skip the triage check">
   Every way into the inbox can now **say what the item is**: a "File as" choice on the web upload, a `skill` field on the API and your agent's upload tool, an `X-Ingest-Skill` header on webhooks, and a standing default on a webhook source. When you name the skill, the automatic filer skips its "is this worth filing" check for that item, spends nothing on it, and files with the skill you chose; the item's log says so. Leave it unset and ambient captures are checked exactly as before. A name that is not a skill is refused with the list. See [uploading files](/capture/uploading-files), the [API reference](/reference/api) and [webhooks](/reference/webhooks).
 </Update>
