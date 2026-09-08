@@ -3,6 +3,10 @@ title: "Changelog"
 description: "What's new in Cortex"
 ---
 
+<Update label="September 2026" description="Adding to a page, what changed, the graph tools, moves, and one search tool">
+  Agents and integrations can now **add to one part of a page** instead of replacing it: a timeline line at the top of a section, a topic or todo under a heading, a note at the end, or a frontmatter key, with everything else on the page left exactly as it was. If the page changed under them, the edit is refused and they retry. A **changes feed** tells an agent what was created, updated or deleted since it last looked, with the inbox counts, so a morning briefing reads only what is new. Four **graph and timeline tools** join the connection: who links to a page, the pages within a few hops of it, a page's timeline as dated entries, and a check that the names an agent is about to link actually exist (with near misses when they do not), plus a one-call way to add a dated timeline line. **Moving or renaming a page** now keeps the graph whole: every page that linked to the old name is rewritten, and a move never overwrites. And search is **one tool with a mode**: exact for names, ids and phrases, semantic for meaning, hybrid for both; the separate exact-search tool is retired. The operating manual (1.7.0) explains all of it. See the [API reference](/reference/api).
+</Update>
+
 <Update label="September 2026" description="Service credentials in the audit trail, and connection lifetimes">
   A page written with a **service credential** now shows up in the brain's audit trail as that credential, by its id and label, instead of with no author. Nothing changes for the credential itself. And **how long a connection lasts** is now a stated rule rather than a library default: an agent stays connected while it is used at least once every 90 days, and is asked to approve again if it sits idle longer. See [how connections work](/connect/how-connections-work).
 </Update>

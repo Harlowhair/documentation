@@ -84,6 +84,27 @@ curl https://api.oncortex.ai/api/v1/brains/{brainId}/inbox \
   -d '{"filename": "report.md", "content": "..."}'
 ```
 
+## Pages, timelines and the graph
+
+The page endpoints take a brain-scoped credential and the page path as `?path=`. Writes need a read-and-write credential.
+
+| Do this | Request |
+|---|---|
+| List pages, or read one | `GET /api/v1/brains/{brainId}/pages` (`?path=` for one page, with its markdown) |
+| Create or replace a page | `PUT /api/v1/brains/{brainId}/pages` with `{ "path", "markdown", "expectedVersion" }` |
+| Add to one part of a page | `PATCH /api/v1/brains/{brainId}/pages?path=` with `{ "operation", "section", "content", "position" }` (append to or replace a section, append to the page, set frontmatter keys) |
+| Read a page's timeline | `GET /api/v1/brains/{brainId}/pages/timeline?path=&limit=` (the dated lines of its Timeline section, newest first) |
+| Add a timeline line | `POST /api/v1/brains/{brainId}/pages/timeline?path=` with `{ "text", "date"? }` (today when omitted) |
+| Move or rename a page | `POST /api/v1/brains/{brainId}/pages/move` with `{ "fromPath", "toPath" }` (links to the old name are rewritten; refused when the target exists) |
+| Delete a page | `DELETE /api/v1/brains/{brainId}/pages?path=` |
+| What changed since last time | `GET /api/v1/brains/{brainId}/changes?since=&limit=` (keep the returned `nextCursor` and pass it back as `since`) |
+| Who links to a page | `GET /api/v1/brains/{brainId}/graph/backlinks?path=` |
+| Pages within a few hops | `GET /api/v1/brains/{brainId}/graph/traverse?path=&depth=&limit=` (depth 1 to 3) |
+| Check names before linking | `POST /api/v1/brains/{brainId}/graph/resolve` with `{ "refs": ["a slug", "a title", "a/path.md"] }` (the page each would link to, or near misses) |
+| Search | `GET /api/v1/brains/{brainId}/search?q=&mode=` (`exact`, `semantic` or `hybrid`) |
+
+An edit sent with a stale `expectedVersion`, or one that lands while someone else is saving, is refused with a 409 and the message "This page was changed by someone else. Reload and try again."; read the page again and resend.
+
 ## Partitions
 
 In a [partitioned brain](/brains/partitions) the clients (or sites, or matters) are managed here as well as on the Clients page. Roles are the caller's role on the brain: a service credential carries the role it was issued with, so a Write credential can push and assign, an Admin credential can manage partitions, and only an Owner credential or an owner's connection can purge.
