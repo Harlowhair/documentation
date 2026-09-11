@@ -3,10 +3,14 @@ title: "Changelog"
 description: "What's new in Cortex"
 ---
 
+<Update label="September 2026" description="The command line is on npm">
+  `npm install -g @oncortex/cli` puts `cortex` on your path on any machine with Node 18 or newer. Sign in with `cortex login`, then analyse, import and verify a folder of notes, upload files as sources, mark your brain as yours, or empty a test brain. Agents that find it installed stream files through it instead of asking for a one-time upload address. See [the command line](/connect/command-line).
+</Update>
+
 <Update label="September 2026" description="What's new: a command line, a connector for organisations, and agents that file what they upload">
   The changes of the past few days add up to one shift: **the door decides who files an item**, and the tools around that door got better.
 
-  **A command line.** `cortex` signs in as you, the way Claude Code does, and does the jobs a browser is bad at: `analyse` a folder of markdown notes, `init` a brain, `import` the folder into it and `verify` the result from the brain's side; `upload` a file straight from disk; `personal` to mark a brain as yours; `empty` a brain to run something again from scratch. It paces itself under the API's rate limit and a stopped import is safe to run again. It is not yet published as a package, so today it is installed from the Cortex repository. See [the command line](/connect/command-line).
+  **A command line.** `cortex` signs in as you, the way Claude Code does, and does the jobs a browser is bad at: `analyse` a folder of markdown notes, `init` a brain, `import` the folder into it and `verify` the result from the brain's side; `upload` a file straight from disk; `personal` to mark a brain as yours; `empty` a brain to run something again from scratch. It paces itself under the API's rate limit and a stopped import is safe to run again. Install it with `npm install -g @oncortex/cli`. See [the command line](/connect/command-line).
 
   **Claude for your whole organisation.** A Claude admin can add Cortex once as an organisation connector: Claude on the web registers itself with Cortex's sign-in service and keeps a secret Cortex issues it once, each member signs in through the browser, and Claude reaches exactly the brains that member can. Before this, hosted clients that keep a secret were turned away at registration. The connector now shows the Cortex icon in the list. See [connecting Claude](/connect/claude).
 

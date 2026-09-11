@@ -9,7 +9,14 @@ Your agent uses it too. When the command line is installed, a connected agent st
 
 ## Installing it
 
-The command line is not yet published as a package, so today it is installed from the Cortex repository. You need Node 18 or newer and nothing else. Clone the repository, go to the folder that holds the tool (the repository's own guide names it) and run `npm link`; that puts a `cortex` command on your path. Running the tool's script with `node` directly works the same way.
+The command line is published on npm as `@oncortex/cli`. You need Node 18 or newer and nothing else:
+
+```bash
+npm install -g @oncortex/cli
+cortex --version
+```
+
+Update it the same way. If your agent finds no `cortex` on its path and Node is present, it may offer once to run that install for you; it never installs anything unasked.
 
 ## Signing in
 
