@@ -3,7 +3,7 @@ title: "Meeting transcripts"
 description: "Push meetings from any tool into a brain"
 ---
 
-Cortex does not tie you to one meeting tool. Instead it defines a simple **transcript format**, and accepts it from anything that can make an HTTP request: your note-taker's export, a script, a webhook, an automation platform. If a tool can POST a file, it can feed your brain.
+Cortex does not tie you to one meeting tool. Two tools connect with a click, [Granola](/capture/granola) and [Read AI](/capture/read-ai), and for everything else Cortex defines a simple **transcript format** and accepts it from anything that can make an HTTP request: your note-taker's export, a script, a webhook, an automation platform, or your own agent. If a tool can POST a file, it can feed your brain.
 
 ## The format
 
@@ -48,9 +48,11 @@ In a [partitioned brain](/brains/partitions) (a clients brain, say), every trans
 
 Attendees with email addresses are therefore doubly valuable in a partitioned brain: they identify the people and they identify the client.
 
-## A reference pusher for Granola
+## Connect a tool, or use your agent
 
-If your team records calls with Granola, the Cortex repository ships a small script, the Granola collector, that reads each person's notes through the Granola API, writes them in the format above and pushes them in. It routes by attendee: a call with anyone outside your own domains goes to the shared clients brain and Cortex decides the client; a call with only your own people goes to that person's own brain, or nowhere. It runs on your side, on a schedule, with your Granola tokens; Cortex never polls Granola itself.
+**Granola** and **Read AI** are built in: connect one on the brain's Settings page under Ingest sources, and its meetings arrive by themselves in this format, verified, deduplicated and filed. See [Granola](/capture/granola) and [Read AI](/capture/read-ai).
+
+For any other tool, your connected agent is the manual route: give it the transcript (a file, an export, pasted text) and ask it to file the meeting. The `ingest-meeting` skill reads it, writes this format, uploads it as the source and files it, all in the conversation. Nothing to install and nothing to run on a schedule.
 
 ## Duplicates and retries
 

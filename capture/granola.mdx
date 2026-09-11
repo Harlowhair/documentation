@@ -1,0 +1,56 @@
+---
+title: "Granola"
+description: "Connect Granola and your meeting notes file themselves"
+---
+
+Record a call in Granola as you do today. When Granola has written the note, it tells Cortex, Cortex fetches the note with your key, turns it into the [transcript format](/capture/meeting-transcripts#the-format) and files it into the brain you connected: the meeting page, the people, the dated lines on their pages, the client when the brain is a clients brain. Nothing to run on your side.
+
+<Info>Granola connectors are in **beta**. Everything on this page works; the logo and a few words may still change.</Info>
+
+## What you get
+
+- Every new Granola note lands in the brain's inbox within a minute or two of Granola finishing it, and is filed by [auto-ingest](/filing/auto-ingest) with the meeting skill already chosen.
+- The attendees come from the calendar, so people are matched by email, not guessed from the dialogue.
+- The Granola note is the source: the filed page cites it, and the source record links straight to the note in Granola's web app.
+- In a clients brain, the attendee domains decide the client at the door, as for any transcript.
+
+## What you need
+
+- A Granola workspace on a **Business or Enterprise** plan (the API and webhooks are not on the free and Pro plans).
+- A **Granola API key**. A personal key sends the notes you own and the notes shared with you. A workspace key (admins only) sends the workspace's public notes and does not stop when a person leaves.
+- **Admin** on the brain you are connecting.
+
+## Set it up
+
+1. Open the brain's **Settings**, then **Ingest sources**, and pick **Granola** in the gallery.
+2. Paste your Granola API key. Cortex checks it with one list call before anything is saved, stores it encrypted, and never shows it again.
+3. Choose what to send. **Events**: a note's first summary (the default), and optionally edits, which arrive as a new version of the same meeting. **Which notes**: personal, public, or both. **Folders**: press *Load folders* and tick the ones to send; on a brain other people can read, limit the source to a folder, or everything the key can see becomes visible to every reader.
+4. Choose who sets up the webhook. **Cortex sets it up** is the usual choice: Cortex creates the webhook at Granola with your key and keeps it in step with the settings above. **I will set it up at the provider** is for an admin who wants to own the webhook in Granola: Cortex shows the receive URL to paste there, and you paste back the signing secret Granola shows once.
+5. Choose how far back to catch up. The default is the last seven days; up to thirty.
+6. Connect. The catch-up meetings arrive over the next few minutes; new ones arrive as Granola finishes them.
+
+## What arrives and how it is filed
+
+Each note becomes one inbox item in the transcript format: the title, when it started, the attendees with their emails, Granola's summary, then the diarised transcript with timestamps. The item is pinned to the meeting skill, so Cortex's filer spends nothing deciding what it is. Filing follows the brain's mode: automatic, suggested for review, or off.
+
+A note Cortex already holds (the same Granola note id) is recorded as a duplicate and nothing new is stored. A note.edited event, when you subscribe to it, arrives as a new version linked to the first.
+
+## Keeping it running
+
+The source row on the Ingest sources page shows the last delivery, the last item filed, the last error, and what Granola reports about the webhook. Three things to know:
+
+- **Manage at Granola** opens Granola's own view of the webhook (Settings, Connectors, Webhooks). If you want to change folders or pause it there, you can; press **Refresh** on the row and Cortex reads the change back.
+- If deliveries fail for four days (Cortex unreachable, say), Granola switches the webhook off and emails whoever created it. The row shows a banner; switch it back on at Granola, then Refresh. Nothing is lost: every night Cortex asks Granola for notes since the last one it holds, and **Catch up** on the row does the same on demand.
+- **Pause** stops deliveries at once (Granola gets a 401 and retries for a while); **Resume** starts them again. **Delete** wipes the key, deletes the webhook Cortex created, and refuses anything further.
+
+**Deliveries** on the row lists what arrived in the last thirty days and what became of each: filed, duplicate, ignored, queued or failed, with the reason.
+
+## What Cortex keeps
+
+Your API key, encrypted, used only to fetch notes and manage the webhook. The delivery history for thirty days: note ids, times and outcomes, never note content. The note itself is kept as the item's source, like any upload, and follows the brain's normal retention.
+
+## Related
+
+- [Meeting transcripts](/capture/meeting-transcripts): the format, and the manual route through your agent.
+- [Read AI](/capture/read-ai): the other connector.
+- [Auto-ingest](/filing/auto-ingest) and the [review queue](/filing/review-queue).
