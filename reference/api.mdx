@@ -19,6 +19,12 @@ Authorization: Bearer ck_your_key_here
 
 A credential is scoped to one brain and one access level. Writing endpoints need a read-and-write credential.
 
+## Rate limits
+
+The API and the agent connection endpoint allow **240 requests a minute per credential**, counted in fixed one-minute windows; requests with no credential are counted per client address instead. Over the limit, a request is refused with **429** and a `Retry-After` header giving the number of seconds until the window resets (60 when that cannot be worked out).
+
+A well-behaved client paces itself a little under the limit (the Cortex [command line](/connect/command-line) runs at 200 a minute), waits the number of seconds in `Retry-After` when it does see a 429 before retrying, and saves calls where it can, for example by fetching a brain's page list once at the start of a bulk import rather than reading each page before writing it.
+
 ## Push to your default brain
 
 The quickest way to capture something: post to the default inbox, which lands in the credential's brain (or, for a signed-in user, their single writable brain when they have exactly one).
@@ -58,8 +64,9 @@ curl https://api.oncortex.ai/api/v1/inbox \
 
 `contentBase64` and `content` are mutually exclusive. The decoded size is capped at 10 MB on this route; larger files go as multipart form data, up to 50 MB, where the same four fields are accepted as form fields. The same rules apply to your agent's `upload_to_inbox` tool.
 
-Two optional query parameters:
+Optional query parameters:
 
+- `?claim=true` marks the item as held by the agent that is calling: it arrives as `in_progress` with `claimedBy` set to `agent`, and Cortex's own filer never picks it up; the caller is expected to write the pages and archive the item. Without it, the item arrives `pending` and Cortex files it under the workspace's monthly ingestion limit. A held item nobody finishes within 30 minutes moves to `needs_review`. See [how ingestion is paid for](/filing/how-ingestion-is-paid-for).
 - `?brain={slugOrId}` names a destination brain explicitly (it must be one the credential can write to; a brain-scoped credential can only name its own brain).
 - `?path={folder}` suggests where the content should file. It is recorded as a hint for the filing pass, not an order; the content itself can never choose its own destination.
 - `?partition={key}` names the client (or site, or matter) in a [partitioned brain](/brains/partitions). An unknown or archived key is refused with a 422 that lists the existing keys. Without it, the attendee emails decide, or the item waits as "needs a client".
@@ -74,8 +81,32 @@ Two optional query parameters:
 | Upload an item | `POST /api/v1/brains/{brainId}/inbox` |
 | Update an item's status | `PUT /api/v1/brains/{brainId}/inbox/{itemId}/status` |
 | Archive an item | `POST /api/v1/brains/{brainId}/inbox/{itemId}/archive` |
+| Delete an item for good | `DELETE /api/v1/brains/{brainId}/inbox/{itemId}` (Admin on the brain; removes the item, its original file and its extracted text; pages filed from it keep source lines that now point at nothing) |
 
-Uploads accept either a JSON body (`filename`, `content` or `contentBase64`, optional `externalId`, `targetFolder`, `skill` and the four reference fields above) or multipart form data for binary files, up to 50 MB, with `canonicalUrl`, `provider`, `providerItemId`, `version` and `skill` as form fields. The `?path={folder}` and `?skill={name}` hints work here too. Items carry `skillHint` (the pinned skill, or null), `sourceReference`, `supersedesItemId` and `supersededByItemId`; a GET on one item adds `revisionOf` and `revisionDiff`.
+Uploads accept either a JSON body (`filename`, `content` or `contentBase64`, optional `externalId`, `targetFolder`, `skill` and the four reference fields above) or multipart form data for binary files, up to 50 MB, with `canonicalUrl`, `provider`, `providerItemId`, `version` and `skill` as form fields. The `?path={folder}`, `?skill={name}` and `?claim=true` options work here too. Items carry `status`, `claimedBy` (`agent`, `runner` or null: who holds an item that is being filed), `skillHint` (the pinned skill, or null), `sourceReference`, `supersedesItemId` and `supersededByItemId`; a GET on one item adds `revisionOf` and `revisionDiff`.
+
+## Upload a file with a one-time token
+
+This is the route a connected agent uses to get a file from its shell into the inbox without the bytes passing through the conversation. The agent asks Cortex for a token with its `create_upload_token` tool (Write on the brain), naming the filename, the brain, the filing skill and, optionally, where the document lives. The token starts with `ut_`, is good for **one brain, one file, one use, for 15 minutes**, and can do nothing else; Cortex stores only a hash of it. The tool returns a ready-made `curl` line:
+
+```bash
+curl -X PUT https://api.oncortex.ai/api/uploads \
+  -H "Authorization: Bearer ut_your_token_here" \
+  --data-binary @acme-brief.pdf
+```
+
+The body is the file, either raw or as the first part of a multipart form (`POST` is accepted as well as `PUT`, and the token may be sent in an `X-Upload-Token` header instead). Up to 50 MB. The item is created held by the agent (`in_progress`, `claimedBy: "agent"`) with the skill and source reference pinned, and the response carries what the agent needs next:
+
+| Field | Meaning |
+|---|---|
+| `id`, `brain`, `filename`, `status`, `claimedBy` | The new inbox item. |
+| `sourceUrl` | The item's citable address, for the source line on every page. |
+| `extracted`, `extractionNote` | Whether Cortex could extract text (PDF, Word, PowerPoint, plain text), and a sentence saying so, or saying that it could not (a scan, an image, a format Cortex does not open). |
+| `extractedText`, `extractedTextTruncated` | The document's text. The first 200,000 characters are inline; when there is more, `extractedTextTruncated` is true and the rest is on the item (`GET .../inbox/{itemId}`). |
+| `revisionOf`, `revisionDiff` | When the file is a new version of a document already filed: the earlier item, its status and the pages it fed, and a line diff of the two extractions. |
+| `note` | One line on what to do next. |
+
+An unknown or malformed token is a bare **401**. A token that has already been used, or has expired, is a **410** with a message saying which. A refused upload (an empty body, say) is a **400**.
 
 ```bash
 # Upload text to a named brain's inbox
@@ -91,7 +122,7 @@ The page endpoints take a brain-scoped credential and the page path as `?path=`.
 
 | Do this | Request |
 |---|---|
-| List pages, or read one | `GET /api/v1/brains/{brainId}/pages` (`?path=` for one page, with its markdown) |
+| List pages, or read one | `GET /api/v1/brains/{brainId}/pages` (`?path=` for one page, with its markdown and its `outline`; read it in pieces with the parameters below) |
 | Create or replace a page | `PUT /api/v1/brains/{brainId}/pages` with `{ "path", "markdown", "expectedVersion" }` |
 | Add to one part of a page | `PATCH /api/v1/brains/{brainId}/pages?path=` with `{ "operation", "section", "content", "position" }` (append to or replace a section, append to the page, set frontmatter keys) |
 | Read a page's timeline | `GET /api/v1/brains/{brainId}/pages/timeline?path=&limit=` (the dated lines of its Timeline section, newest first) |
@@ -105,6 +136,33 @@ The page endpoints take a brain-scoped credential and the page path as `?path=`.
 | Search | `GET /api/v1/brains/{brainId}/search?q=&mode=` (`exact`, `semantic` or `hybrid`) |
 
 An edit sent with a stale `expectedVersion`, or one that lands while someone else is saving, is refused with a 409 and the message "This page was changed by someone else. Reload and try again."; read the page again and resend.
+
+### Reading a page in pieces
+
+A single-page read (`?path=`) takes four more parameters, so a caller that found the right passage by search is not handed the whole page for it:
+
+| Parameter | Effect |
+|---|---|
+| `section={heading}` | Only that section of the page, matched by heading; the response's `section` names the heading that matched. An unknown heading is refused with the page's headings listed. |
+| `outline=true` | Headings only, no body. |
+| `maxChars={n}` | Only the opening, cut at that many characters. |
+| `whole=true` | The whole body even when the page is long. |
+
+Every read returns `outline`, the page's headings in order. A page over **20,000 characters** comes back cut at that point, with its outline and a note, unless `whole=true` is passed.
+
+### What a search hit carries
+
+Each hit in a search response carries `section`, the text of the chunk that matched (up to 1,500 characters), and `outline`, the page's headings in order, alongside the path, title, snippet and score. Most questions can be answered from `section` alone; when more is needed, read the page with `section={heading}` rather than whole.
+
+## Your personal brain
+
+One brain per member per workspace is marked as that member's personal brain: the default destination for an agent's writes when it can reach several brains, and reported as `personal` in the brain list an agent sees.
+
+| Do this | Request | Role |
+|---|---|---|
+| Mark a brain as yours | `POST /api/v1/brains/{brainId}/personal` (empty body) | Owner |
+
+The mark belongs to the signed-in user, so this needs a user's token (a connection or the [command line](/connect/command-line#marking-your-brain-as-yours)), not a service credential. Marking a second brain moves the mark; any other brain carrying it for you loses it. The brain Cortex created for you when you joined carries it already. There is no Settings switch for this yet.
 
 ## Partitions
 

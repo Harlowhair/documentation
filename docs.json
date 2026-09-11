@@ -57,6 +57,7 @@
         "pages": [
           "filing/skills",
           "filing/auto-ingest",
+          "filing/how-ingestion-is-paid-for",
           "filing/review-queue",
           "filing/pages-and-structure",
           "filing/search-and-recall"
@@ -71,7 +72,8 @@
           "connect/chatgpt",
           "connect/other-clients",
           "connect/multiple-brains",
-          "connect/service-credentials"
+          "connect/service-credentials",
+          "connect/command-line"
         ]
       },
       {

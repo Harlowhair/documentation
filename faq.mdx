@@ -29,7 +29,11 @@ description: "Common questions about how Cortex works"
   </Accordion>
 
   <Accordion title="Does automatic filing have a limit?">
-    Yes. Automatic filing has a daily allowance, so it works through your inbox steadily rather than in an uncontrolled burst. If there is more than a day's worth, it continues the next day.
+    Yes. Cortex's own filing is paid for by the workspace under a monthly ingestion limit. When the month's total reaches it, automatic filing pauses for the workspace, the inbox says so, and waiting items are filed when the limit is raised or the month turns. What your connected agent uploads is filed by the agent with its own tokens, so it is not affected. [How ingestion is paid for.](/filing/how-ingestion-is-paid-for)
+  </Accordion>
+
+  <Accordion title="How does my agent get a file into Cortex?">
+    It uploads the file first, streaming it from disk through the [command line](/connect/command-line) when that is installed or through a one-time upload address from its shell when not, and Cortex hands back the extracted text. The agent then writes the pages and archives the item. The file's bytes never pass through the conversation. [Ask your agent.](/capture/asking-your-agent#giving-your-agent-a-file)
   </Accordion>
 
   <Accordion title="What happens to an edited page?">

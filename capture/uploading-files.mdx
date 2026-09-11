@@ -9,6 +9,8 @@ Uploading is how you add a document to a brain directly, without going through a
 If you have an agent connected, the easiest way to add something is usually just to [ask it](/capture/asking-your-agent). Uploading is best for adding files, or for when you have not connected an agent.
 </Tip>
 
+A file you upload here is filed by Cortex on its next pass, in the brain's [filing mode](/filing/auto-ingest) and under your workspace's monthly ingestion limit. A file you hand to your agent instead is filed by the agent, with its own tokens. [How ingestion is paid for](/filing/how-ingestion-is-paid-for) explains the difference.
+
 ## What you can upload
 
 | Format | What happens |
@@ -29,6 +31,10 @@ The link does one more thing: when you upload a newer version of the same docume
 ## Say what it is
 
 The upload window has a **File as** choice: Auto, General, Meeting transcript, Document or Agent conversation. Leave it on Auto and the filing pass first asks a cheap check whether the item is worth filing and which kind it is. Pick a kind and you have answered both questions yourself: the check is skipped, nothing is spent on it, and the item goes straight to that filing skill. You uploaded it on purpose, after all. The item's log records "skill pinned by the caller" so you can see which route it took.
+
+## From your agent or the command line
+
+You do not have to use the browser. An agent with a shell uploads a file for you: it streams the file in, gets the extracted text back from Cortex, and files it in the same conversation. [Ask your agent](/capture/asking-your-agent#giving-your-agent-a-file) describes the steps. From a terminal, `cortex upload <file> --brain <slug>` puts a file in the inbox from disk, for Cortex to file or, with `--claim`, for the agent that ran it to file. See [the command line](/connect/command-line#putting-a-file-in).
 
 ## What extraction does, and does not, do
 

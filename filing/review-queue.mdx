@@ -34,6 +34,11 @@ In a [partitioned brain](/brains/partitions), an item that arrived without a kno
 
 A proposal drafted for such an item carries Cortex's best guess at the client, and it always waits for you: accepting it settles the client as well as the pages. If the client it names does not exist or is archived, the queue says so and the proposal cannot be accepted until the client is created or restored.
 
+## Two more things that land here
+
+- **An item your agent abandoned.** When your agent uploads something, it files it itself, and the item shows as held by the agent. If the agent does not finish within 30 minutes, the item comes here with a note saying so, for you to decide. Cortex never takes over an agent's item.
+- **A page split.** When a page grows past 2,000 words, Cortex queues it to be [split](/brains/health#oversized-pages) into an overview and topic pages. On Suggest, the split arrives here as a proposal with the drafted pages; on Automatic it is applied when confident.
+
 ## When something will not file
 
 Occasionally an item resists filing: it is malformed, or Cortex keeps failing to make sense of it. Rather than retrying forever, Cortex gives up after a few attempts and parks the item for you to handle by hand. A stuck item is always surfaced, never silently dropped.

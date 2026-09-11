@@ -1,0 +1,103 @@
+---
+title: "The command line"
+description: "Move a folder of notes into a brain, put files in from a terminal, and mark your brain as yours"
+---
+
+The Cortex command line is a small tool that runs on your own machine. It signs in as you, the same way Claude Code does, and then does the jobs that are awkward from a browser or a chat: moving an existing folder of markdown notes into a brain, putting a file into a brain's inbox straight from disk, marking a brain as yours, and emptying a brain when you want to run something again from scratch.
+
+Your agent uses it too. When the command line is installed, a connected agent streams files into the inbox through it rather than passing the bytes through the conversation. See [ask your agent](/capture/asking-your-agent#giving-your-agent-a-file).
+
+## Installing it
+
+The command line is not yet published as a package, so today it is installed from the Cortex repository. You need Node 18 or newer and nothing else. Clone the repository, go to the folder that holds the tool (the repository's own guide names it) and run `npm link`; that puts a `cortex` command on your path. Running the tool's script with `node` directly works the same way.
+
+## Signing in
+
+<Steps>
+  <Step title="Copy the connection URL">
+    In Cortex, open any brain's **Connect** page, choose the **Claude Code** tab and copy the URL. It looks like `https://api.oncortex.ai/t/your-workspace-id/mcp`.
+  </Step>
+  <Step title="Run cortex login">
+    ```bash
+    cortex login https://api.oncortex.ai/t/your-workspace-id/mcp
+    ```
+
+    The tool registers itself with your workspace's sign-in service once, prints a sign-in address, and opens it in a browser when there is one on the machine. Sign in and approve the connection, as you would for any agent. The approval screen names the workspace and shows that the tool will act as you.
+  </Step>
+  <Step title="Paste the address back if the browser is elsewhere">
+    After you approve, the browser is sent to an address on the machine running the tool. If the browser is on that machine, the tool picks it up on its own. If the browser is somewhere else (you are signing in to a server from your laptop, say), that page will not load: copy the address the browser landed on and paste it into the terminal. Pass `--no-browser` when you know in advance there is no browser.
+  </Step>
+</Steps>
+
+Once signed in, the login is kept in a settings folder in your home directory, readable only by you, and refreshed on its own. You sign in again only when the connection is revoked on the Connect page, you leave the workspace, or the login sits unused for 90 days. `cortex logout` forgets the login locally; the connection stays listed on the Connect page until you revoke it there. `cortex whoami` shows who you are, the inbox counts and the brains you can see, and `cortex brains` lists the brains alone. If you work in more than one workspace, sign in to each and pick one with `--profile <name>`.
+
+## Importing a folder of notes
+
+The command line is the migration tool: it takes a folder of markdown files, the kind Obsidian or a git-backed notes folder holds, and turns it into a brain. Four commands, in order.
+
+<Steps>
+  <Step title="Analyse the folder">
+    ```bash
+    cortex analyse ~/notes
+    ```
+
+    Nothing is sent anywhere. The report says what an import would do: how many files, which are missing a title or a type and what would be filled in, which links resolve and which do not, links that point outside the folder, duplicate names, images and other files that would not be imported, and a proposed folder tree.
+  </Step>
+  <Step title="Create the brain">
+    ```bash
+    cortex init "Rob personal" --slug rob-personal --template personal --personal
+    ```
+
+    Creating brains is a workspace admin action. The template is one of `blank`, `personal`, `company`, `strategy` or `client`; `--personal` marks the new brain as yours at the same time. A [deleted brain keeps its address](/brains/shared-brains#creating-one), so a slug that belonged to one is refused: choose another.
+  </Step>
+  <Step title="Import">
+    ```bash
+    cortex import ~/notes --brain rob-personal
+    ```
+
+    Each file becomes a page at the same path. The front matter is sent exactly as it is, never reordered; a missing title is taken from the first heading or the filename and a missing type from the top-level folder, and both are reported. The import paces itself under the API's rate limit and saves its progress every 25 pages, so a run that stops part way is safe to run again: pages already written are skipped and the rest are created. A page that changed in the brain since the last run is reported as a conflict rather than overwritten. `--dry-run` shows the plan without writing. A thousand new pages take about five minutes.
+  </Step>
+  <Step title="Verify">
+    ```bash
+    cortex verify ~/notes --brain rob-personal
+    ```
+
+    Checks from the brain's side: every local file is a page and there are no extras, the per-folder counts match, a sample of pages reads back byte for byte, a sample of links resolves, a search by title finds its page, and a dry-run re-import plans no writes. Broken links inside your folder are a warning, not a failure.
+  </Step>
+</Steps>
+
+What the import does not do: upload images or other non-markdown files (they are listed in the report), carry git history, rewrite links, delete pages for files you removed, or create clients in a [partitioned brain](/brains/partitions). Nothing is ever written into the folder you import from.
+
+## Marking your brain as yours
+
+```bash
+cortex personal --brain rob-personal
+```
+
+This marks a brain as [your personal brain](/brains/your-personal-brain#marked-as-yours): the one your agents write to unless you name another. You need to be the brain's Owner. One brain per person per workspace carries the mark, so marking a second one moves it. The brain Cortex created for you when you joined is marked already; a brain you created with `cortex init` is not until you say so, or pass `--personal` to `init`. There is no switch for this in Settings yet, so the command line and the API are the ways to set it today.
+
+## Putting a file in
+
+```bash
+cortex upload ~/Downloads/acme-brief.pdf --brain rob-personal --skill ingest-doc
+```
+
+The file goes from disk to the brain's inbox as a source, up to 50 MB, and its text is extracted on arrival. Without `--claim`, Cortex files it on its next pass under the workspace's [monthly ingestion limit](/filing/how-ingestion-is-paid-for); `--skill` names the filing skill (`ingest-doc`, `ingest-meeting`, `ingest-conversation` or `ingest`) so the "is this worth filing" check is skipped. With `--claim`, the item is held by the agent that ran the command: that agent reads the text, writes the pages and archives the item, and Cortex's own filer never touches it. `--url` records where the document lives, so a later version is recognised as a revision; `--folder` suggests where it should file, and `--partition` names the client in a partitioned brain.
+
+## Emptying a brain
+
+```bash
+cortex empty --brain rob-personal --yes
+```
+
+Deletes every page and every inbox item, sources included, and puts the blank starter text back on the brain's instructions page, so the [first-document check](/capture/asking-your-agent#the-first-time-an-agent-writes-into-a-brain) fires again. The brain itself, its members, credentials, folder structure and settings stay. It is for running a test again from scratch, not for tidying up. You need Admin on the brain, and nothing happens without `--yes`. Add `--keep-instructions` to leave the instructions page alone.
+
+## Using a service credential instead
+
+Pass `--ck` with a [service credential](/connect/service-credentials) to run `import`, `verify` and `upload` against that credential's brain without signing in, for example from a scheduled job. A credential is pinned to one brain, so `init`, `connect` and `personal` need a login.
+
+## Try it
+
+1. Run `cortex analyse` on a folder of notes and read the proposed folder tree.
+2. Import it into a new brain, then run `cortex verify` and check every count matches.
+3. Run `cortex whoami` and confirm the brain is marked as yours.

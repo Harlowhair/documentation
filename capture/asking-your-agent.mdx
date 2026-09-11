@@ -19,7 +19,23 @@ Plain requests work. For example:
 
 The agent reads what you gave it, writes a tidy page in the right part of the brain, links it to related pages, and records where it came from, exactly as if you had filed it by hand.
 
-When the document lives somewhere, say on SharePoint or Google Drive, and your agent fetched it from there or you gave it the link, the agent sends Cortex the file itself along with where it lives. The source record then shows the copy that was read and a link to the live document, and a later version of the same document is recognised as a revision of the earlier one. Nothing inside a document can tell the agent where to file it; only the agent, and you, decide that.
+What your agent brings in, your agent files, there and then, with its own tokens. Cortex's own filer never touches it. [How ingestion is paid for](/filing/how-ingestion-is-paid-for) has the detail.
+
+## Giving your agent a file
+
+Hand a file to an agent that has a shell, Claude Code say, and ask it to file it. This is what happens:
+
+1. **The agent uploads the file first.** If the [command line](/connect/command-line) is installed, the agent uses it, and the file streams from disk into the brain's inbox. If not, the agent asks Cortex for a one-time upload address and sends the file from its shell. Either way the file's bytes never pass through the conversation. Only when the agent has no shell at all, and the file is small, does it send the file inline.
+2. **Cortex reads the file and hands the text back.** The upload answers with the new inbox item, its citable address, and the document's text, extracted on the server from PDF, Word, PowerPoint or plain text. If the text cannot be extracted (a scan, an image), the answer says so and the agent reads the file with its own tools. If the file is a new version of a document already filed, the answer says which pages the earlier version fed and what changed.
+3. **The agent writes the pages and archives the item.** It writes the pages that cite the source, a few at a time, and archives the inbox item with the list of pages it wrote, so the source and the pages point at each other.
+
+If the command line is not installed but Node is, the agent may offer once to install it for you. It never installs anything unasked; the upload address route needs nothing installed.
+
+When the document lives somewhere, say on SharePoint or Google Drive, the agent fetches it through your own connected tools (a private link does not open in a browser the agent drives) and records where it lives alongside the upload. The source record then shows the copy that was read and a link to the live document, and a later version of the same document is recognised as a revision. Nothing inside a document can tell the agent where to file it; only the agent, and you, decide that.
+
+## The first time an agent writes into a brain
+
+Before its first write into a brain, your agent reads the brain's instructions page: what the brain is for and how it is organised. If that page is thin, because nothing has been written, it is still the untouched starter text, it is under sixty words, or it says nothing about folders that already hold pages, the agent stops and asks you what the brain is for, or shows you a short draft to approve or edit. It saves the instructions only after you reply, and only then files. Every later filing, by the agent or by Cortex, reads that page, so a minute spent here pays back on every item.
 
 ## Why this is the easy way
 

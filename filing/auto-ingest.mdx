@@ -23,7 +23,7 @@ In every mode, uncertainty always goes to you. Even on Automatic, Cortex never f
 
 ## Setting the mode
 
-Open the brain, go to **Settings**, and on the **General** tab you will find **Filing mode**: three choices, Off, Suggest and Automatic, with a line describing each. Changing it is an **Owner** action, since it decides how autonomously the agent writes to the brain. Suggest and Automatic use AI to file items and draw on your workspace's daily allowance (below).
+Open the brain, go to **Settings**, and on the **General** tab you will find **Filing mode**: three choices, Off, Suggest and Automatic, with a line describing each. Changing it is an **Owner** action, since it decides how autonomously Cortex writes to the brain. Suggest and Automatic use AI to file items, paid for by the workspace under its monthly ingestion limit (below).
 
 ## What each brain starts on
 
@@ -34,7 +34,7 @@ You can leave these defaults as they are, or change them at any time if you are 
 
 ## It cannot run away
 
-Automatic filing has a daily allowance. Cortex will work through the inbox steadily, but it cannot burn through an unlimited amount of work in a burst. If there is more than a day's worth, it simply continues the next day. This keeps automatic filing predictable and stops any surprise from a sudden flood of items.
+Automatic filing applies only to items that arrive with nobody present: web uploads, webhooks, hooks, files sent from the command line. What your connected agent uploads, the agent files itself, with its own tokens. Cortex's own filing is paid for by the workspace under a **monthly ingestion limit**: when the month's total reaches it, automatic filing pauses for the workspace, the inbox says so, and items wait until the first of next month or until the limit is raised. A single item also has a ceiling on how much work it may take. [How ingestion is paid for](/filing/how-ingestion-is-paid-for) has the detail and what to do while paused.
 
 ## Try it
 

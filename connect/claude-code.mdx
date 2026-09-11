@@ -47,6 +47,10 @@ Claude Code is Anthropic's command-line agent. Connecting it to Cortex means it 
   </Step>
 </Steps>
 
+## Giving it files
+
+Hand Claude Code a document and ask it to file it: it uploads the file to the brain's inbox first, gets the extracted text back from Cortex, writes the pages and archives the item, all with its own tokens. The file's bytes never pass through the conversation. With the [command line](/connect/command-line) installed, the upload streams from disk; without it, Claude Code uses a one-time upload address from its shell. [Ask your agent](/capture/asking-your-agent#giving-your-agent-a-file) has the steps.
+
 ## A memory that keeps itself
 
 The most useful pattern is to have Claude Code record its own work as it goes, so your brain fills up without you copying anything by hand. See [capturing agent conversations](/capture/agent-conversations) for how to set that up with a project hook.

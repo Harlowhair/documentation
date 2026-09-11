@@ -32,6 +32,20 @@ Connecting Claude to Cortex lets you ask Claude to remember and recall things ac
   </Step>
 </Steps>
 
+Once added, the connector shows the Cortex icon in Claude's connector list. If yours shows a plain initial instead, it was added before Cortex declared its icon; remove and add it again.
+
+## For workspace admins: adding Cortex for your whole organisation
+
+A Claude organisation admin can add Cortex once, as a connector for the organisation, so that each member signs in to Cortex from it rather than adding their own. Claude on the web registers itself with Cortex's sign-in service and keeps a secret Cortex issues it once; each person still approves their own connection in the browser, and Claude reaches exactly the brains that person can. The form asks a handful of things:
+
+- **The address** is the workspace connection URL from any brain's Connect page, the same one shown above.
+- **Whether users must sign in:** yes, always. Cortex has no anonymous access; every connection acts as a signed-in member.
+- **How the connector identifies itself to Cortex:** let Claude register itself automatically. There is no client id to paste: Cortex registers the connector on first contact and hands it a secret, which Claude keeps.
+- **Authorisation managed by Anthropic:** leave it off. Cortex runs its own sign-in and does not read a client description hosted elsewhere.
+- **Which tools the connector may use:** these can be restricted after the first successful connection, once Claude has seen what Cortex offers.
+
+Members then find Cortex in their connector list, sign in once, and use it exactly as described above.
+
 ## Using it day to day
 
 Once connected, you can ask Claude to both recall and remember:
