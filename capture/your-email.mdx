@@ -1,0 +1,124 @@
+---
+title: "Your email"
+description: "Forward a thread to your brain and keep what mattered, not the mail"
+---
+
+Mail does two jobs, and only one of them belongs in a brain. The first is triage: what is in my inbox right now, who wrote, what is still unread. That is a view over your mailbox, and it stays there. The second is memory: Jane confirmed the move on 11 September, Sam wants the revised deck by Friday, the contract changed in the thread after that one. That is what Cortex takes.
+
+So Cortex files what mattered onto the people, companies and projects a thread touched, keeps a link back to the message, and never keeps the message.
+
+<Info>
+**The forwarding address is being switched on.** The Cortex side is built and tested, and the setup below is how it works. The mail routing for the address is going live this week, so an address you create before then will not receive anything yet. Everything else on this page works today: verified mailboxes, the filing, and the collector route.
+</Info>
+
+## What you get
+
+A month of forwarded threads, and the pages in your brain read like a record of your dealings rather than a pile of mail.
+
+The page for a client contact carries dated lines in her timeline: what she confirmed, what she asked you for, what she told you had changed, each one linking the other people involved and citing the message it came from. Your todo page carries her asks with their dates and a link straight back to the thread. Each day's note carries one line for each thread that mattered. The company's page says whatever the thread changed about it.
+
+What you will not find is a page called "RE: contract revision", or a page for every sender, or a person page that reads like a mailbox. A thread gets a page of its own only when the thread is itself the record: a decision made by mail, a complaint, a change to a contract. Most threads produce lines, not pages.
+
+## What Cortex keeps, and what it never keeps
+
+**Kept:** the lines and pages it wrote. Alongside them, a short record of the delivery: the subject as the item's name, the link back to the message in your mailbox, the date, and the list of pages it was filed to. That record is what a citation on a page points at, and it is how you check later what was read and where it went.
+
+**Never kept:** the message. The text of a thread exists in Cortex only while the item is waiting to be filed. It is destroyed the moment filing ends, whichever way it ends: filed and archived, rejected, deleted, or left unfiled for seven days, which closes it. After that there is nothing to download and nothing to read back. The brain's Sources record says "Body not kept" and offers the link to your mailbox instead.
+
+Attachments never arrive at all. They are dropped as the message is read and only their names are carried through, so a filed line can say the revised deck was attached without the deck going anywhere. If an attachment matters, [upload it](/capture/uploading-files) yourself, deliberately.
+
+Your mailbox stays the archive. Cortex is the index over it.
+
+## What you need
+
+- **A brain marked as yours.** Mail may only enter [your own brain](/brains/your-personal-brain), never a shared or client brain. There is no setting that changes this.
+- **A verified mailbox.** The address you sign in with counts already; add any others you use.
+- **For the collector route only:** a credential on your own mailbox and somewhere to run a small program every half hour.
+
+## Forward it to your brain
+
+This is the route for everyone. No script, no credential, and it works from your phone.
+
+<Steps>
+  <Step title="Check your mailbox is verified">
+    Open **Profile**, then the **Mailboxes** tab. The address you sign in with is there already, verified by the fact that you sign in with it. Add any other address you send from, `you@yourcompany.com` and `you@yourownthing.co.uk` say: Cortex sends a six-digit code to it, you type the code back in, and the address is verified.
+
+    The code lasts fifteen minutes and dies after five wrong entries. You can hold up to ten added addresses. Removing one takes effect at once: the next message forwarded from it is refused. The list belongs to you, not to a workspace, so it follows you wherever you are a member.
+  </Step>
+
+  <Step title="Create the brain's address">
+    Open your own brain's **Connect** page and find **Forward mail to this brain**. One click creates an address that looks like `my-work-brain-k3p9vq2x7m4tbn6shd8afgwz@in.oncortex.ai`: your brain's name, then twenty-four random characters. Copy it.
+
+    Only the brain marked as yours can have one, and only you can create it. A shared brain has no address and cannot be given one.
+  </Step>
+
+  <Step title="Forward a message">
+    Forward anything worth remembering to that address, the way you would forward it to a colleague. Or set a rule in your mailbox that forwards mail from the people you name, so the ones that matter arrive without you thinking about it. Both work, and both end up in the same place.
+  </Step>
+
+  <Step title="If Gmail asks for a code">
+    Before Gmail will let a filter forward to a new address, it sends that address a confirmation mail with a code. Cortex recognises it, never files it, and shows the code on the Connect page under your address. Type the code into Gmail's forwarding settings and your rule starts working.
+  </Step>
+</Steps>
+
+### Forwarded by hand, or by a rule
+
+A message you forward by hand carries the original message as text, with the sender, date, recipients and subject written at the top of the body. Cortex reads that block, in the shapes Gmail, Outlook and Apple Mail write it, so the thread is filed under the person who actually wrote it rather than under you.
+
+A rule-based forward keeps the original headers intact, so the people on the thread and the thread's own identity are exact. That is the better of the two if you are setting up a watchlist, but the difference is one of precision, not of where the mail goes.
+
+### What gets refused, and why nothing bounces
+
+The door is narrow on purpose. A message is refused when:
+
+- it did not come from one of your verified addresses, so somebody who learns your brain's address still cannot put anything in it;
+- the sending domain failed the mail provider's sender checks, so a forged "from" cannot get in either;
+- the address has been rotated or removed.
+
+A refused message is never bounced. A bounce would tell a stranger that the address exists, so nothing goes back. Instead the refusal is counted on the Connect page, with the date and the sender's domain, and the message itself is never stored.
+
+The same narrowness applies to every route in. Mail may only enter the brain marked as yours, from an address you have verified. A shared brain, a client brain, a colleague's brain: all refused, with nothing stored, even when an agent has been told to file it there. If something from a thread belongs in a shared brain, the honest move is to [promote](/brains/promoting) the page afterwards, or have your agent write the fact there deliberately, with its citation.
+
+## Let a collector do it
+
+Forwarding needs nothing but a mailbox. A collector is for when you want it to happen on its own, with whole threads and exact participants.
+
+A collector is a small program that runs on your side, on a schedule, with your own mailbox credential. It reads only the threads you told it to care about: senders you named, starred or flagged mail, signature requests, anything you tag with a label. Everything else stays in your mailbox and is never read past its headers. For each thread with new mail, it takes the new messages only, strips the quoted history out of replies, names the attachments without sending them, and posts the result to your brain with a [service credential](/connect/service-credentials).
+
+Before it sends anything at all, it checks that the credential belongs to your own brain and that the mailbox it is reading is one you have verified. A wrong pairing stops it at startup rather than at delivery. Running it twice files nothing twice: a thread that has gained a reply arrives as a fresh item, and one that has not is recognised as a repeat.
+
+Cortex ships a reference collector for Gmail. Microsoft 365 and IMAP are not built yet. It is a more technical setup than forwarding, so the details, along with the shape Cortex expects a thread to arrive in, live in [the email contract](/reference/email-contract).
+
+Either way, Cortex never holds your mailbox credentials and never polls your mailbox itself.
+
+## How a thread is filed
+
+Both routes end at the same place: an item in the brain's [inbox](/capture/the-inbox), pinned to the **Ingest email** [skill](/filing/skills). That skill does the same work whether your agent runs it with you sitting there or Cortex runs it overnight:
+
+1. **It looks for the thread's earlier filing first.** If a page already cites this thread, the new messages update that record. There is never a second page for the same thread.
+2. **It resolves everyone by email address**, taken from the message headers rather than from signatures at the bottom. Someone with a page gets it updated. Someone with a real role in your world and no page yet gets one. A one-off sender or an automated notification gets neither.
+3. **It writes dated lines** on each person, company and project the thread was about, and they say something: "confirmed the move to the new supplier", not "emailed about contract".
+4. **Asks become todos.** When someone asks you for something with a deadline or a clear next step, it lands on your todo page with the person, the ask, the date and the link. Your own commitments go in the same way.
+5. **The day's note gets a line** for each thread that mattered.
+6. **Everything cites the link** back to the message. The words of the message are never pasted into a page, beyond the odd phrase where the exact wording is the fact: a price, a date, a decision.
+7. **Then the item is archived**, which is what destroys the message.
+
+A thread that arrives with nobody present is filed by Cortex under the brain's [filing mode](/filing/auto-ingest), so on a brain set to Automatic it files the straightforward ones and parks anything it is unsure about in the [review queue](/filing/review-queue) with the lines it had drafted. A parked mail item you reject is closed there and then, and its message destroyed with it; it is never put back in the queue.
+
+## What it costs
+
+A forwarded thread arrives with nobody present, so Cortex files it under the workspace's monthly ingestion limit, exactly like any other item that arrives on its own. A thread is small next to a document, so it is a cheap item to file. When you hand a thread to your own agent instead, the agent files it with its own tokens and the limit is not touched. [How ingestion is paid for](/filing/how-ingestion-is-paid-for) has the detail.
+
+## Keeping it running
+
+- **Watch the refused count** on the Connect page. It shows how many deliveries were turned away, when the last one was, and which domain it came from. A count that climbs is usually a forward from an address you have not verified yet, or a rule sending from an address you had forgotten about.
+- **Rotate the address** from the Connect page if you think it has leaked. The old one stops working at once and a new one replaces it.
+- **Remove the address** to stop mail entirely. Anything sent to it afterwards is not delivered, and still not bounced.
+- **Remove a mailbox** under Profile, then Mailboxes, and mail forwarded from it is refused from the next delivery on.
+- **Nothing lingers.** Cortex's own filing pass closes any mail item that has sat unfiled for seven days and destroys its message, so a brain you stop watching does not quietly accumulate readable mail. Turn automatic filing off for the brain and that pass stops running, so unfiled items then wait for you.
+
+## What this does not do
+
+- It is not a digest. Cortex does not tell you what is in your inbox; your mail client already does that better.
+- It does not send, reply, or mark anything as read. Nothing Cortex does reaches back into your mailbox.
+- It does not route by content. There is no rule, hint or setting that can send mail anywhere other than the brain marked as yours. See [data and privacy](/account/data-and-privacy).

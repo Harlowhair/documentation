@@ -9,6 +9,16 @@ Cortex is a place to keep your thinking, so it is fair to ask what happens to it
 
 Your brains, pages and files are stored on managed cloud infrastructure. Content is encrypted at rest, and the databases behind Cortex are not exposed to the public internet: they sit on a private network that only the application can reach. In short, your knowledge is held securely, not sitting in the open.
 
+## Mail is never kept
+
+Email is the one thing Cortex deliberately does not store. When you [forward a thread to your brain](/capture/your-email), or a collector posts one in, the message is readable only while the item waits to be filed. Filing destroys it: on archive, on reject, on delete, and on the seventh day if nothing has filed it by then. What is left is the record of the delivery, the subject, the link back to your mailbox, the date and the pages it was filed to, and the lines the filing wrote. There is nothing to download afterwards and nothing to read back. Attachments never arrive in the first place; only their names do.
+
+Forwarded mail passes through one more hand: the mail routing service that receives a message sent to your brain's address and hands it to Cortex. It handles the message in transit and stores nothing.
+
+A delivery that is refused, because it did not come from an address you verified, or because the sending domain failed its sender checks, is counted on the brain with the date and the sender's domain. The message behind it is not stored, and nothing is sent back to whoever sent it.
+
+Mail can only ever enter the brain marked as yours, from an address you have proved is yours. No setting, hint or instruction to an agent changes that.
+
 ## The member list is the boundary
 
 Access to a brain is its member list, full stop:

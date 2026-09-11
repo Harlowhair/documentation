@@ -1,0 +1,97 @@
+---
+title: "The email contract"
+description: "The shape a mail thread arrives in, and the rules it is held to"
+---
+
+<Info>
+This is a technical reference for developers writing a mail collector. If you only want to forward mail to your brain, see [your email](/capture/your-email); it needs nothing from this page.
+</Info>
+
+Cortex does not connect to mailboxes. It documents one shape for a mail thread and accepts it on the ordinary entry points, under three rules that are the whole point of the feature.
+
+1. **One mailbox, one brain.** A mail item may only enter the personal brain of the person whose mailbox it came from, and only from an address that person has verified. The door checks this in code before anything is stored, and refuses everything else with a **422**. No hint, no partition and no `?brain=` changes it.
+2. **The mail is never kept.** A mail item is created with retention `none`: its body exists only while the item waits to be filed, and is destroyed when filing ends (archive, reject, delete, or seven days unfiled). No archive copy, no downloadable original, no replay. What remains is the stub: subject, link, content hash, external id, the pages it was filed to, and the dates.
+3. **The skill is pinned** to `ingest-email`, at the door, whatever the caller asked for.
+
+## The shape
+
+A markdown file: frontmatter, then the **new** messages of the thread, oldest first.
+
+```markdown
+---
+kind: email
+subject: "RE: Contract revision - Acme"
+source: gmail                      # free text: the tool that produced it
+threadId: 1a0908761ccee487         # stable across deliveries of the same thread
+externalId: 1a0908761ccee487:1a090958b318dac1   # thread id plus newest message id
+link: https://mail.google.com/mail/u/?authuser=you%40example.com#all/1a0908761ccee487
+forwarded: rule                    # optional: manual | rule (forwarded mail only)
+selectedBecause: watchlist         # optional, free text: what made the collector pick this thread
+owner: { name: "Your Name", email: "you@example.com" }    # whose mailbox: must be verified
+participants:
+  - { name: "Jane Doe", email: "jane@acme.com" }
+  - { name: "Sam Patel", email: "sam@acme.com" }
+messages:
+  - { id: 1a090958b318dac1, from: "jane@acme.com", at: "2026-09-11T08:40:00Z", attachments: "pricing.pdf" }
+---
+### Jane Doe <jane@acme.com>, 2026-09-11 08:40
+_Attachments (not included): pricing.pdf_
+
+Hi, we are happy to move to the annual plan ...
+```
+
+| Field | What it does |
+|---|---|
+| `kind: email` | The marker the door keys off. Everything on this page follows from it. |
+| `owner.email` | Whose mailbox this came from. It must be one of the target brain owner's verified addresses, or the delivery is refused. |
+| `participants` | The highest-value field, as `attendees` is for a [transcript](/capture/meeting-transcripts). Take identity from the message headers, never from signatures in the body. |
+| `externalId` | Thread id plus newest message id. Re-sending an unchanged thread is a duplicate; a thread that gains a reply is a new item with the same `threadId`. |
+| `threadId` | Stable across deliveries. It is how the skill finds what it already filed from this thread. |
+| `link` | The citation, and the only archive. Every line the skill writes points back to it. |
+| `messages` | One entry per new message: id, from, at, and `attachments` as names only. |
+| `forwarded` | `manual` or `rule`, set by Cortex on mail that arrived by forwarding. Collectors leave it out. |
+| `selectedBecause` | Free text recording why a collector picked the thread (`watchlist`, `starred`, `signature`, `label`, `manual`). Not validated, and not used for routing. |
+
+Rules for the body: only the **new** messages, oldest first. Quoted history is stripped by whatever produces the contract. Attachments are never sent, only named. Extra keys are allowed and preserved; unknown keys are ignored.
+
+## Where to send it
+
+| Route | Who builds the contract | Entry point |
+|---|---|---|
+| **Forward it** | Cortex, from the raw message | Mail to the brain's inbound address. See [inbound mail](/reference/api#inbound-mail). |
+| **A collector** | Your code | `POST /api/v1/inbox` or `POST /api/v1/brains/{brainId}/inbox` with a Write [service credential](/connect/service-credentials) on the personal brain, `skill: ingest-email` and `retain: none`. A [webhook source](/reference/webhooks) works too, with `?retain=none`. |
+| **An agent** | The agent, from its own mail connector | The `upload_to_inbox` tool, with `content` and `skill: ingest-email`. The item is held by the agent, and its body is destroyed on archive like any other mail item. |
+
+`retain: none` is implied for a `kind: email` contract whether or not you send it. It is worth sending anyway: it is the honest description of what you are asking for, and it applies to [any item](/reference/api#retention-ask-for-the-body-not-to-be-kept), not only mail.
+
+## Check the pairing before you send
+
+A collector should verify its own configuration at startup rather than discovering a mistake at delivery. Call `whoami` with the credential it will use:
+
+- With a **service credential** on a personal brain, the response's first brain carries `personal: true` and `ownerMailboxes`, the owner's verified addresses. Refuse to run unless the mailbox you are about to read is in that list.
+- With an **OAuth connection**, `user.mailboxes` carries the signed-in caller's own verified addresses.
+
+## What the door answers
+
+Every refusal is a **422** with a message starting "Mail refused", and nothing is stored: no item, no blob, no extracted text.
+
+| Situation | Reply |
+|---|---|
+| The target brain is not marked as anyone's personal brain | 422, saying to mark it or to send to the owner's own brain |
+| The target brain is partitioned | 422: mail never enters a partitioned brain |
+| `owner.email` is missing or unreadable | 422: the contract must name the mailbox it came from |
+| `owner.email` is not a verified address of the brain's owner | 422, naming the address |
+
+The agent route goes through the same door and gets the same refusal, so an agent cannot file mail into a shared brain even when it is asked to.
+
+## Verified mailboxes
+
+An address is added and confirmed under **Profile**, then **Mailboxes**, in the web app: Cortex sends a six-digit code to the address, valid for fifteen minutes and dead after five wrong entries. The sign-in address is verified by signing in and is on the list from the start. Up to ten added addresses per account. Removing one takes effect immediately. The list belongs to the user rather than to a workspace.
+
+The list is managed in the web app and nowhere else: proving an address is something a person does, so there is nothing in the public API for it.
+
+## Once it is in
+
+The item is pinned to the `ingest-email` skill, named by the subject, and carries the `link` as its source reference. From there it is an ordinary inbox item: filed by your agent, by Cortex under the brain's [filing mode](/filing/auto-ingest), or by you in the [review queue](/filing/review-queue). What the skill writes is described in [how a thread is filed](/capture/your-email#how-a-thread-is-filed).
+
+`get_inbox_item` and `list_inbox` report `retention` (`none` or `keep`) and `bodyDestroyedAt`. Once the body is gone, `GET .../inbox/{itemId}/download` answers **410**, `get_source_file` answers with an error instead of the file, and the Sources record shows "Body not kept". A rejected mail item is closed rather than re-queued.

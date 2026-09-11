@@ -70,7 +70,24 @@ Optional query parameters:
 - `?brain={slugOrId}` names a destination brain explicitly (it must be one the credential can write to; a brain-scoped credential can only name its own brain).
 - `?path={folder}` suggests where the content should file. It is recorded as a hint for the filing pass, not an order; the content itself can never choose its own destination.
 - `?partition={key}` names the client (or site, or matter) in a [partitioned brain](/brains/partitions). An unknown or archived key is refused with a 422 that lists the existing keys. Without it, the attendee emails decide, or the item waits as "needs a client".
-- `?skill={name}` (or `skill` in the JSON body or as a form field) pins the filing skill: `ingest`, `ingest-meeting`, `ingest-doc` or `ingest-conversation`. A deliberate upload that names its skill skips the automatic filer's "is this worth filing" check and goes straight to that skill; leave it out for ambient captures (a session hook, say) so the check still runs. A name that is not a skill is refused with a 400 that lists the skills. The same `skill` argument is on your agent's `upload_to_inbox` tool.
+- `?skill={name}` (or `skill` in the JSON body or as a form field) pins the filing skill: `ingest`, `ingest-meeting`, `ingest-doc`, `ingest-conversation` or `ingest-email`. A deliberate upload that names its skill skips the automatic filer's "is this worth filing" check and goes straight to that skill; leave it out for ambient captures (a session hook, say) so the check still runs. A name that is not a skill is refused with a 400 that lists the skills. The same `skill` argument is on your agent's `upload_to_inbox` tool.
+- `?retain=none` (or `retain` in the JSON body or as a form field) asks for the item's body not to outlive its filing. See [retention](#retention-ask-for-the-body-not-to-be-kept) below.
+
+### Retention: ask for the body not to be kept
+
+By default an inbox item's body is kept: archived with the item, readable in the brain's Sources, downloadable, and available to replays. Any caller can ask for the opposite, for content that should be read once and then gone:
+
+| Route | How to ask |
+|---|---|
+| `POST /api/v1/inbox` and `POST /api/v1/brains/{brainId}/inbox` | `retain` in the JSON body, `?retain=none` on the address, or `retain` as a multipart form field |
+| `POST /api/ingest/{brainId}` (a [webhook source](/reference/webhooks)) | `?retain=none` or the `X-Ingest-Retain: none` header |
+| An agent's `upload_to_inbox` tool | the `retain` argument |
+
+`none` is the only value that does anything; anything else leaves the item on the default. With it, the body exists only while the item waits to be filed and is destroyed the moment filing ends, whether the item is archived, rejected, deleted or closed unfiled after seven days. What survives is the stub: the filename, the source reference, the content hash, the external id, the pages it was filed to, the dates and the log.
+
+A `kind: email` contract is given `retain: none` at the door whether or not the caller asks, along with the `ingest-email` skill and the [routing rules](/reference/email-contract) that go with mail.
+
+Afterwards, `GET`s on the item report `retention` (`none` or `keep`) and `bodyDestroyedAt`; `GET /api/v1/brains/{brainId}/inbox/{itemId}/download` answers **410** with "Not retained: the body of this item was destroyed when filing ended"; an agent's `get_source_file` answers with an error instead of the file; and the item's Sources record shows "Body not kept" with the link to the original in place of the download.
 
 ## Work with a specific brain's inbox
 
@@ -82,6 +99,7 @@ Optional query parameters:
 | Update an item's status | `PUT /api/v1/brains/{brainId}/inbox/{itemId}/status` |
 | Archive an item | `POST /api/v1/brains/{brainId}/inbox/{itemId}/archive` |
 | Delete an item for good | `DELETE /api/v1/brains/{brainId}/inbox/{itemId}` (Admin on the brain; removes the item, its original file and its extracted text; pages filed from it keep source lines that now point at nothing) |
+| Download the original | `GET /api/v1/brains/{brainId}/inbox/{itemId}/download` (add `?extracted=true` for the extracted text; **410** when the item's body was not retained and has been destroyed) |
 
 Uploads accept either a JSON body (`filename`, `content` or `contentBase64`, optional `externalId`, `targetFolder`, `skill` and the four reference fields above) or multipart form data for binary files, up to 50 MB, with `canonicalUrl`, `provider`, `providerItemId`, `version` and `skill` as form fields. The `?path={folder}`, `?skill={name}` and `?claim=true` options work here too. Items carry `status`, `claimedBy` (`agent`, `runner` or null: who holds an item that is being filed), `skillHint` (the pinned skill, or null), `sourceReference`, `supersedesItemId` and `supersededByItemId`; a GET on one item adds `revisionOf` and `revisionDiff`.
 
@@ -115,6 +133,35 @@ curl https://api.oncortex.ai/api/v1/brains/{brainId}/inbox \
   -H "Content-Type: application/json" \
   -d '{"filename": "report.md", "content": "..."}'
 ```
+
+## Inbound mail
+
+This is where forwarded mail arrives. A brain marked as its owner's personal brain can be given an inbound address on its Connect page, shaped `{brain-slug}-{24 random characters}@in.oncortex.ai`. Mail sent to it reaches Cortex through a mail relay, which posts the raw message here and decides nothing:
+
+```
+POST https://api.oncortex.ai/api/inbound/email
+```
+
+| Header | Value |
+|---|---|
+| `X-Inbound-Secret` | The shared secret, compared in constant time. Wrong or missing is a bare **401** with no body. |
+| `X-Inbound-To` | The envelope recipient: the brain's inbound address. Required; without it, **400**. |
+| `X-Inbound-From` | The envelope sender, as the forwarding mailbox rewrote it. |
+| Body | The raw RFC 822 message, up to 10 MB. |
+
+An authenticated post always answers **200** with `{ "outcome", "itemId", "reason" }`, whatever happened to the message, so that the relay never bounces anything and the address cannot be used to find out whether a brain exists:
+
+| `outcome` | What happened |
+|---|---|
+| `accepted` | The message became an inbox item, pinned to `ingest-email` and waiting to be filed. `itemId` names it. |
+| `duplicate` | The same message had already been delivered. Nothing new was created. |
+| `refused` | The address exists but the message may not enter, with `reason` saying why: the brain is not marked as anyone's personal brain, the sender is not a verified mailbox of its owner, or the sending domain passed neither SPF nor DKIM. The refusal is counted on the brain, with the date and the sender's domain, and the message is not stored. |
+| `unknown-address` | No brain owns that address, or it has been rotated or removed. |
+| `confirmation` | Gmail's "confirm this forwarding address" mail. The code is kept for the brain's Connect page and the message is never filed. |
+
+A post that arrives while no inbound secret is configured answers **503**.
+
+Cortex builds the [email contract](/reference/email-contract) from the message itself: who forwarded it (the forwarding headers, the envelope sender with the usual rewriting undone, then the From header, each checked against the owner's verified addresses), the original sender and subject (from the forwarded block for a message forwarded by hand, or from the headers for one forwarded by a rule), the participants, and the new message's text with quoted history stripped. Attachments are dropped and their names carried through. The item that results has retention `none` like any mail item.
 
 ## Pages, timelines and the graph
 

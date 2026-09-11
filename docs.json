@@ -48,6 +48,7 @@
           "capture/the-inbox",
           "capture/uploading-files",
           "capture/meeting-transcripts",
+          "capture/your-email",
           "capture/agent-conversations",
           "capture/other-sources"
         ]
@@ -96,6 +97,7 @@
         "pages": [
           "reference/api",
           "reference/webhooks",
+          "reference/email-contract",
           "faq",
           "changelog"
         ]

@@ -46,7 +46,8 @@ Headers:
 | `X-Ingest-Provider-Item-Id` | Optional. The stable id at the provider. With the version, it identifies revisions of one document. |
 | `X-Ingest-Version` | Optional. The etag or version at delivery. A new version of a known document becomes a new item linked to the earlier one; the same version again is a repeat. |
 | `X-Ingest-Partition` | Optional. The client (or site, or matter) key in a [partitioned brain](/brains/partitions); `?partition=` on the address does the same. Unknown or archived keys are refused. A source can also be pinned to one partition in its settings. |
-| `X-Ingest-Skill` | Optional. Pins the filing skill (`ingest`, `ingest-meeting`, `ingest-doc` or `ingest-conversation`); `?skill=` on the address does the same. The automatic filer then skips its "is this worth filing" check for the delivery and runs that skill. A source can carry a standing default skill in its settings; the per-delivery header wins. A name that is not a skill is refused with a 400 listing the skills, and nothing is stored. |
+| `X-Ingest-Skill` | Optional. Pins the filing skill (`ingest`, `ingest-meeting`, `ingest-doc`, `ingest-conversation` or `ingest-email`); `?skill=` on the address does the same. The automatic filer then skips its "is this worth filing" check for the delivery and runs that skill. A source can carry a standing default skill in its settings; the per-delivery header wins. A name that is not a skill is refused with a 400 listing the skills, and nothing is stored. |
+| `X-Ingest-Retain` | Optional. `none` asks for the delivered body not to outlive its filing: it is destroyed when the item is archived, rejected, deleted or closed unfiled, leaving the stub and the pages it was filed to. `?retain=none` on the address does the same. See [retention](/reference/api#retention-ask-for-the-body-not-to-be-kept). |
 
 ```bash
 curl https://api.oncortex.ai/api/ingest/{brainId} \
