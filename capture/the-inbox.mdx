@@ -39,7 +39,7 @@ Three hands can file an item, and they all follow the same [skills](/core-concep
 
 - **Your connected agent** files whatever it uploads: a document you handed it, a transcript, a note. It does that in the same conversation, with its own tokens, and the item shows as held by your agent while it works. It can also file a waiting item when you ask it to.
 - **Cortex itself** files what arrives with nobody present: web uploads, webhook deliveries, session hooks, files sent from the command line. It files straightforward items automatically, parks anything it is not confident about in the review queue, and works under the workspace's monthly ingestion limit.
-- **You** can file, adjust or reject anything by hand from the inbox.
+- **You** can file, adjust or reject anything by hand from the inbox. An item waiting for Cortex can also be handed to your agent: open it and copy the prompt the drawer offers ("Check my Cortex inbox and deal with what is waiting"); the agent takes it from the queue, files it and asks you anything Cortex would have parked on. The drawer also says why an item is waiting: Cortex filing is switched off for the brain, the workspace has reached its monthly limit, or it is simply next in line.
 
 [How ingestion is paid for](/filing/how-ingestion-is-paid-for) explains the two lanes and the monthly limit. If an item repeatedly fails to file cleanly, Cortex stops retrying and parks it in the review queue rather than looping forever.
 
