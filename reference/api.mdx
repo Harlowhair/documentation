@@ -136,7 +136,7 @@ curl https://api.oncortex.ai/api/v1/brains/{brainId}/inbox \
 
 ## Inbound mail
 
-This is where forwarded mail arrives. A brain marked as its owner's personal brain can be given an inbound address on its Connect page, shaped `{brain-slug}-{24 random characters}@oncortex.ai`. Mail sent to it reaches Cortex through a mail relay, which posts the raw message here and decides nothing:
+This is where forwarded mail arrives. A brain marked as its owner's personal brain can be given an inbound address on its Connect page, shaped `{brain-slug}-{24 random characters}@in.oncortex.ai`. Mail sent to it reaches Cortex through a mail relay, which posts the raw message here and decides nothing:
 
 ```
 POST https://api.oncortex.ai/api/inbound/email
