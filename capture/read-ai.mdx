@@ -1,0 +1,49 @@
+---
+title: "Read AI"
+description: "Send Read AI meeting reports into a brain"
+---
+
+Read AI writes a report when a meeting ends: the summary, the action items, the key questions, the topics, the transcript. Give Read the address of a Cortex source and every report arrives in the brain's inbox and is filed as a meeting.
+
+<Info>The Read AI connector is in **beta**: it has been built against Read's published report shape and is being checked against real deliveries. If a report of yours files oddly, send it to us.</Info>
+
+## What you get
+
+- Every meeting report lands in the inbox as soon as Read sends it, and is filed by [auto-ingest](/filing/auto-ingest) with the meeting skill already chosen.
+- The participants come from the report, so people are matched by email where Read gives one.
+- Read's summary, action items, key questions, topics and chapters all go into the item, each under its own heading, with the transcript after them.
+- The filed page cites the report, and the source record links to it in Read.
+
+## What you need
+
+- A Read AI workspace on a **Pro or Enterprise** plan (webhooks are not on the free and starter tiers).
+- Access to Read's webhook settings: **Integrations, Webhooks** in the Read app.
+- **Admin** on the brain you are connecting.
+
+## Set it up
+
+1. Open the brain's **Settings**, then **Ingest sources**, and pick **Read AI** in the gallery.
+2. Give the source a label and, if you like, a folder to file under. Connect.
+3. Cortex shows the source's **receive URL**. The last part of it is a secret: copy the whole URL now; it is shown once. (Rotate it from the source row if it ever leaks.)
+4. In Read, open **Integrations, Webhooks** and create a webhook with that URL as its address. Read sends a report at the end of every meeting.
+
+There is no credential to paste: Read pushes the whole report, so Cortex never has to fetch anything from Read.
+
+## What arrives and how it is filed
+
+Each report becomes one inbox item in the [transcript format](/capture/meeting-transcripts#the-format): the title, when it started, the participants, then the summary, action items, key questions, topics and chapters under headings, then the diarised transcript. The item is pinned to the meeting skill. Filing follows the brain's mode.
+
+A report Cortex already holds (the same Read session) is recorded as a duplicate. A meeting-start event, if Read sends one, is ignored.
+
+## Keeping it running
+
+The source row shows the last delivery, the last item filed and the last error. **Manage at Read AI** opens Read's webhook settings, where the webhook itself lives. **Deliveries** lists what arrived in the last thirty days and what became of each. **Pause** makes the URL answer 401 until you **Resume**. **Delete** stops the URL for good; remove the webhook in Read as well.
+
+## What Cortex keeps
+
+No credential. The delivery history for thirty days: session ids, times and outcomes. The report is kept as the item's source, like any upload, and follows the brain's normal retention.
+
+## Related
+
+- [Meeting transcripts](/capture/meeting-transcripts): the format, and the manual route through your agent.
+- [Granola](/capture/granola): the other connector.

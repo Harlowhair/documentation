@@ -3,6 +3,16 @@ title: "Changelog"
 description: "What's new in Cortex"
 ---
 
+<Update label="September 2026" description="Connect Granola or Read AI and your meetings file themselves">
+  **Source connectors.** A brain's Settings page now has a gallery of tools to connect. Pick **Granola**: paste your API key, choose which notes and folders, and Cortex sets up the webhook at Granola, catches up the last week and files every new note as a meeting as Granola finishes it. Pick **Read AI**: paste the address Cortex gives you into Read's webhook settings, and every meeting report arrives with its summary, action items, key questions and transcript. Both are in beta.
+
+  **One source, one brain.** A connected source feeds only the brain you connected it to; nothing routes between brains. On a shared brain, limit a Granola source to a folder, or everything the key can see becomes visible to every reader; the page warns you.
+
+  **Managed at the provider, visible in Cortex.** Every source row shows the last delivery, the last item filed, the last error, what the provider reports about the webhook, and a **Manage** link to the provider's own settings. If a provider switches a webhook off after days of failures, the row says so and a nightly catch-up picks up what was missed. **Deliveries** lists everything that arrived in the last thirty days and what became of it.
+
+  The reference Granola pusher script is retired: connect Granola instead, or ask your agent to file a transcript by hand. See [Granola](/capture/granola), [Read AI](/capture/read-ai) and [meeting transcripts](/capture/meeting-transcripts).
+</Update>
+
 <Update label="September 2026" description="Your email: what mattered goes in, the mail itself never does">
   **Your email.** Mail does two jobs, and Cortex now does the second one. Forward a thread to your brain and it is filed as what mattered: dated lines on the people, companies and projects it touched, todos for the asks, a line in the day's note, every one cited to the message. There is no page per thread and no page that reads like a mailbox.
 
