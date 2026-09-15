@@ -180,7 +180,7 @@ The page endpoints take a brain-scoped credential and the page path as `?path=`.
 | Who links to a page | `GET /api/v1/brains/{brainId}/graph/backlinks?path=` |
 | Pages within a few hops | `GET /api/v1/brains/{brainId}/graph/traverse?path=&depth=&limit=` (depth 1 to 3) |
 | Check names before linking | `POST /api/v1/brains/{brainId}/graph/resolve` with `{ "refs": ["a slug", "a title", "a/path.md"] }` (the page each would link to, or near misses) |
-| Search | `GET /api/v1/brains/{brainId}/search?q=&mode=` (`exact`, `semantic` or `hybrid`) |
+| Search | `GET /api/v1/brains/{brainId}/search?q=&mode=` (`exact`, `semantic` or `hybrid`); repeat `queries=` for up to five sub-queries searched beside `q` and fused into one result (a compound `q` is split for you unless the mode is `exact`) |
 | Is the brain still being fed | `GET /api/v1/brains/{brainId}/health` (see [below](#is-a-brain-still-being-fed)) |
 
 An edit sent with a stale `expectedVersion`, or one that lands while someone else is saving, is refused with a 409 and the message "This page was changed by someone else. Reload and try again."; read the page again and resend.
@@ -200,7 +200,7 @@ Every read returns `outline`, the page's headings in order. A page over **20,000
 
 ### What a search hit carries
 
-Each hit in a search response carries `section`, the text of the chunk that matched (up to 1,500 characters), and `outline`, the page's headings in order, alongside the path, title, snippet and score. Most questions can be answered from `section` alone; when more is needed, read the page with `section={heading}` rather than whole.
+Each hit in a search response carries `section`, the text of the chunk that matched (up to 1,500 characters), `outline`, the page's headings in order, and `abstract`, one line on what the page is about (its frontmatter `description` if it has one, else its first paragraph), alongside the path, title, snippet and score. Most questions can be answered from `section` alone; when more is needed, read the page with `section={heading}` rather than whole. The page index (`get_index`, and `brief`) carries the same `abstract` per page, so a caller can choose a page before reading it.
 
 ## Is a brain still being fed
 

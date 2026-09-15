@@ -3,6 +3,14 @@ title: "Changelog"
 description: "What's new in Cortex"
 ---
 
+<Update label="September 2026" description="Search finds more of what a brain holds, in fewer calls">
+  Three things made a brain return less than it held, and all three are fixed. A very long page could crowd every other page out of a search, so a brain with one big document looked like one page: each page now gets one place in the running, on its best passage. Exact mode could not find a short string inside a long page (an id, a code, part of a word), because it compared your text with the whole passage rather than looking for it inside: now it looks inside. And a question in plain words only matched pages holding every one of its words: now a page holding most of them counts, most first.
+
+  Two things make each call go further. Ask a **compound question** ("what is our bounce policy and how long does a warm-up take") and Cortex searches its parts as well as the whole, in the same call, so both halves come back together; an agent that knows the parts can pass them as `queries`. And every page now carries a one-line **abstract**, taken from its frontmatter description or its first paragraph, on every search hit, in the page index and in the brief, so an agent can choose the right page without reading it.
+
+  For anyone watching what their agent costs: the usage record now names the tool behind every call, and each search records what it did. See [the API reference](/reference/api#what-a-search-hit-carries).
+</Update>
+
 <Update label="September 2026" description="Cortex on your phone, and a quick add for tasks and topics">
   The Workspace now fits a phone. The page fills the screen, **Pages** slides the folder tree in from the left and **Info** the backlinks and page details from the right; reading, the editor (the same one, both modes), history and delete all work as on a desk. Every brain page also has a round **+** button at the bottom left with two one-line forms: **Task** adds a line to your [task page](/filing/tasks) with a due date and a section, and **Topic** adds something to raise with a person, found by typing their name, under **To Discuss** in their Topics section, dated today and linking the page you were reading. Both append to the page as it is at that moment, so nothing else on it is touched. See [pages and structure](/filing/pages-and-structure#on-your-phone).
 </Update>
