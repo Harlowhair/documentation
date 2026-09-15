@@ -17,6 +17,8 @@ the first place to look when a search misses something you know is there.
 | **Embed coverage** | How much of the brain semantic search can see (below). |
 | **Oversized pages** | Pages over 2,000 words, each listed below. A page should be one topic; these have grown past it (below). |
 | **Inbox pending** | Items waiting in the inbox or review queue. |
+| **Failed deliveries** | Shown only when a [connected meeting tool](/capture/granola) delivered something in the last week that Cortex could not file; the source row under Settings, Ingest sources says why. |
+| **Switched off at the provider** | Shown only when a connected tool reports its webhook disabled; the source row has the link to switch it back on. |
 | **Last activity** | The most recent write, human or agent. |
 
 ## Embed coverage
@@ -39,15 +41,18 @@ is 300 to 1,500 words. Health counts the pages over 2,000 words and lists them, 
 page that long answers questions badly: search finds it, but the answer is buried. Cortex fixes
 them for you. On each pass it takes a few of the listed pages and queues each one for the
 **split page** skill, which rewrites the page as a short overview at the same address, so
-nothing that linked to it breaks, plus one page per topic underneath. The split goes through the
+nothing that linked to it breaks, plus one page per topic underneath. A person, company or
+project page in your own brain is [compacted](/filing/pages-and-structure#the-right-size-for-a-page)
+instead: rewritten in place with its older history moved to a history page. The split goes through the
 brain's filing mode like anything else: a proposal in the [review queue](/filing/review-queue)
 on Suggest, applied when confident on Automatic. You can also ask your agent to split a page
 now. Folder index pages are never counted.
 
 ## The buttons
 
-- **Run dream** runs the hourly maintenance pass immediately: resolves links, and fills
-  in any missing search data and embeddings. Harmless to press whenever - repeated
+- **Run dream** runs the hourly maintenance pass immediately: resolves links, fills
+  in any missing search data and embeddings, and refreshes the brain's [front page](/filing/pages-and-structure#the-front-page)
+  if you have not edited it. Harmless to press whenever - repeated
   presses coalesce into one pass.
 - **Repair structure** rebuilds what the brain's template provisioned: its instructions,
   schema and folder index pages. Use it if the Health page warns about stuck page writes
