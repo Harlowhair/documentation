@@ -1,0 +1,87 @@
+---
+title: "Tasks"
+description: "One task page in your own brain, fed by your meetings and mail, kept tidy on its own"
+---
+
+Your brain keeps your tasks on **one page**: `todos.md` at the root of your personal brain.
+Not scattered across project pages, not in a separate app. One list, in plain markdown, that
+you can read in the editor, that your agent can read and add to, and that Cortex fills from
+the meetings and mail it files.
+
+## The page
+
+Each task is one line, in the shape Obsidian's Tasks plugin uses, so a page you bring from
+Obsidian works as it is and a page Cortex writes opens in Obsidian unchanged:
+
+```markdown
+## Now
+- [ ] Get the P&Ls from the founders and share them with [[people/monika-joshevska|Monika]] 📅 2026-09-19 ➕ 2026-09-15 [[meetings/2026-09-15-perlon-sync]]
+
+## Waiting on
+- [ ] Sasho to send the Skopje numbers 📅 2026-09-18 [[people/sasho-jankovski]]
+```
+
+| Marker | Meaning |
+|---|---|
+| `📅 2026-09-19` | Due date. Only when one is known; nothing invents a date. |
+| `➕ 2026-09-15` | When the line was added. Every line a tool writes carries it. |
+| `✅ 2026-09-20` | When it was ticked. |
+| `🔺` `⏫` `🔼` `🔽` `⏬` | Priority, high to lowest. |
+| `🔁 every week` | It comes back. Ticking it adds the next occurrence above it, with the next date. |
+| `[[wikilinks]]` | The meeting or mail it came from, the project, the people. |
+
+The sections are yours to order: **Now**, **Next**, **Later**, **Captured**, **Waiting on** and
+**Completed** to start with, plus any you add. Indent a line under another for a sub-task.
+
+## Where tasks come from
+
+- **Meetings.** When Cortex files a transcript, an action item that is yours becomes a line
+  under **Captured**, with the date if one was said and links to the meeting page and the
+  project. An action someone else owes you goes under **Waiting on** with their name.
+- **Mail.** An ask in a [forwarded thread](/capture/your-email) becomes a Captured line, linked
+  to the person and the message.
+- **Your agent.** "Add a task to chase Monika about the P&Ls on Friday." It formats the line for
+  you, and checks the list first so the same ask is not added twice.
+- **You.** Type one into the box on the Tasks page, or edit the page itself in the editor: it is
+  ordinary markdown with boxes you can tick.
+- **Agent sessions.** A commitment you made in a session ("I'll send that tomorrow") is
+  captured when the session is filed, under the same rules as everything else in it.
+
+Cortex never decides what matters most. Everything it finds lands under **Captured**; you, or
+your agent in the morning, move lines up to Now or Next.
+
+## The Tasks page
+
+Every brain with a task page has **Tasks** in its sidebar: the page as a list, grouped by your
+sections, with a strip along the top for what is overdue, due today, due this week, or has no
+date. Tick a box to complete a task, untick to reopen. Add one from the box at the top with a
+date and a section. Move a task between sections from the menu on its line. **Open the page**
+takes you to the same lines in the editor for anything else.
+
+Nothing you did not touch is rewritten. If someone else changed the page between your reading
+it and your click, the change is refused and the list reloads.
+
+## Kept tidy on its own
+
+Ticked tasks stay where they are for a week, so what you finished is still visible in its
+section. After that the hourly maintenance moves them to **`todos-archive.md`** beside the page,
+one section per month, newest first. A ticked line with no date is stamped first and moves the
+following week. A ticked task whose sub-tasks are still open stays put. **Archive done** on the
+Tasks page does the same move now.
+
+The task page and its archive are the two pages the [size rule](/filing/pages-and-structure#the-right-size-for-a-page)
+leaves alone: a task list is one list however long it gets, and the archive grows by design.
+
+## For your agent and for scripts
+
+Your agent has `list_tasks` (with filters for due and section), `add_task`, `complete_task`,
+`move_task` and `archive_done_tasks`, and its morning `brief` carries the counts and the lines
+due this week. The same live at `/api/v1/brains/{brainId}/tasks` on the
+[API](/reference/api#tasks), so a script can read or add to the list with a
+[service credential](/connect/service-credentials).
+
+## Try it
+
+1. Ask your agent to add a task with a due date of tomorrow and a link to a project page.
+2. Open the Tasks page, tick it, then untick it. Open the page in the editor and find the line.
+3. Tick a task with `🔁 every week` on it and watch the next occurrence appear above it.

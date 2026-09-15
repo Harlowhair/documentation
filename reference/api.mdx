@@ -214,6 +214,20 @@ automatic filing, and `findings`: one row per check with `status` (`fine`, `stal
 behind [brain health](/brains/health#is-it-still-being-fed) and `cortex health`, so a
 scheduled job can poll it and alert when anything is not `fine`.
 
+## Tasks
+
+Your brain's [task page](/filing/tasks) as a list. A read-only credential can list; adding, completing, moving and archiving need read-and-write.
+
+| Do this | Request |
+|---|---|
+| List tasks | `GET /api/v1/brains/{brainId}/tasks?status=open|done|all&due=overdue|today|week|none&section=&link=` (each task carries an `id`, its section, text, dates, links and a `dueBucket`) |
+| Add one | `POST /api/v1/brains/{brainId}/tasks` with `{ "text", "due"?, "section"?, "priority"?, "links"?, "recurrence"? }` (lands under Captured unless a section is named) |
+| Complete or reopen | `POST /api/v1/brains/{brainId}/tasks/{id}/complete`, `.../{id}/reopen` |
+| Move to a section | `POST /api/v1/brains/{brainId}/tasks/{id}/move` with `{ "section" }` |
+| Archive ticked tasks | `POST /api/v1/brains/{brainId}/tasks/archive-done?cutoff=YYYY-MM-DD` (default a week ago; `today` archives everything ticked) |
+
+An edit that lands while someone else is saving the page is refused with a 409; list again and retry.
+
 ## Your personal brain
 
 One brain per member per workspace is marked as that member's personal brain: the default destination for an agent's writes when it can reach several brains, and reported as `personal` in the brain list an agent sees.
