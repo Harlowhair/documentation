@@ -48,6 +48,35 @@ brain's filing mode like anything else: a proposal in the [review queue](/filing
 on Suggest, applied when confident on Automatic. You can also ask your agent to split a page
 now. Folder index pages are never counted.
 
+## Is it still being fed?
+
+The numbers above say whether what went in is findable. They do not say whether anything is
+still going in. A brain set up once can quietly stop receiving: the session hook was lost
+with a rebuilt laptop, the meeting tool's webhook was switched off, a credential expired, or
+items have sat in the inbox for a fortnight. Ask your agent: **"Run the health check on my
+brain."** It reads one report and answers, worst first, with the one thing that fixes each:
+
+| Check | What it looks at | Fine when |
+|---|---|---|
+| **Hook** | The newest session transcript that arrived through the [hook](/capture/agent-conversations#the-automatic-way-a-session-hook-advanced), and the last use of the credential labelled `claude-code-capture` | A transcript within 3 days |
+| **Each source** | A [connected meeting tool](/capture/granola) or webhook: enabled, not switched off at the provider, and delivering | Something within 7 days |
+| **Each credential** | Last use and expiry; never the key itself | Used within 30 days and not expired |
+| **Inbox** | How long the oldest waiting item has waited | Nothing pending for more than 2 days |
+| **Filing** | The brain's filing mode, whether the workspace's monthly limit has paused it, whether Cortex has run recently while items wait, and items it gave up on | Not paused, nothing parked |
+| **Search** | Embed coverage | At least 90% |
+
+Those are the defaults. If your brain expects more or less, say so on its instructions
+page under a heading `## Expectations`, in plain sentences: "Session transcripts arrive most
+days (stale after 2 days)", "Granola transcripts arrive on weekdays through the Granola
+source", "No meeting tool is connected to this brain". Your agent reads that section first
+and grades against it, so a feed you do not use is never reported as missing. The check
+never changes anything: it tells you what to renew, switch on or clear, and you decide.
+
+The same report is there without an agent: `cortex health --brain <slug>` from the
+[command line](/connect/command-line#is-it-still-being-fed) prints it and exits with a
+code a scheduled job can alert on, and the [API](/reference/api#is-a-brain-still-being-fed)
+returns it as JSON.
+
 ## The buttons
 
 - **Run dream** runs the hourly maintenance pass immediately: resolves links, fills
@@ -66,3 +95,4 @@ Both need Admin on the brain.
 2. Fix one broken link: open the listed page, correct the `[[wikilink]]`, watch the
    count drop.
 3. Press **Run dream** and refresh after a minute to see the counts settle.
+4. Ask your agent to run the health check and read which feeds it found.

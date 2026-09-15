@@ -181,6 +181,7 @@ The page endpoints take a brain-scoped credential and the page path as `?path=`.
 | Pages within a few hops | `GET /api/v1/brains/{brainId}/graph/traverse?path=&depth=&limit=` (depth 1 to 3) |
 | Check names before linking | `POST /api/v1/brains/{brainId}/graph/resolve` with `{ "refs": ["a slug", "a title", "a/path.md"] }` (the page each would link to, or near misses) |
 | Search | `GET /api/v1/brains/{brainId}/search?q=&mode=` (`exact`, `semantic` or `hybrid`) |
+| Is the brain still being fed | `GET /api/v1/brains/{brainId}/health` (see [below](#is-a-brain-still-being-fed)) |
 
 An edit sent with a stale `expectedVersion`, or one that lands while someone else is saving, is refused with a 409 and the message "This page was changed by someone else. Reload and try again."; read the page again and resend.
 
@@ -200,6 +201,18 @@ Every read returns `outline`, the page's headings in order. A page over **20,000
 ### What a search hit carries
 
 Each hit in a search response carries `section`, the text of the chunk that matched (up to 1,500 characters), and `outline`, the page's headings in order, alongside the path, title, snippet and score. Most questions can be answered from `section` alone; when more is needed, read the page with `section={heading}` rather than whole.
+
+## Is a brain still being fed
+
+`GET /api/v1/brains/{brainId}/health` returns, in one JSON document, the brain's health
+numbers, the inbox counts by status and by how items arrived (with the session hook's
+transcripts picked out), the brain's service credentials by label and role with their last
+use and expiry (never the key), its connected sources with their last run, the state of
+automatic filing, and `findings`: one row per check with `status` (`fine`, `stale`,
+`missing` or `backlog`), the `fact`, the `expectation` it was measured against and the
+`action` that fixes it, worst first. A read-only credential is enough. It is the report
+behind [brain health](/brains/health#is-it-still-being-fed) and `cortex health`, so a
+scheduled job can poll it and alert when anything is not `fine`.
 
 ## Your personal brain
 

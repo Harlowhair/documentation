@@ -3,6 +3,10 @@ title: "Changelog"
 description: "What's new in Cortex"
 ---
 
+<Update label="September 2026" description="Is your brain still being fed?">
+  A brain set up once can quietly stop receiving: the session hook lost with a rebuilt laptop, a meeting tool's webhook switched off, a credential that expired, an inbox nobody cleared. Ask your agent to **run the health check** and it answers in one pass, worst first, with the one thing that fixes each: when the last transcript arrived on the hook, whether each connected source is still delivering, which credentials are unused or expired, how long the oldest inbox item has waited, whether filing is paused, and whether search can see everything. Tell the brain what it should expect under a `## Expectations` heading on its instructions page and the check grades against that instead of the defaults. The same report is `cortex health` on the command line and one address on the API, so a scheduled job can alert on it. See [brain health](/brains/health#is-it-still-being-fed).
+</Update>
+
 <Update label="September 2026" description="Hand a waiting item to your agent, compaction for pages that grow, and a front page for every brain">
   **Deal with the inbox from your agent.** Open a waiting item and the drawer now says whose lane it is in and why it is waiting: Cortex is on it, filing is off for the brain, the monthly limit is reached, or it is simply next. It offers three ways out, one of them a prompt to copy into Claude Code or any connected agent: "Check my Cortex inbox and deal with what is waiting." The agent works through proposals first, then takes pending items from the queue, files them with the matching skill and asks you what Cortex would have parked on. A service credential cannot take items; only you, or an agent acting as you.
 

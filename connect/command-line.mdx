@@ -99,9 +99,22 @@ cortex empty --brain rob-personal --yes
 
 Deletes every page and every inbox item, sources included, and puts the blank starter text back on the brain's instructions page, so the [first-document check](/capture/asking-your-agent#the-first-time-an-agent-writes-into-a-brain) fires again. The brain itself, its members, credentials, folder structure and settings stay. It is for running a test again from scratch, not for tidying up. You need Admin on the brain, and nothing happens without `--yes`. Add `--keep-instructions` to leave the instructions page alone.
 
+## Is it still being fed?
+
+```bash
+cortex health --brain rob-personal
+```
+
+One line per check, worst first: the session hook, each connected source and credential,
+the inbox backlog, filing, search coverage and the link counts, each with the one thing that
+fixes it. It is the report described under [brain health](/brains/health#is-it-still-being-fed),
+read straight from the API. The command exits with code 2 when something is missing or a
+backlog has built up, so a scheduled job can run it and alert. Add `--json` for the whole
+report.
+
 ## Using a service credential instead
 
-Pass `--ck` with a [service credential](/connect/service-credentials) to run `import`, `verify` and `upload` against that credential's brain without signing in, for example from a scheduled job. A credential is pinned to one brain, so `init`, `connect` and `personal` need a login.
+Pass `--ck` with a [service credential](/connect/service-credentials) to run `import`, `verify`, `upload` and `health` against that credential's brain without signing in, for example from a scheduled job. A credential is pinned to one brain, so `init`, `connect` and `personal` need a login.
 
 ## Try it
 
