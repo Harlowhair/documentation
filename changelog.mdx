@@ -3,6 +3,10 @@ title: "Changelog"
 description: "What's new in Cortex"
 ---
 
+<Update label="September 2026" description="Proposals edit a page, they no longer replace it">
+  When Cortex files a meeting or an email on its own and needs to add something to a page that already exists, it now proposes **the change, not the page**: a dated line at the top of a person's timeline, a topic under a heading, one section rewritten. Before, a proposal carried the whole page as Cortex had rewritten it, so anything you or your agent wrote on that page while the proposal waited in the review queue was lost when you accepted it. Now the rest of the page is never touched, an addition applies to the page as it is when you accept, and a rewritten section is refused with nothing written if the page changed underneath it, so you can look again. The review queue shows each change as an addition or a section, with the current page beside it. See [the review queue](/filing/review-queue).
+</Update>
+
 <Update label="September 2026" description="Is your brain still being fed?">
   A brain set up once can quietly stop receiving: the session hook lost with a rebuilt laptop, a meeting tool's webhook switched off, a credential that expired, an inbox nobody cleared. Ask your agent to **run the health check** and it answers in one pass, worst first, with the one thing that fixes each: when the last transcript arrived on the hook, whether each connected source is still delivering, which credentials are unused or expired, how long the oldest inbox item has waited, whether filing is paused, and whether search can see everything. Tell the brain what it should expect under a `## Expectations` heading on its instructions page and the check grades against that instead of the defaults. The same report is `cortex health` on the command line and one address on the API, so a scheduled job can alert on it. See [brain health](/brains/health#is-it-still-being-fed).
 </Update>
