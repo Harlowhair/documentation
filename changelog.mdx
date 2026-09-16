@@ -3,6 +3,12 @@ title: "Changelog"
 description: "What's new in Cortex"
 ---
 
+<Update label="September 2026" description="Mark your brain as yours from Settings, and mail lives with the other sources">
+  Two things moved into the place you would look for them. **Your personal brain** can now be marked from the web app: open a brain's Settings, then General, and if nobody has marked it yet an Owner sees **Make this my personal brain**. That mark is what your agents read to know where to write by default, and it is what lets a brain receive your mail. Before, the command line and the API were the only ways to set it, so a brain made with `cortex init` and never marked could not be given a mail address at all.
+
+  **Forward mail to this brain** has moved from the Connect page to Settings, then **Ingest sources**, beside Granola, Read AI and webhooks, since mail is a source like the others. On your own personal brain it is the same card: create the address, copy it, rotate or remove it, the refused count, and Gmail's confirmation code. On a brain that is not marked as yours, the same spot says why there is no card and points you at General. See [your email](/capture/your-email) and [your personal brain](/brains/your-personal-brain#marked-as-yours).
+</Update>
+
 <Update label="September 2026" description="Search finds more of what a brain holds, in fewer calls">
   Three things made a brain return less than it held, and all three are fixed. A very long page could crowd every other page out of a search, so a brain with one big document looked like one page: each page now gets one place in the running, on its best passage. Exact mode could not find a short string inside a long page (an id, a code, part of a word), because it compared your text with the whole passage rather than looking for it inside: now it looks inside. And a question in plain words only matched pages holding every one of its words: now a page holding most of them counts, most first.
 

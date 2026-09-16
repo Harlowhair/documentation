@@ -43,9 +43,9 @@ This is the route for everyone. No script, no credential, and it works from your
   </Step>
 
   <Step title="Create the brain's address">
-    Open your own brain's **Connect** page and find **Forward mail to this brain**. One click creates an address that looks like `my-work-brain-k3p9vq2x7m4tbn6shd8afgwz@in.oncortex.ai`: your brain's name, then twenty-four random characters. Copy it.
+    Open your own brain's **Settings**, then **Ingest sources**, and find **Forward mail to this brain**. One click creates an address that looks like `my-work-brain-k3p9vq2x7m4tbn6shd8afgwz@in.oncortex.ai`: your brain's name, then twenty-four random characters. Copy it.
 
-    Only the brain marked as yours can have one, and only you can create it. A shared brain has no address and cannot be given one.
+    Only the brain marked as yours can have one, and only you can create it. A shared brain has no address and cannot be given one. If the card is missing and the brain is yours, it is not marked yet: open **Settings**, then **General**, and press **Make this my personal brain**.
   </Step>
 
   <Step title="Forward a message">
@@ -53,7 +53,7 @@ This is the route for everyone. No script, no credential, and it works from your
   </Step>
 
   <Step title="If Gmail asks for a code">
-    Before Gmail will let a filter forward to a new address, it sends that address a confirmation mail with a code. Cortex recognises it, never files it, and shows the code on the Connect page under your address. Type the code into Gmail's forwarding settings and your rule starts working.
+    Before Gmail will let a filter forward to a new address, it sends that address a confirmation mail with a code. Cortex recognises it, never files it, and shows the code under your address on the Ingest sources page. Type the code into Gmail's forwarding settings and your rule starts working.
   </Step>
 </Steps>
 
@@ -71,7 +71,7 @@ The door is narrow on purpose. A message is refused when:
 - the sending domain failed the mail provider's sender checks, so a forged "from" cannot get in either;
 - the address has been rotated or removed.
 
-A refused message is never bounced. A bounce would tell a stranger that the address exists, so nothing goes back. Instead the refusal is counted on the Connect page, with the date and the sender's domain, and the message itself is never stored.
+A refused message is never bounced. A bounce would tell a stranger that the address exists, so nothing goes back. Instead the refusal is counted on the Ingest sources page, with the date and the sender's domain, and the message itself is never stored.
 
 The same narrowness applies to every route in. Mail may only enter the brain marked as yours, from an address you have verified. A shared brain, a client brain, a colleague's brain: all refused, with nothing stored, even when an agent has been told to file it there. If something from a thread belongs in a shared brain, the honest move is to [promote](/brains/promoting) the page afterwards, or have your agent write the fact there deliberately, with its citation.
 
@@ -107,8 +107,8 @@ A forwarded thread arrives with nobody present, so Cortex files it under the wor
 
 ## Keeping it running
 
-- **Watch the refused count** on the Connect page. It shows how many deliveries were turned away, when the last one was, and which domain it came from. A count that climbs is usually a forward from an address you have not verified yet, or a rule sending from an address you had forgotten about.
-- **Rotate the address** from the Connect page if you think it has leaked. The old one stops working at once and a new one replaces it.
+- **Watch the refused count** on the Ingest sources page. It shows how many deliveries were turned away, when the last one was, and which domain it came from. A count that climbs is usually a forward from an address you have not verified yet, or a rule sending from an address you had forgotten about.
+- **Rotate the address** from the Ingest sources page if you think it has leaked. The old one stops working at once and a new one replaces it.
 - **Remove the address** to stop mail entirely. Anything sent to it afterwards is not delivered, and still not bounced.
 - **Remove a mailbox** under Profile, then Mailboxes, and mail forwarded from it is refused from the next delivery on.
 - **Nothing lingers.** Cortex's own filing pass closes any mail item that has sat unfiled for seven days and destroys its message, so a brain you stop watching does not quietly accumulate readable mail. Turn automatic filing off for the brain and that pass stops running, so unfiled items then wait for you.

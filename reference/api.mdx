@@ -136,7 +136,7 @@ curl https://api.oncortex.ai/api/v1/brains/{brainId}/inbox \
 
 ## Inbound mail
 
-This is where forwarded mail arrives. A brain marked as its owner's personal brain can be given an inbound address on its Connect page, shaped `{brain-slug}-{24 random characters}@in.oncortex.ai`. Mail sent to it reaches Cortex through a mail relay, which posts the raw message here and decides nothing:
+This is where forwarded mail arrives. A brain marked as its owner's personal brain can be given an inbound address under its Settings, then Ingest sources, shaped `{brain-slug}-{24 random characters}@in.oncortex.ai`. Mail sent to it reaches Cortex through a mail relay, which posts the raw message here and decides nothing:
 
 ```
 POST https://api.oncortex.ai/api/inbound/email
@@ -157,7 +157,7 @@ An authenticated post always answers **200** with `{ "outcome", "itemId", "reaso
 | `duplicate` | The same message had already been delivered. Nothing new was created. |
 | `refused` | The address exists but the message may not enter, with `reason` saying why: the brain is not marked as anyone's personal brain, the sender is not a verified mailbox of its owner, or the sending domain passed neither SPF nor DKIM. The refusal is counted on the brain, with the date and the sender's domain, and the message is not stored. |
 | `unknown-address` | No brain owns that address, or it has been rotated or removed. |
-| `confirmation` | Gmail's "confirm this forwarding address" mail. The code is kept for the brain's Connect page and the message is never filed. |
+| `confirmation` | Gmail's "confirm this forwarding address" mail. The code is kept for the brain's Ingest sources page and the message is never filed. |
 
 A post that arrives while no inbound secret is configured answers **503**.
 
