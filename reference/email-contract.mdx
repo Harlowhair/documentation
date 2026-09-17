@@ -9,7 +9,7 @@ This is a technical reference for developers writing a mail collector. If you on
 
 Cortex does not connect to mailboxes. It documents one shape for a mail thread and accepts it on the ordinary entry points, under three rules that are the whole point of the feature.
 
-1. **One mailbox, one brain.** A mail item may only enter the personal brain of the person whose mailbox it came from, and only from an address that person has verified. The door checks this in code before anything is stored, and refuses everything else with a **422**. No hint, no partition and no `?brain=` changes it.
+1. **The address chooses the brain; the brain verifies its forwarders.** A mail item may enter a brain only from an address on that brain's forwarder list, the addresses its members have proved with a code. Any brain can hold such a list. The door checks this in code before anything is stored, and refuses everything else with a **422**. No hint and no `?brain=` changes which brain; in a client brain, `?partition=` or the address's `+key` names the client and the participants' domains decide otherwise.
 2. **The mail is never kept.** A mail item is created with retention `none`: its body exists only while the item waits to be filed, and is destroyed when filing ends (archive, reject, delete, or seven days unfiled). No archive copy, no downloadable original, no replay. What remains is the stub: subject, link, content hash, external id, the pages it was filed to, and the dates.
 3. **The skill is pinned** to `ingest-email`, at the door, whatever the caller asked for.
 
@@ -27,7 +27,7 @@ externalId: 1a0908761ccee487:1a090958b318dac1   # thread id plus newest message 
 link: https://mail.google.com/mail/u/?authuser=you%40example.com#all/1a0908761ccee487
 forwarded: rule                    # optional: manual | rule (forwarded mail only)
 selectedBecause: watchlist         # optional, free text: what made the collector pick this thread
-owner: { name: "Your Name", email: "you@example.com" }    # whose mailbox: must be verified
+owner: { name: "Your Name", email: "you@example.com" }    # whose mailbox: must be a forwarder of the brain
 participants:
   - { name: "Jane Doe", email: "jane@acme.com" }
   - { name: "Sam Patel", email: "sam@acme.com" }
@@ -43,7 +43,8 @@ Hi, we are happy to move to the annual plan ...
 | Field | What it does |
 |---|---|
 | `kind: email` | The marker the door keys off. Everything on this page follows from it. |
-| `owner.email` | Whose mailbox this came from. It must be one of the target brain owner's verified addresses, or the delivery is refused. |
+| `owner.email` | Whose mailbox this came from. It must be a verified forwarder of the target brain, or the delivery is refused. In a shared or client brain the skill names this person in the citation and never writes about them. |
+| `participants` (in a client brain) | Their domains decide the client when no `+key` or `?partition=` named one: exactly one client's domain resolves it; the brain's own domains (its members and forwarders) never count. |
 | `participants` | The highest-value field, as `attendees` is for a [transcript](/capture/meeting-transcripts). Take identity from the message headers, never from signatures in the body. |
 | `externalId` | Thread id plus newest message id. Re-sending an unchanged thread is a duplicate; a thread that gains a reply is a new item with the same `threadId`. |
 | `threadId` | Stable across deliveries. It is how the skill finds what it already filed from this thread. |
@@ -59,7 +60,7 @@ Rules for the body: only the **new** messages, oldest first. Quoted history is s
 | Route | Who builds the contract | Entry point |
 |---|---|---|
 | **Forward it** | Cortex, from the raw message | Mail to the brain's inbound address. See [inbound mail](/reference/api#inbound-mail). |
-| **A collector** | Your code | `POST /api/v1/inbox` or `POST /api/v1/brains/{brainId}/inbox` with a Write [service credential](/connect/service-credentials) on the personal brain, `skill: ingest-email` and `retain: none`. A [webhook source](/reference/webhooks) works too, with `?retain=none`. |
+| **A collector** | Your code | `POST /api/v1/inbox` or `POST /api/v1/brains/{brainId}/inbox` with a Write [service credential](/connect/service-credentials) on the brain, `skill: ingest-email` and `retain: none`; `?partition=` names the client in a client brain. A [webhook source](/reference/webhooks) works too, with `?retain=none`. |
 | **An agent** | The agent, from its own mail connector | The `upload_to_inbox` tool, with `content` and `skill: ingest-email`. The item is held by the agent, and its body is destroyed on archive like any other mail item. |
 
 `retain: none` is implied for a `kind: email` contract whether or not you send it. It is worth sending anyway: it is the honest description of what you are asking for, and it applies to [any item](/reference/api#retention-ask-for-the-body-not-to-be-kept), not only mail.
@@ -68,8 +69,8 @@ Rules for the body: only the **new** messages, oldest first. Quoted history is s
 
 A collector should verify its own configuration at startup rather than discovering a mistake at delivery. Call `whoami` with the credential it will use:
 
-- With a **service credential** on a personal brain, the response's first brain carries `personal: true` and `ownerMailboxes`, the owner's verified addresses. Refuse to run unless the mailbox you are about to read is in that list.
-- With an **OAuth connection**, `user.mailboxes` carries the signed-in caller's own verified addresses.
+- With a **service credential**, the response's one brain carries `mail.forwarders`, that brain's verified forwarders, and `mail.address`, whether it has an inbound address. Refuse to run unless the mailbox you are about to read is in that list.
+- With an **OAuth connection**, every brain in the roster carries `mail.forwarders`, and `brief` on one brain carries the same block with `mail.address`.
 
 ## What the door answers
 
@@ -77,18 +78,27 @@ Every refusal is a **422** with a message starting "Mail refused", and nothing i
 
 | Situation | Reply |
 |---|---|
-| The target brain is not marked as anyone's personal brain | 422, saying to mark it or to send to the owner's own brain |
-| The target brain is partitioned | 422: mail never enters a partitioned brain |
+| The target brain has no verified forwarder | 422, saying a member with write access adds and verifies their address under Settings, Ingest sources |
 | `owner.email` is missing or unreadable | 422: the contract must name the mailbox it came from |
-| `owner.email` is not a verified address of the brain's owner | 422, naming the address |
+| `owner.email` is not a verified forwarder of the brain | 422, naming the address |
+| In a client brain, `?partition=` names a client that does not exist or is archived | 422, listing the existing clients (the partition door, not the mail door) |
 
-The agent route goes through the same door and gets the same refusal, so an agent cannot file mail into a shared brain even when it is asked to.
+The agent route goes through the same door and gets the same refusal, so an agent cannot file mail into a brain whose list does not hold the mailbox, whatever it is asked. The core manual tells an agent to file into the personal brain by default and into a shared or client brain only when the user names it, confirming first.
 
-## Verified mailboxes
+## Forwarders
 
-An address is added and confirmed under **Profile**, then **Mailboxes**, in the web app: Cortex sends a six-digit code to the address, valid for fifteen minutes and dead after five wrong entries. The sign-in address is verified by signing in and is on the list from the start. Up to ten added addresses per account. Removing one takes effect immediately. The list belongs to the user rather than to a workspace.
+A forwarder is an address proven to one brain. It is added and confirmed under the brain's **Settings**, then **Ingest sources**, on the **Forward mail** card: Cortex sends a six-digit code to the address, valid for fifteen minutes and dead after five wrong entries, and the person types it back. Any member with write access to the brain can add an address they can read. The member who added it, or an Admin, removes it, with effect from the next delivery. Up to twenty-five per brain. A brain marked as someone's own starts with their sign-in address on the list; addresses verified under the old per-account list were moved onto each owner's own brain when that list was retired.
 
-The list is managed in the web app and nowhere else: proving an address is something a person does, so there is nothing in the public API for it.
+The same list is on the API, so the [command line](/connect/command-line#forwarders) and a scheduled job can manage it:
+
+| Do this | Request | Needs |
+|---|---|---|
+| List forwarders | `GET /api/v1/brains/{brainId}/mail/forwarders` (email, verified, pending, who added it) | Read |
+| Add one and send its code | `POST /api/v1/brains/{brainId}/mail/forwarders` with `{ "email" }` | Write |
+| Confirm the code | `POST /api/v1/brains/{brainId}/mail/forwarders/verify` with `{ "email", "code" }` | Write |
+| Remove one | `DELETE /api/v1/brains/{brainId}/mail/forwarders?email=` | The member who added it, or Admin |
+
+A service credential acts with the role it was issued. The code still has to be read from the mailbox by a person: nothing on the API returns it.
 
 ## Once it is in
 

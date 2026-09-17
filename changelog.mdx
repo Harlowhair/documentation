@@ -3,6 +3,14 @@ title: "Changelog"
 description: "What's new in Cortex"
 ---
 
+<Update label="17 September 2026" description="Forward mail into any brain, not only your own">
+  Until now mail could only be forwarded into the brain marked as yours. From today **any brain can take mail**: a shared brain, a client brain, your own. An Admin gives the brain an address under Settings, then Ingest sources, and the same card now lists the brain's **forwarders**, the addresses mail may come from. Anyone with write access adds an address they can read and confirms it with the six-digit code Cortex sends there. Verification has moved from your profile onto each brain, so the Profile, Mailboxes tab is gone; every address you had verified there is on your own brain's list already, along with the address you sign in with.
+
+  In a **client brain**, forward to the brain's address with `+` and the client's key before the `@` and the thread is filed under that client; the Clients page shows each client's address. Forward to the plain address and the people on the chain decide: one client's domain among them settles it, your own colleagues never count, and a chain with two clients or none waits for someone to choose. The client's own people never have to verify anything; they are the participants, and a client mailing the address directly is refused. In a shared or client brain, Cortex names the member who forwarded a thread in the citation and writes nothing about them; a client's ask lands on the client's page under Open items, never on anyone's task list. The message itself is still never kept.
+
+  Your agent sees each brain's forwarders in `whoami` and `brief`, the health check says when a brain has an address but nobody allowed to send to it, and `cortex mail` manages the list from the command line. See [your email](/capture/your-email#into-a-shared-brain) and [the email contract](/reference/email-contract#forwarders).
+</Update>
+
 <Update label="September 2026" description="Mark your brain as yours from Settings, and mail lives with the other sources">
   Two things moved into the place you would look for them. **Your personal brain** can now be marked from the web app: open a brain's Settings, then General, and if nobody has marked it yet an Owner sees **Make this my personal brain**. That mark is what your agents read to know where to write by default, and it is what lets a brain receive your mail. Before, the command line and the API were the only ways to set it, so a brain made with `cortex init` and never marked could not be given a mail address at all.
 

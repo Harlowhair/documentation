@@ -106,15 +106,26 @@ cortex health --brain rob-personal
 ```
 
 One line per check, worst first: the session hook, each connected source and credential,
-the inbox backlog, filing, search coverage and the link counts, each with the one thing that
-fixes it. It is the report described under [brain health](/brains/health#is-it-still-being-fed),
+the inbox backlog, filing, search coverage, the link counts and, once the brain has a mail
+address, whether anyone is allowed to forward to it, each with the one thing that fixes it. It is the report described under [brain health](/brains/health#is-it-still-being-fed),
 read straight from the API. The command exits with code 2 when something is missing or a
 backlog has built up, so a scheduled job can run it and alert. Add `--json` for the whole
 report.
 
+## Forwarders
+
+```bash
+cortex mail forwarders --brain clients
+cortex mail add you@yourcompany.com --brain clients
+cortex mail verify you@yourcompany.com 482913 --brain clients
+cortex mail remove you@yourcompany.com --brain clients
+```
+
+The addresses mail may be forwarded to a brain from, as described under [your email](/capture/your-email#into-a-shared-brain). `forwarders` lists them with their state and who added each; `add` sends the six-digit code to the address (write access on the brain, and an address you can read); `verify` confirms the code; `remove` takes one off, with effect from the next delivery, for the member who added it or an Admin. Add `--json` to `forwarders` for the rows.
+
 ## Using a service credential instead
 
-Pass `--ck` with a [service credential](/connect/service-credentials) to run `import`, `verify`, `upload` and `health` against that credential's brain without signing in, for example from a scheduled job. A credential is pinned to one brain, so `init`, `connect` and `personal` need a login.
+Pass `--ck` with a [service credential](/connect/service-credentials) to run `import`, `verify`, `upload`, `health` and `mail` against that credential's brain without signing in, for example from a scheduled job. A credential is pinned to one brain, so `init`, `connect` and `personal` need a login.
 
 ## Try it
 

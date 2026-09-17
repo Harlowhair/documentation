@@ -136,7 +136,7 @@ curl https://api.oncortex.ai/api/v1/brains/{brainId}/inbox \
 
 ## Inbound mail
 
-This is where forwarded mail arrives. A brain marked as its owner's personal brain can be given an inbound address under its Settings, then Ingest sources, shaped `{brain-slug}-{24 random characters}@in.oncortex.ai`. Mail sent to it reaches Cortex through a mail relay, which posts the raw message here and decides nothing:
+This is where forwarded mail arrives. Any brain can be given an inbound address under its Settings, then Ingest sources (Admin or Owner), shaped `{brain-slug}-{24 random characters}@in.oncortex.ai`. In a client brain, `+key` before the `@` names the client. Mail sent to it reaches Cortex through a mail relay, which posts the raw message here and decides nothing:
 
 ```
 POST https://api.oncortex.ai/api/inbound/email
@@ -155,13 +155,13 @@ An authenticated post always answers **200** with `{ "outcome", "itemId", "reaso
 |---|---|
 | `accepted` | The message became an inbox item, pinned to `ingest-email` and waiting to be filed. `itemId` names it. |
 | `duplicate` | The same message had already been delivered. Nothing new was created. |
-| `refused` | The address exists but the message may not enter, with `reason` saying why: the brain is not marked as anyone's personal brain, the sender is not a verified mailbox of its owner, or the sending domain passed neither SPF nor DKIM. The refusal is counted on the brain, with the date and the sender's domain, and the message is not stored. |
+| `refused` | The address exists but the message may not enter, with `reason` saying why: the brain has no verified forwarder, the sender is not a verified forwarder of the brain, the sending domain passed neither SPF nor DKIM, or (in a client brain) the `+key` named no client. The refusal is counted on the brain, with the date and the sender's domain, and the message is not stored. |
 | `unknown-address` | No brain owns that address, or it has been rotated or removed. |
 | `confirmation` | Gmail's "confirm this forwarding address" mail. The code is kept for the brain's Ingest sources page and the message is never filed. |
 
 A post that arrives while no inbound secret is configured answers **503**.
 
-Cortex builds the [email contract](/reference/email-contract) from the message itself: who forwarded it (the forwarding headers, the envelope sender with the usual rewriting undone, then the From header, each checked against the owner's verified addresses), the original sender and subject (from the forwarded block for a message forwarded by hand, or from the headers for one forwarded by a rule), the participants, and the new message's text with quoted history stripped. Attachments are dropped and their names carried through. The item that results has retention `none` like any mail item.
+Cortex builds the [email contract](/reference/email-contract) from the message itself: who forwarded it (the forwarding headers, the envelope sender with the usual rewriting undone, then the From header, each checked against the brain's verified forwarders), the original sender and subject (from the forwarded block for a message forwarded by hand, or from the headers for one forwarded by a rule), the participants, and the new message's text with quoted history stripped. Attachments are dropped and their names carried through. The item that results has retention `none` like any mail item.
 
 ## Pages, timelines and the graph
 
