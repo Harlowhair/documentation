@@ -3,6 +3,10 @@ title: "Changelog"
 description: "What's new in Cortex"
 ---
 
+<Update label="19 September 2026" description="Search is quick again on a big brain">
+  On a brain of a thousand pages a search from the web app had grown to several seconds. Three changes bring it back under a second, most of which is now the embedding call itself. Cortex runs its search lists **at the same time** rather than one after another. The **passage list**, which looks for your exact words inside long pages, now runs only for a short query of up to three words (an id, a code, part of a word) and in exact mode, because on a whole question it read every passage in the brain and found the pages the other lists had already found. And the **meaning list** uses an index over the embeddings instead of comparing your question with every passage, so it no longer slows down as a brain grows. The web Search page also stops a search you have typed past, on the server too. Nothing changes in what a search returns for a short query or in exact mode; a long question in hybrid mode gets the same pages, faster.
+</Update>
+
 <Update label="17 September 2026" description="Forward mail into any brain, not only your own">
   Until now mail could only be forwarded into the brain marked as yours. From today **any brain can take mail**: a shared brain, a client brain, your own. An Admin gives the brain an address under Settings, then Ingest sources, and the same card now lists the brain's **forwarders**, the addresses mail may come from. Anyone with write access adds an address they can read and confirms it with the six-digit code Cortex sends there. Verification has moved from your profile onto each brain, so the Profile, Mailboxes tab is gone; every address you had verified there is on your own brain's list already, along with the address you sign in with.
 
