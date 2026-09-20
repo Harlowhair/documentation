@@ -7,7 +7,13 @@ One Cortex connection covers all the brains you can access in your workspace: yo
 
 ## How the agent chooses
 
-When you ask a question, the agent searches across the brains you can access, and every result says which brain it came from. When you ask it to save something, it goes to **your own brain** unless you name another: your brain is marked as yours in the list the agent sees, so it never has to guess from a name. A team or client brain is written only when you say so, for example *"save this client info"* or *"file this in the compliance brain"*, and the agent confirms the first time in a conversation. If nothing is marked as your brain, the agent asks before its first write. The agent names the destination brain explicitly either way. The brain Cortex created for you is marked already; a brain you created yourself can be marked from the [command line](/connect/command-line#marking-your-brain-as-yours) or the API, and there is no switch for it in Settings yet. See [your work brain](/brains/your-personal-brain#marked-as-yours). Clear brain names and descriptions still matter: they are how the agent understands what each shared brain is for when you do name one.
+When you ask a question, **the agent chooses which brains to search**. It sees a short map of every brain you can access: what each one is for (its description), how many pages it holds and its largest folders. It picks the brains that could hold the answer, always including your own brain, and keeps using a brain that has already answered earlier in the conversation. Each brain it picks is searched on its own, at the same time, and the results come back together; every result says which brain it came from.
+
+Every answer from Cortex also tells the agent which brains it searched and which it did not. So when nothing turns up, a good agent widens to a brain it left out before telling you the brains do not know, and you can always ask *"which brains did you look in?"*. If the agent names no brain at all, Cortex searches your own brain only.
+
+This is why a brain's **description** matters: it is the main thing the agent reads when it decides whether a brain is worth searching. A description that says what the brain holds and who it is for ("Sopro's compliance policies, audits and signed-off procedures") gets the brain searched when it should be. An empty one gets it overlooked.
+
+When you ask it to save something, it goes to **your own brain** unless you name another: your brain is marked as yours in the list the agent sees, so it never has to guess from a name. A team or client brain is written only when you say so, for example *"save this client info"* or *"file this in the compliance brain"*, and the agent confirms the first time in a conversation. If nothing is marked as your brain, the agent asks before its first write. The agent names the destination brain explicitly either way. The brain Cortex created for you is marked already; a brain you created yourself can be marked from the [command line](/connect/command-line#marking-your-brain-as-yours) or the API, and there is no switch for it in Settings yet. See [your work brain](/brains/your-personal-brain#marked-as-yours). Clear brain names and descriptions still matter: they are how the agent understands what each shared brain is for when you do name one.
 
 You can always direct it yourself: *"search the team handbook"*, *"file this in my work brain"*. The agent sees your brain list, with your role on each, so plain references like these resolve reliably.
 
@@ -24,5 +30,5 @@ A connection belongs to one workspace. If you work in two workspaces, say your c
 ## Try it
 
 1. With one connection set up, ask your agent *"what brains can you see, and what's your role on each?"*.
-2. Ask a question you know is answered in a team brain, and notice the answer says which brain it came from.
+2. Ask a question you know is answered in a team brain, and notice the answer says which brain it came from. Then ask *"which brains did you search?"*.
 3. Ask it to save a note "in my work brain", then check the page arrived there and nowhere else.

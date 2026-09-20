@@ -3,6 +3,14 @@ title: "Changelog"
 description: "What's new in Cortex"
 ---
 
+<Update label="20 September 2026" description="Your agent chooses which brains to search, and tells you where it looked">
+  Until now a question from your agent was searched across every brain you could read, in one go. From today **the agent chooses**. The map it sees when it connects now says what each brain holds, its description, how many pages and its largest folders, and the agent names the brains that could hold the answer, always with your own brain, and keeps a brain that has already answered in the conversation. With no brain named, only your own brain is searched.
+
+  Each brain is now searched **on its own**, at the same time as the others, and the results are merged. A small brain is no longer crowded out by a large one, and no single search ever touches more than one brain.
+
+  Every reply tells the agent which brains were **searched** and which were **not**, with each unsearched brain's description, so when nothing turns up it can widen its search rather than tell you the answer does not exist. Ask it *"which brains did you look in?"* at any time. If you build on the agent tools directly: `query` now answers an object with `hits`, `searched`, `notSearched`, `defaultedTo` and `note`, where it used to answer the list of hits alone, and `list_brains` gains `topFolders`. A brain's description now does real work, so it is worth a line saying what the brain holds and who it is for. See [using multiple brains](/connect/multiple-brains#how-the-agent-chooses).
+</Update>
+
 <Update label="19 September 2026" description="Search is quick again on a big brain">
   On a brain of a thousand pages a search from the web app had grown to several seconds. Three changes bring it back under a second, most of which is now the embedding call itself. Cortex runs its search lists **at the same time** rather than one after another. The **passage list**, which looks for your exact words inside long pages, now runs only for a short query of up to three words (an id, a code, part of a word) and in exact mode, because on a whole question it read every passage in the brain and found the pages the other lists had already found. And the **meaning list** uses an index over the embeddings instead of comparing your question with every passage, so it no longer slows down as a brain grows. The web Search page also stops a search you have typed past, on the server too. One thing changes in what comes back: the passage list now finds your words as written inside a page, ignoring case, rather than a near-miss spelling, so an id, a code or part of a word still matches and a typo does not. A long question in hybrid mode gets the same pages, faster.
 </Update>
