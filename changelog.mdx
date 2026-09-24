@@ -8,6 +8,8 @@ description: "What's new in Cortex"
 
   Two runs in a sweep on 23 September stopped part-way with "per-item token budget exceeded", and what they had drafted was lost. That guard added up every step of a run, and on a large brain an ordinary meeting needs enough steps to trip it. It now watches the size of **one step at a time**, which is what a runaway document actually looks like. And a run that is cut short, by that ceiling or by the step limit, now **keeps its drafts**: they arrive in the review queue as a proposal you can accept or finish, instead of being thrown away and tried again for the same cost.
 
+  For a meeting, Cortex now does the predictable half of the work before the model starts: it reads the attendee list, finds each attendee's page and the sections a meeting adds to, picks up your task page and the pages a search on the title turns up, and hands all of that over in one go. The model's steps go on what a transcript actually surprises you with, the customer named in passing, the colleague who was not on the call, the earlier decision this one reverses. It still searches for those.
+
   Each filed item's log now ends with a **run line**: how many steps the run took, the biggest prompt, how much of it came from the cache, what it cost, and which tools each step called. If you ever wonder why a run was slow or expensive, that line is the answer. The built-in filing instructions also now say plainly that a change to an existing page is a section edit, never a rewrite of the page.
 </Update>
 
