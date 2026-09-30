@@ -3,10 +3,14 @@ title: "Changelog"
 description: "What's new in Cortex"
 ---
 
+<Update label="30 September 2026" description="Re-apply a template to a brain you already have">
+  A brain used to copy its template once, at creation, and never see a change to it. Now an Owner can bring a brain level from **Settings, Schema, "Re-apply a template"**: the folders, page types and fields the template has and the brain lacks are merged in and their folder pages created, while everything the brain already has stays as it is. The instructions page is replaced only if it is still the untouched starter text and you ask for it. You type the slug to confirm, as for a delete. The same action is on the API at `POST /api/v1/brains/{id}/schema/reapply`.
+</Update>
+
 <Update label="30 September 2026" description="The Personal template gains writing and career plans, and a person is one page">
   Two new homes in the Personal template. **writing/** holds the things you write for other people to read: newsletter editions, posts, articles, talks, one page per piece with its channel, its status and the date it went out. **career-plans/** holds one page per person whose development you own: the plan, the objectives, the review record and any improvement steps, with the evidence uploaded as source documents and cited from the plan rather than pasted in. The template's instructions now also say what the first real migration taught: a person is one page, never a folder. A document about a person goes in the folder for its kind and links back.
 
-  A brain you already have keeps its own shape; the new folders and types reach it when you add them under Settings, Schema, or when you create a brain from the template after your workspace admin has restored the built-in.
+  A brain you already have keeps its own shape until you re-apply the template to it (the entry above), or add the folders and types under Settings, Schema yourself.
 </Update>
 
 <Update label="24 September 2026" description="Dated pages show their date in the Workspace tree">
