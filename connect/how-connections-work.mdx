@@ -36,7 +36,7 @@ A connection does not need renewing while it is in use. Behind the scenes the ag
 
 ## Taking access back
 
-Every connection is listed under **Connected Agents** on the Connect page, and each one can be revoked on its own. Revoking a connection destroys exactly that key and nothing else: your other agents keep working, and the revoked agent immediately loses access to the workspace. Removing your access to a single brain, meanwhile, does not need any revoking, because access is checked live: the agent simply stops being able to reach that brain.
+Your connections are listed under **Connected Agents** on the Connect page of any brain you can open, and each one can be revoked on its own. You see your own agents there; a workspace admin sees the agents of everyone with access to that brain, and every agent in the workspace on **Settings, Team**. Revoking a connection destroys exactly that key and nothing else: your other agents keep working, and the revoked agent can no longer get a token. One it already holds works until it expires, within the hour. Because one connection covers the whole workspace, revoking it on one brain's page stops the agent on every brain. Removing your access to a single brain, meanwhile, does not need any revoking, because access is checked live: the agent simply stops being able to reach that brain.
 
 ## Try it
 
