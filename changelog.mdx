@@ -15,6 +15,10 @@ description: "What's new in Cortex"
   The Connected Agents list on a brain's Connect page used to show every agent in the workspace, on every brain, and only to admins. Now it shows the agents of the people with access to that brain: your own if you are a member, everyone's on that brain if you are a workspace admin. Your personal brain lists only your agents. Members can now see and revoke their own agents, which before only an admin could do. The full list of every agent in the workspace, with Revoke, has moved to **Settings, Team** for admins.
 </Update>
 
+<Update label="2 October 2026" description="The assistant kit: a Claude Code plugin that files your sessions and reports your brain's health">
+  A new page, [Set up your assistant](/assistant-setup), takes you from a brain to a Claude Code assistant whose memory is that brain. The **cortex-assistant** plugin installs the two hooks (a status line at session start, the session filed at session end), the scheduled mail collector and health check, and the day-to-day skills. Three keys and a short block in your instruction file are the only setup. Sessions are rendered to text before they are sent, so a long conversation is read whole rather than cut off at its start, and a session with nothing durable in it produces nothing.
+</Update>
+
 <Update label="30 September 2026" description="Re-apply a template to a brain you already have">
   A brain used to copy its template once, at creation, and never see a change to it. Now an Owner can bring a brain level from **Settings, Schema, "Re-apply a template"**: the folders, page types and fields the template has and the brain lacks are merged in and their folder pages created, while everything the brain already has stays as it is. The instructions page is replaced only if it is still the untouched starter text and you ask for it. You type the slug to confirm, as for a delete. The same action is on the API at `POST /api/v1/brains/{id}/schema/reapply`.
 </Update>

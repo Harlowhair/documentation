@@ -1,0 +1,85 @@
+---
+title: "Set up your assistant"
+description: "From a brain to a Claude Code assistant that remembers, with the kit"
+---
+
+The [quickstart](/quickstart) gets you a brain and an agent that can search it. This page goes one step further: an assistant in Claude Code whose memory is your brain, where every session is filed for you, mail and meetings arrive on their own, and a status line tells you each morning that the feeds are alive.
+
+It takes the **cortex-assistant** plugin, three keys and a short block of text. No code.
+
+<Steps>
+  <Step title="Get a brain">
+    If you joined a workspace, you already have one: **My Work Brain**, created from the Personal template and marked as yours. If a workspace admin created your brain instead, check it is marked as yours under **Settings, General**. Your agents write there unless you name another brain.
+  </Step>
+
+  <Step title="Connect">
+    From your brain's **Connect** page, run the `claude mcp add` line it shows in the folder your assistant runs from, then `/mcp` in Claude Code and sign in as yourself. One connection covers every brain you can reach.
+
+    Install the [command line](/connect/command-line) too: `npm i -g @oncortex/cli`, then `cortex login` with the same URL. The kit uses it for the status line and the health check.
+  </Step>
+
+  <Step title="Install the kit">
+    Four pieces, in this order.
+
+    **Enable the plugin.** In Claude Code, `/plugin`, marketplace `sopro`, enable `cortex-assistant`. That installs the two hooks, the scheduled scripts and the skills together. Nothing runs yet: they look for settings they do not have.
+
+    **Tell it which brain.** Create `~/.config/cortex/ea.json`:
+
+    ```json
+    { "api": "https://api.oncortex.ai", "workspace": "<workspace id>", "brain": "<your slug>", "brainId": "<its id>" }
+    ```
+
+    `cortex whoami` prints the ids. From this moment every session starts with a line of brain status.
+
+    **Mint three keys** on your brain under **Settings, Service credentials**, and store each in its own file in `~/.config/cortex/`:
+
+    | Label | Role | Goes in | Turns on |
+    |---|---|---|---|
+    | `claude-code-capture` | Read and Write | `hook.env` as `CORTEX_CAPTURE_TOKEN=ck_...` | the session hook. The label matters: the [health check](/brains/health) recognises the hook by it |
+    | `ea-health` | Read | `health.env` as `CORTEX_HEALTH_TOKEN=ck_...` | the status refresh and the daily health check, without depending on your sign-in. Optional |
+    | `ea-email-collector` | Write | `email-collector/config.json` as `brainCredential` | the mail collector. Only if mail comes in by collector rather than by forwarding (step 4) |
+
+    Keys rather than your sign-in because the hook and the scheduled jobs run when nobody is signed in, and a key is pinned to one brain with one role.
+
+    **Paste the block** from the plugin's README into your `CLAUDE.md`. Ten lines: the brain is the memory; the brain's own rules govern filing; check what awaits review at session start; search before answering from memory; put facts on pages at the time; use the task tools; plans live in repositories. Everything else in that file is yours.
+  </Step>
+
+  <Step title="Turn the feeds on">
+    - **Meetings:** connect [Granola](/capture/granola) or [Read AI](/capture/read-ai) under **Settings, Ingest sources**, and catch up a couple of weeks.
+    - **Mail:** [forward](/capture/your-email) threads to your brain's address, or set a Gmail filter to forward from the senders you choose. The address is issued on the same Ingest sources page, and Gmail's confirmation code appears there.
+    - **Filing mode:** **Automatic** on your own brain, so the runner files what arrives and parks only what it is unsure about.
+    - **A description** of what the brain holds, on Settings, General, and an **Expectations** section on the instructions page: one plain sentence per feed and how stale is too stale. The health check grades against it.
+  </Step>
+
+  <Step title="Check it is alive">
+    Run `cortex health --brain <your slug>`. Each line is one check, worst first, with the one action that fixes it. Then open a new Claude Code session: the first turn starts with six lines of brain status, and ending the session writes one `ok` line to `~/.config/cortex/capture.log`.
+
+    Schedule the two scripts the README names: the mail collector every half hour if you use it, and the health check once a morning with the way you want to be told.
+  </Step>
+</Steps>
+
+## What you get
+
+| Moment | What happens |
+|---|---|
+| A session starts | Six cached lines: inbox and review counts, whether the hook and the feeds are alive, the runner's spend this month, what needs attention, when the capture key was last used. Read from disk, never a wait. |
+| A session ends | The conversation is rendered to text (your words, the assistant's, the tools it used) and posted to your brain's inbox. The runner keeps what was durable: a decision, an idea in your words, a fact about someone, a commitment. Most sessions produce nothing, on purpose. |
+| Every morning | `/morning` on a schedule: today's meetings with prep from the people pages, tasks due, what changed in the brain, mail needing a reply, documents to prepare. Emailed to you. No daily page is written. |
+| Any time | `/emails` turns starred mail into tasks; `/my-tasks` works your task page; `/bootstrap <project>` loads a project's context from a page in your brain. |
+
+## Where next
+
+<CardGroup cols={2}>
+  <Card title="Your personal brain" icon="user" href="/brains/your-personal-brain">
+    What makes it yours, and why agents write there by default.
+  </Card>
+  <Card title="Is it still being fed?" icon="heart-pulse" href="/brains/health">
+    The health check, the Expectations section and what each finding means.
+  </Card>
+  <Card title="Capturing agent conversations" icon="comments" href="/capture/agent-conversations">
+    The session hook on its own, without the plugin.
+  </Card>
+  <Card title="Tasks" icon="list-check" href="/filing/tasks">
+    One task page, fed by meetings and mail.
+  </Card>
+</CardGroup>
