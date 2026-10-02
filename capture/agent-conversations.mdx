@@ -41,24 +41,41 @@ Then follow the tab for your operating system. Each one creates a small script, 
 
     ```bash
     #!/usr/bin/env bash
-    set -euo pipefail
+    # Cortex capture hook for Claude Code (SessionEnd). Posts the finished session's log to Cortex,
+    # which cleans it to the conversation contract (docs/conversation-contract.md) and files it.
+    #
+    # Needs: curl and jq. Env: CORTEX_TOKEN (a ck_ service credential, Write, on the brain that should
+    # receive sessions); optional CORTEX_API (default https://api.oncortex.ai) and CORTEX_BRAIN (a brain
+    # slug or id; only needed with a token that can write more than one brain).
+    #
+    # The session id is the source reference's item id, so a resumed session's later post is linked
+    # as a revision of the earlier one; the line count is its version. The body is streamed through a
+    # pipe, never passed as an argument (a large session would exceed the shell's argument limit), and
+    # the hook never fails the session end.
+    set -uo pipefail
 
-    # Claude Code sends details about the finished session on stdin.
     input=$(cat)
-    transcript_path=$(echo "$input" | jq -r '.transcript_path')
-    session_id=$(echo "$input" | jq -r '.session_id')
+    transcript_path=$(printf '%s' "$input" | jq -r '.transcript_path // empty')
+    session_id=$(printf '%s' "$input" | jq -r '.session_id // empty')
+    [ -n "$transcript_path" ] && [ -f "$transcript_path" ] && [ -n "$session_id" ] || exit 0
+    [ -n "${CORTEX_TOKEN:-}" ] || exit 0
 
-    # Build the request safely and post the transcript to your default inbox.
-    body=$(jq -n \
+    lines=$(wc -l < "$transcript_path" | tr -d ' ')
+    api="${CORTEX_API:-https://api.oncortex.ai}"
+    query=""
+    [ -n "${CORTEX_BRAIN:-}" ] && query="?brain=${CORTEX_BRAIN}"
+
+    jq -n \
       --arg filename "claude-code-$session_id.jsonl" \
-      --arg externalId "$session_id" \
+      --arg sid "$session_id" \
+      --arg version "$lines" \
       --rawfile content "$transcript_path" \
-      '{filename: $filename, content: $content, externalId: $externalId}')
-
-    curl -s https://api.oncortex.ai/api/v1/inbox \
-      -H "Authorization: Bearer $CORTEX_TOKEN" \
-      -H "Content-Type: application/json" \
-      -d "$body" > /dev/null
+      '{filename: $filename, content: $content, provider: "claude-code", providerItemId: $sid, version: $version}' \
+    | curl -s --max-time 120 "$api/api/v1/inbox$query" \
+        -H "Authorization: Bearer $CORTEX_TOKEN" \
+        -H "Content-Type: application/json" \
+        --data-binary @- > /dev/null || true
+    exit 0
     ```
 
     Make it runnable:
@@ -107,24 +124,41 @@ Then follow the tab for your operating system. Each one creates a small script, 
 
     ```bash
     #!/usr/bin/env bash
-    set -euo pipefail
+    # Cortex capture hook for Claude Code (SessionEnd). Posts the finished session's log to Cortex,
+    # which cleans it to the conversation contract (docs/conversation-contract.md) and files it.
+    #
+    # Needs: curl and jq. Env: CORTEX_TOKEN (a ck_ service credential, Write, on the brain that should
+    # receive sessions); optional CORTEX_API (default https://api.oncortex.ai) and CORTEX_BRAIN (a brain
+    # slug or id; only needed with a token that can write more than one brain).
+    #
+    # The session id is the source reference's item id, so a resumed session's later post is linked
+    # as a revision of the earlier one; the line count is its version. The body is streamed through a
+    # pipe, never passed as an argument (a large session would exceed the shell's argument limit), and
+    # the hook never fails the session end.
+    set -uo pipefail
 
-    # Claude Code sends details about the finished session on stdin.
     input=$(cat)
-    transcript_path=$(echo "$input" | jq -r '.transcript_path')
-    session_id=$(echo "$input" | jq -r '.session_id')
+    transcript_path=$(printf '%s' "$input" | jq -r '.transcript_path // empty')
+    session_id=$(printf '%s' "$input" | jq -r '.session_id // empty')
+    [ -n "$transcript_path" ] && [ -f "$transcript_path" ] && [ -n "$session_id" ] || exit 0
+    [ -n "${CORTEX_TOKEN:-}" ] || exit 0
 
-    # Build the request safely and post the transcript to your default inbox.
-    body=$(jq -n \
+    lines=$(wc -l < "$transcript_path" | tr -d ' ')
+    api="${CORTEX_API:-https://api.oncortex.ai}"
+    query=""
+    [ -n "${CORTEX_BRAIN:-}" ] && query="?brain=${CORTEX_BRAIN}"
+
+    jq -n \
       --arg filename "claude-code-$session_id.jsonl" \
-      --arg externalId "$session_id" \
+      --arg sid "$session_id" \
+      --arg version "$lines" \
       --rawfile content "$transcript_path" \
-      '{filename: $filename, content: $content, externalId: $externalId}')
-
-    curl -s https://api.oncortex.ai/api/v1/inbox \
-      -H "Authorization: Bearer $CORTEX_TOKEN" \
-      -H "Content-Type: application/json" \
-      -d "$body" > /dev/null
+      '{filename: $filename, content: $content, provider: "claude-code", providerItemId: $sid, version: $version}' \
+    | curl -s --max-time 120 "$api/api/v1/inbox$query" \
+        -H "Authorization: Bearer $CORTEX_TOKEN" \
+        -H "Content-Type: application/json" \
+        --data-binary @- > /dev/null || true
+    exit 0
     ```
 
     Make it runnable:
@@ -167,22 +201,34 @@ Then follow the tab for your operating system. Each one creates a small script, 
     **1. Save this as `.claude/hooks/cortex-capture.ps1`:**
 
     ```powershell
-    # Claude Code sends details about the finished session on stdin.
-    $data = [Console]::In.ReadToEnd() | ConvertFrom-Json
-    $transcript = Get-Content -Path $data.transcript_path -Raw
+    # Cortex capture hook for Claude Code on Windows (SessionEnd). Posts the finished session's log to
+    # Cortex, which cleans it to the conversation contract (docs/conversation-contract.md) and files it.
+    # Env: CORTEX_TOKEN (a ck_ service credential, Write); optional CORTEX_API and CORTEX_BRAIN.
+    # The session id is the source reference's item id, so a resumed session's later post is linked as
+    # a revision; the line count is its version. The hook never fails the session end.
+    try {
+        $data = [Console]::In.ReadToEnd() | ConvertFrom-Json
+        if (-not $env:CORTEX_TOKEN -or -not $data.transcript_path -or -not (Test-Path $data.transcript_path)) { exit 0 }
 
-    # Build the request and post the transcript to your default inbox.
-    $body = @{
-      filename   = "claude-code-$($data.session_id).jsonl"
-      content    = $transcript
-      externalId = $data.session_id
-    } | ConvertTo-Json -Depth 10
+        $api = if ($env:CORTEX_API) { $env:CORTEX_API } else { "https://api.oncortex.ai" }
+        $query = if ($env:CORTEX_BRAIN) { "?brain=$($env:CORTEX_BRAIN)" } else { "" }
+        $content = [System.IO.File]::ReadAllText($data.transcript_path)
+        $lines = [System.IO.File]::ReadAllLines($data.transcript_path).Length
 
-    Invoke-RestMethod -Uri "https://api.oncortex.ai/api/v1/inbox" `
-      -Method Post `
-      -Headers @{ Authorization = "Bearer $env:CORTEX_TOKEN" } `
-      -ContentType "application/json" `
-      -Body $body | Out-Null
+        $body = @{
+          filename       = "claude-code-$($data.session_id).jsonl"
+          content        = $content
+          provider       = "claude-code"
+          providerItemId = "$($data.session_id)"
+          version        = "$lines"
+        } | ConvertTo-Json -Depth 3
+
+        Invoke-RestMethod -Uri "$api/api/v1/inbox$query" -Method Post `
+          -Headers @{ Authorization = "Bearer $($env:CORTEX_TOKEN)" } `
+          -ContentType "application/json; charset=utf-8" `
+          -Body ([System.Text.Encoding]::UTF8.GetBytes($body)) -TimeoutSec 120 | Out-Null
+    } catch { }
+    exit 0
     ```
 
     **2. Store your credential** in `.claude/settings.local.json` (kept out of shared files):
@@ -219,11 +265,17 @@ Then follow the tab for your operating system. Each one creates a small script, 
 
 To capture sessions across every project rather than just the current one, put the same hook in your user-level `~/.claude/settings.json` and use the script's full path.
 
-From then on, each session's transcript lands in your personal inbox through the same door as any other item. What happens next is different from a document you chose to upload. A cheap first pass decides whether the session is worth a closer look at all; if not, it waits in the review queue with the reason. If it is, the [conversation skill](/filing/skills) reads it with a high bar: only a real decision, an idea in your own words, a durable fact about someone or something your brain tracks, or a substantial piece of work gets filed. Most sessions produce nothing, and that is the intended result. The transcript stays on the archived item either way, so nothing is lost. Ask your next session *"what did we work on last time?"* and it can tell you.
+From then on, each session lands in your personal inbox through the same door as any other item, and Cortex **cleans it first**. A raw session log is mostly the output of the commands and tools the agent ran; the conversation itself is often under 1% of it. Cortex keeps what you typed, what the assistant said and one line for each thing it did ("ran: Show working tree status", "edited RunnerEngine.cs"), drops the tool output, the assistant's private reasoning and anything injected behind the scenes, and masks passwords, API keys and tokens. The original log stays on the item.
+
+The cleaned session goes straight to the [conversation skill](/filing/skills), which reads it with a high bar: only a real decision, an idea in your own words, a durable fact about someone or something your brain tracks, or a substantial piece of work gets filed. Most sessions produce nothing, and that is the intended result. If you come back to a session and carry on, the next time it ends Cortex links the new copy to the earlier one as a new version, rather than treating it as a duplicate. Ask your next session *"what did we work on last time?"* and it can tell you.
+
+<Note>
+  If you set this hook up before 2 October 2026, replace the script with the one above. The old one sent the session id as a delivery id, so a session you resumed was turned away as a duplicate the second time it ended, and on very long sessions it could fail to send at all.
+</Note>
 
 ## Other agents
 
-Any tool that can run a command or call a web address when it finishes can capture the same way: post the conversation to `https://api.oncortex.ai/api/v1/inbox` with a [service credential](/connect/service-credentials). The default-inbox address means you never name a brain; it goes to the credential's brain.
+Any tool that can run a command or call a web address when it finishes can capture the same way: post the conversation to `https://api.oncortex.ai/api/v1/inbox` with a [service credential](/connect/service-credentials). The default-inbox address means you never name a brain; it goes to the credential's brain. Send its own log as it is, with `provider` set to the tool's name (`copilot-cli`, `codex`, `gemini-cli`) and `providerItemId` set to its session id: Cortex reads the common message formats most agents use and cleans the log the same way. A format it cannot read is flagged in your inbox for you to look at, never filed raw.
 
 ## Keeping it tidy
 

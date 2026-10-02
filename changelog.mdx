@@ -3,6 +3,12 @@ title: "Changelog"
 description: "What's new in Cortex"
 ---
 
+<Update label="2 October 2026" description="Agent sessions are cleaned before they are filed">
+  A coding agent's session log is mostly the output of the tools it ran: across 193 real Claude Code sessions, the conversation was under 1% of the file. The filer only reads the start of an item, so it was seeing session housekeeping and early tool output, and at best a few hundred characters of what was actually said, which is why real sessions were often judged not worth filing. Cortex now cleans every captured session before anything reads it: what you typed, what the assistant said, one line for each action it took, with tool output, private reasoning and injected instructions dropped and passwords, keys and tokens masked. The original log stays on the item. Claude Code sessions are read in their own format; other agents' logs are read through the message formats most of them share, and a log Cortex cannot read is flagged for you rather than filed raw.
+
+  The capture hook on [Capturing agent conversations](/capture/agent-conversations) has changed too. A session you resume and end again now arrives as a new version of the earlier one instead of being turned away as a duplicate, and very long sessions send reliably. If you set the hook up before today, replace the script.
+</Update>
+
 <Update label="1 October 2026" description="A brain's Connect page lists only the agents that can reach it">
   The Connected Agents list on a brain's Connect page used to show every agent in the workspace, on every brain, and only to admins. Now it shows the agents of the people with access to that brain: your own if you are a member, everyone's on that brain if you are a workspace admin. Your personal brain lists only your agents. Members can now see and revoke their own agents, which before only an admin could do. The full list of every agent in the workspace, with Revoke, has moved to **Settings, Team** for admins.
 </Update>
