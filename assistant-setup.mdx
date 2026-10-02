@@ -63,7 +63,7 @@ It takes the **cortex-assistant** plugin, three keys and a short block of text. 
 | Moment | What happens |
 |---|---|
 | A session starts | Six cached lines: inbox and review counts, whether the hook and the feeds are alive, the runner's spend this month, what needs attention, when the capture key was last used. Read from disk, never a wait. |
-| A session ends | The conversation is rendered to text (your words, the assistant's, the tools it used) and posted to your brain's inbox. The runner keeps what was durable: a decision, an idea in your words, a fact about someone, a commitment. Most sessions produce nothing, on purpose. |
+| A session ends | The session's log is posted to your brain's inbox, and Cortex [cleans it](/capture/agent-conversations) before anything reads it: your words, the assistant's, one line per action it took, with keys and passwords masked. A session you resume and end again arrives as a new version of the earlier one. The runner keeps what was durable: a decision, an idea in your words, a fact about someone, a commitment. Most sessions produce nothing, on purpose. |
 | Every morning | `/morning` on a schedule: today's meetings with prep from the people pages, tasks due, what changed in the brain, mail needing a reply, documents to prepare. Emailed to you. No daily page is written. |
 | Any time | `/emails` turns starred mail into tasks; `/my-tasks` works your task page; `/bootstrap <project>` loads a project's context from a page in your brain. |
 
