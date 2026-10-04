@@ -3,6 +3,10 @@ title: "Changelog"
 description: "What's new in Cortex"
 ---
 
+<Update label="4 October 2026" description="Archiving a brain stops its feeds">
+  Archiving a brain used to change its label and nothing else: a connected meeting tool kept delivering into it and the filer kept working there. Now archiving disables every ingest source on the brain and closes its inbox to anything new, from any route, with a message that says the brain is archived. Pages stay readable and searchable. Restoring the brain opens the inbox again; the sources stay off until you turn back on the ones you still want.
+</Update>
+
 <Update label="2 October 2026" description="Agent sessions are cleaned before they are filed">
   A coding agent's session log is mostly the output of the tools it ran: across 193 real Claude Code sessions, the conversation was under 1% of the file. The filer only reads the start of an item, so it was seeing session housekeeping and early tool output, and at best a few hundred characters of what was actually said, which is why real sessions were often judged not worth filing. Cortex now cleans every captured session before anything reads it: what you typed, what the assistant said, one line for each action it took, with tool output, private reasoning and injected instructions dropped and passwords, keys and tokens masked. The original log stays on the item. Claude Code sessions are read in their own format; other agents' logs are read through the message formats most of them share, and a log Cortex cannot read is flagged for you rather than filed raw.
 
