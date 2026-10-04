@@ -3,6 +3,10 @@ title: "Changelog"
 description: "What's new in Cortex"
 ---
 
+<Update label="4 October 2026" description="A star files a thread, whenever you put it on">
+  The reference mail collector used to look only at threads with mail newer than its last run, so a star put on last week's thread was missed. It now searches for starred threads on their own, thirty days back, in the inbox or archived, and sends what it has not sent before. Star it and archive it; the next run files it. The collector can also take its brain credential from the environment, so its config file need not hold a secret.
+</Update>
+
 <Update label="4 October 2026" description="Archiving or deleting a brain stops its feeds">
   Archiving a brain used to change its label and nothing else: a connected meeting tool kept delivering into it and the filer kept working there. Now archiving, and deleting, disable every ingest source on the brain and close its inbox to anything new, from any route, with a message that says why. A meeting tool still pointed at a closed brain is unsubscribed overnight. Pages of an archived brain stay readable and searchable. Restoring the brain opens the inbox again; the sources stay off until you turn back on the ones you still want.
 </Update>

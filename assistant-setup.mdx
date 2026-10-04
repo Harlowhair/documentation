@@ -37,7 +37,7 @@ It takes the **cortex-assistant** plugin, three keys and a short block of text. 
     |---|---|---|---|
     | `claude-code-capture` | Read and Write | `hook.env` as `CORTEX_CAPTURE_TOKEN=ck_...` | the session hook. The label matters: the [health check](/brains/health) recognises the hook by it |
     | `ea-health` | Read | `health.env` as `CORTEX_HEALTH_TOKEN=ck_...` | the status refresh and the daily health check, without depending on your sign-in. Optional |
-    | `ea-email-collector` | Write | `email-collector/config.json` as `brainCredential` | the mail collector. Only if mail comes in by collector rather than by forwarding (step 4) |
+    | `ea-email-collector` | Write | `collector.env` as `CORTEX_COLLECTOR_TOKEN=ck_...` | the mail collector. Only if mail comes in by collector rather than by forwarding (step 4). A star on a thread files it |
 
     Keys rather than your sign-in because the hook and the scheduled jobs run when nobody is signed in, and a key is pinned to one brain with one role.
 
