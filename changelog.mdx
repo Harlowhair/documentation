@@ -3,6 +3,10 @@ title: "Changelog"
 description: "What's new in Cortex"
 ---
 
+<Update label="4 October 2026" description="Delete a task with one click, and undo it">
+  Every line on the Tasks page now has a bin icon. It asks nothing: the task, and anything nested under it, leaves the page at once, and the row stays on screen struck through with an **Undo** button. Undo puts the task back where it was, or at the end of its section if the page has changed meanwhile. The undo is there while the page is open; leave or reload it and the struck rows are gone. Scripts get the same two actions on the [API](/reference/api#tasks).
+</Update>
+
 <Update label="4 October 2026" description="A star files a thread, whenever you put it on">
   The reference mail collector used to look only at threads with mail newer than its last run, so a star put on last week's thread was missed. It now searches for starred threads on their own, thirty days back, in the inbox or archived, and sends what it has not sent before. Star it and archive it; the next run files it. The collector can also take its brain credential from the environment, so its config file need not hold a secret.
 </Update>

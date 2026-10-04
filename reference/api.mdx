@@ -216,7 +216,7 @@ scheduled job can poll it and alert when anything is not `fine`.
 
 ## Tasks
 
-Your brain's [task page](/filing/tasks) as a list. A read-only credential can list; adding, completing, moving and archiving need read-and-write.
+Your brain's [task page](/filing/tasks) as a list. A read-only credential can list; adding, completing, moving, deleting and archiving need read-and-write.
 
 | Do this | Request |
 |---|---|
@@ -224,6 +224,8 @@ Your brain's [task page](/filing/tasks) as a list. A read-only credential can li
 | Add one | `POST /api/v1/brains/{brainId}/tasks` with `{ "text", "due"?, "section"?, "priority"?, "links"?, "recurrence"? }` (lands under Captured unless a section is named) |
 | Complete or reopen | `POST /api/v1/brains/{brainId}/tasks/{id}/complete`, `.../{id}/reopen` |
 | Move to a section | `POST /api/v1/brains/{brainId}/tasks/{id}/move` with `{ "section" }` |
+| Delete one | `DELETE /api/v1/brains/{brainId}/tasks/{id}` (takes the task and anything nested under it off the page; the response carries `section`, `line` and `lines`, the block as it was) |
+| Put a deleted one back | `POST /api/v1/brains/{brainId}/tasks/restore` with `{ "section", "line", "lines" }` as the delete returned them (back at its line while that place exists, else at the end of its section) |
 | Archive ticked tasks | `POST /api/v1/brains/{brainId}/tasks/archive-done?cutoff=YYYY-MM-DD` (default a week ago; `today` archives everything ticked) |
 
 An edit that lands while someone else is saving the page is refused with a 409; list again and retry.
