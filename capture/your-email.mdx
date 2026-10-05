@@ -117,6 +117,8 @@ The way we run it ourselves, and suggest you do too:
 
 Set it once in the collector's config: the senders to watch, `starred: true`, `signatures: true`, no label. Then schedule it every half hour.
 
+Calendar responses (accepted, declined, invitations, cancellations) and out-of-office replies are never sent, whoever they come from. Receipts, itineraries and the like that reach you from a watched sender can be dropped with your own subject patterns (`skipSubjects` in the config); a skip costs nothing, the thread is never read.
+
 Either way, Cortex never holds your mailbox credentials and never polls your mailbox itself.
 
 ## How a thread is filed
