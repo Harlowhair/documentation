@@ -3,6 +3,10 @@ title: "Changelog"
 description: "What's new in Cortex"
 ---
 
+<Update label="3 November 2026" description="Two-factor sign-in works in Firefox, and recovery codes work at all">
+  In Firefox, typing the sixth digit of an authenticator code cleared the field and left you on the code page, with no message and the code in the address bar. The page sent a pretend submit that Firefox also treated as a real one, which reloaded the page and cancelled the check. It now submits once, the same way in every browser, and the code never goes into an address. A wrong or expired code shows a message under the field that stays until you try again. Recovery codes had never worked: Cortex removed the dash before checking a code that is stored with one. They now work with or without the dash. Three gaps in the same step are closed too. **Each code works once**: a code that has signed you in cannot be used again, even while it is still valid. **Wrong codes count**: five wrong passwords or codes in a row lock the account for fifteen minutes, where before a code could be guessed without limit once the password was known. **Return links**: a sign-in link could name any address to go to afterwards, another site included; now it goes only to a page on Cortex. See [Signing in and MFA](/account/signin-and-mfa#entering-your-code).
+</Update>
+
 <Update label="3 November 2026" description="The page tree opens closed, remembers what you open, and can list pages by last change">
   A brain of a few hundred pages used to open with every folder expanded, which meant a lot of scrolling to find anything. Folders now start closed, the ones you open are remembered in your browser for each brain, and two buttons open or close them all. Reaching a page by any route opens the folders above it and brings its row into view. A new **Recent** order lists every page in one column, last changed first, with its folder and how long ago it changed; click the folder to go back to the tree, opened there. **Name** stays the default, and folders now sort A to Z whatever their case.
 </Update>
