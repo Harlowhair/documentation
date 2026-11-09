@@ -208,11 +208,16 @@ Each hit in a search response carries `section`, the text of the chunk that matc
 numbers, the inbox counts by status and by how items arrived (with the session hook's
 transcripts picked out), the brain's service credentials by label and role with their last
 use and expiry (never the key), its connected sources with their last run, the state of
-automatic filing, and `findings`: one row per check with `status` (`fine`, `stale`,
+filing, and `findings`: one row per check with `status` (`fine`, `stale`,
 `missing` or `backlog`), the `fact`, the `expectation` it was measured against and the
 `action` that fixes it, worst first. A read-only credential is enough. It is the report
 behind [brain health](/brains/health#is-it-still-being-fed) and `cortex health`, so a
 scheduled job can poll it and alert when anything is not `fine`.
+
+The brain's filing mode is `brain.mode` (and `runner.mode`, the same value): `off`,
+`suggest` or `automatic`, the three settings on the brain's General settings. Until
+9 November 2026 the API called the last two `propose` and `conservative`; anything that
+checks the value should accept both for now.
 
 ## Tasks
 
@@ -224,6 +229,7 @@ Your brain's [task page](/filing/tasks) as a list. A read-only credential can li
 | Add one | `POST /api/v1/brains/{brainId}/tasks` with `{ "text", "due"?, "section"?, "priority"?, "links"?, "recurrence"? }` (lands under Captured unless a section is named) |
 | Complete or reopen | `POST /api/v1/brains/{brainId}/tasks/{id}/complete`, `.../{id}/reopen` |
 | Move to a section | `POST /api/v1/brains/{brainId}/tasks/{id}/move` with `{ "section" }` |
+| Move to a person's To Discuss | `POST /api/v1/brains/{brainId}/tasks/{id}/discuss` with `{ "person" }` (a slug or a page path; the task and anything nested under it go to the top of **To Discuss** under **Topics** on their page, dated today; if either page changed meanwhile, a 409 and the task page is untouched) |
 | Delete one | `DELETE /api/v1/brains/{brainId}/tasks/{id}` (takes the task and anything nested under it off the page; the response carries `section`, `line` and `lines`, the block as it was) |
 | Put a deleted one back | `POST /api/v1/brains/{brainId}/tasks/restore` with `{ "section", "line", "lines" }` as the delete returned them (back at its line while that place exists, else at the end of its section) |
 | Archive ticked tasks | `POST /api/v1/brains/{brainId}/tasks/archive-done?cutoff=YYYY-MM-DD` (default a week ago; `today` archives everything ticked) |
@@ -264,7 +270,7 @@ A brain's access list can be managed here as well as on its Members page, so onb
 | Do this | Request | Role |
 |---|---|---|
 | List members | `GET /api/v1/brains/{brainId}/members` (user id, email, display name, role, when granted) | Admin |
-| Grant access | `POST /api/v1/brains/{brainId}/members` with `{ "email" or "userId", "role" }` (`Read`, `Write`, `Admin` or `Owner`; `Read` when omitted) | Admin |
+| Grant access | `POST /api/v1/brains/{brainId}/members` with `{ "email" or "userId", "role" }` (`Read`, `Write`, `Admin` or `Owner`; `Read` when omitted). Cortex emails the person; the reply's `emailSent` and `emailFailure` say whether the email went | Admin |
 | Change a role | `PUT /api/v1/brains/{brainId}/members/{userId}` with `{ "role" }` (the email works in place of the id) | Admin |
 | Revoke access | `DELETE /api/v1/brains/{brainId}/members/{userId}` | Admin |
 

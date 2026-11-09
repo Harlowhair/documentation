@@ -3,6 +3,16 @@ title: "Changelog"
 description: "What's new in Cortex"
 ---
 
+<Update label="9 November 2026" description="Adding someone to a brain emails them; send a task to a person's To Discuss; the health report names the filing mode as Settings does">
+  **Adding someone to a brain now tells them.** The Members tab's **Invite** button is now **Add member**, because it adds them straight away. Cortex then emails them who added them, the brain, their role and a link that opens it. The same email goes when a brain is shared through the [API](/reference/api#members). If the email does not go, the page says so and the access stays, so you can tell them yourself. An [invite](/teams/workspaces#inviting-someone) that gives someone brains now names those brains in the invite email. See [Adding someone to a brain](/teams/roles-and-permissions#adding-someone-to-a-brain).
+
+  **Send a task to a person's list.** On the [Tasks page](/filing/tasks#the-tasks-page) the Move menu now ends in **Discuss with…**. Pick the person and the task leaves your list for the top of **To Discuss** on their page, dated today, ready for your next catch-up. Your agent does the same with `move_task` and a `person`, and the [API](/reference/api#tasks) has a route for it.
+
+  **Fixed: a second heading.** An edit to a section that began with the section's own heading added the heading again. Cortex now drops the copy.
+
+  **One name for the filing mode.** Settings calls it Off, Suggest or Automatic, but the [health report](/brains/health) said `propose` and `conservative`. It now uses Settings' names everywhere: `get_health`, the [API](/reference/api#is-a-brain-still-being-fed) (`brain.mode` is `off`, `suggest` or `automatic`) and `cortex health`. **If a script of yours checks the value, accept both** the old and the new names for now.
+</Update>
+
 <Update label="3 November 2026" description="Two-factor sign-in works in Firefox, and recovery codes work at all">
   In Firefox, typing the sixth digit of an authenticator code cleared the field and left you on the code page, with no message and the code in the address bar. The page sent a pretend submit that Firefox also treated as a real one, which reloaded the page and cancelled the check. It now submits once, the same way in every browser, and the code never goes into an address. A wrong or expired code shows a message under the field that stays until you try again. Recovery codes had never worked: Cortex removed the dash before checking a code that is stored with one. They now work with or without the dash. Three gaps in the same step are closed too. **Each code works once**: a code that has signed you in cannot be used again, even while it is still valid. **Wrong codes count**: five wrong passwords or codes in a row lock the account for fifteen minutes, where before a code could be guessed without limit once the password was known. **Return links**: a sign-in link could name any address to go to afterwards, another site included; now it goes only to a page on Cortex. See [Signing in and MFA](/account/signin-and-mfa#entering-your-code).
 </Update>

@@ -76,7 +76,10 @@ Cortex screen. The Tasks page is there for a glance and a quick tick when that i
 Every brain with a task page has **Tasks** in its sidebar, straight after Pages: the page as a
 list, grouped by your sections, with a strip along the top for what is overdue, due today, due this week, or has no
 date. Tick a box to complete a task, untick to reopen. Add one from the box at the top with a
-date and a section. Move a task between sections from the menu on its line. The bin icon on a
+date and a section. Move a task between sections from the menu on its line. **Discuss with…**, at
+the end of that menu, sends it to a person instead: pick them, and the task and anything nested
+under it go to the top of **To Discuss** in their Topics section, dated today, ready for your next
+catch-up. The bin icon on a
 line deletes it, with no question asked: the task, and anything nested under it, leaves the page at
 once and the row stays struck through with an **Undo** button, in case. Undo puts it back where it
 was. Leave or reload the page and the struck rows are gone for good. **Open the page**
@@ -102,7 +105,7 @@ leaves alone: a task list is one list however long it gets, and the archive grow
 ## For your agent and for scripts
 
 Your agent has `list_tasks` (with filters for due and section), `add_task`, `complete_task`,
-`move_task` and `archive_done_tasks`, and its morning `brief` carries the counts and the lines
+`move_task` (to a section, or with a `person` to their To Discuss) and `archive_done_tasks`, and its morning `brief` carries the counts and the lines
 due this week. The same live at `/api/v1/brains/{brainId}/tasks` on the
 [API](/reference/api#tasks), so a script can read or add to the list with a
 [service credential](/connect/service-credentials).
