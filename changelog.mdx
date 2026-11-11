@@ -3,6 +3,17 @@ title: "Changelog"
 description: "What's new in Cortex"
 ---
 
+<Update label="11 November 2026" description="Security fixes from a code review; accepting an invite works whatever your own workspace's plan">
+  **Security fixes.** A review of the code on 11 November found gaps in who may do what, and we have closed them. The changes you may notice:
+
+  - **Billing is for workspace admins.** Changing the subscription, opening the Stripe portal and buying credits now need the workspace's [Admin](/teams/roles-and-permissions#workspace-roles) role. Other members see the Billing page without its buttons.
+  - **The old API keys page is gone.** It came from the template Cortex was built on and opened nothing. The **API keys** button on the home page went with it. Agents and scripts use a brain's service credentials or a sign-in, as before, and those are unchanged.
+  - **Made-up keys share one budget.** A request whose key Cortex does not accept now counts against its address's [rate limit](/reference/api#rate-limits) of 120 a minute, not a fresh budget of its own.
+  - **Reset links always point at Cortex**, whatever site the request came from.
+
+  **Accepting an invite works whatever your own plan.** Someone whose own workspace was on a plan without team features could not accept an invite to another workspace: the Accept button said "Team management requires a Team or Enterprise plan". Answering an invite no longer checks your own workspace's plan; the inviting workspace's seats are still checked.
+</Update>
+
 <Update label="9 November 2026" description="Adding someone to a brain emails them; send a task to a person's To Discuss; the health report names the filing mode as Settings does">
   **Adding someone to a brain now tells them.** The Members tab's **Invite** button is now **Add member**, because it adds them straight away. Cortex then emails them who added them, the brain, their role and a link that opens it. The same email goes when a brain is shared through the [API](/reference/api#members). If the email does not go, the page says so and the access stays, so you can tell them yourself. An [invite](/teams/workspaces#inviting-someone) that gives someone brains now names those brains in the invite email. See [Adding someone to a brain](/teams/roles-and-permissions#adding-someone-to-a-brain).
 

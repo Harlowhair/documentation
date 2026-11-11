@@ -21,7 +21,7 @@ A credential is scoped to one brain and one access level. Writing endpoints need
 
 ## Rate limits
 
-The API and the agent connection endpoint allow **240 requests a minute per credential**, counted in fixed one-minute windows; requests with no credential are counted per client address instead. Over the limit, a request is refused with **429** and a `Retry-After` header giving the number of seconds until the window resets (60 when that cannot be worked out).
+The API and the agent connection endpoint allow **240 requests a minute per credential**, counted in fixed one-minute windows. Requests with no credential, or with one Cortex does not accept, share their client address's budget of **120 a minute**, so a wrong or expired key does not get a budget of its own. Over the limit, a request is refused with **429** and a `Retry-After` header giving the number of seconds until the window resets (60 when that cannot be worked out).
 
 A well-behaved client paces itself a little under the limit (the Cortex [command line](/connect/command-line) runs at 200 a minute), waits the number of seconds in `Retry-After` when it does see a 429 before retrying, and saves calls where it can, for example by fetching a brain's page list once at the start of a bulk import rather than reading each page before writing it.
 
