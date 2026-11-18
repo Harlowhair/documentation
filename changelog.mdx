@@ -3,6 +3,14 @@ title: "Changelog"
 description: "What's new in Cortex"
 ---
 
+<Update label="18 November 2026" description="Change a task where it is: the wording, the due date, a scheduled date, the priority">
+  **Edit a task in place.** Until now a task could be added, ticked, moved and deleted, but not changed: a new due date meant deleting the line and adding it again. Now the pencil on a line of the [Tasks page](/filing/tasks#the-tasks-page) opens it for a change to the wording, the due date, the priority or whether it repeats. Empty a field to remove it. The tick, the date it was added, the section, its place and anything nested under it stay as they are.
+
+  **A scheduled date.** A task can now carry the day you mean to work on it (`⏳ 2026-11-20` on the line) as well as the day it is due. Cortex kept that marker before but did not read it; now it shows beside the task and can be set and cleared.
+
+  **For your agent and for scripts.** Your agent has a new tool, `update_task`, so "push the dentist to next Friday" changes the line where it is. The [API](/reference/api#tasks) has `PATCH /api/v1/brains/{brainId}/tasks/{id}`. A task's `id` changes when its text or its due date changes, so use the one that comes back.
+</Update>
+
 <Update label="11 November 2026" description="Security fixes from a code review; accepting an invite works whatever your own workspace's plan">
   **Security fixes.** A review of the code on 11 November found gaps in who may do what, and we have closed them. The changes you may notice:
 

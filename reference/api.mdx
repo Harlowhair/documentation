@@ -221,12 +221,13 @@ checks the value should accept both for now.
 
 ## Tasks
 
-Your brain's [task page](/filing/tasks) as a list. A read-only credential can list; adding, completing, moving, deleting and archiving need read-and-write.
+Your brain's [task page](/filing/tasks) as a list. A read-only credential can list; adding, changing, completing, moving, deleting and archiving need read-and-write.
 
 | Do this | Request |
 |---|---|
-| List tasks | `GET /api/v1/brains/{brainId}/tasks?status=open|done|all&due=overdue|today|week|none&section=&link=` (each task carries an `id`, its section, text, dates, links and a `dueBucket`) |
+| List tasks | `GET /api/v1/brains/{brainId}/tasks?status=open|done|all&due=overdue|today|week|none&section=&link=` (each task carries an `id`, its section, text, dates (`due`, `scheduled`, `added`, `doneOn`), links and a `dueBucket`) |
 | Add one | `POST /api/v1/brains/{brainId}/tasks` with `{ "text", "due"?, "section"?, "priority"?, "links"?, "recurrence"? }` (lands under Captured unless a section is named) |
+| Change one | `PATCH /api/v1/brains/{brainId}/tasks/{id}` with any of `{ "text", "due", "clearDue", "scheduled", "clearScheduled", "priority", "clearPriority", "recurrence", "clearRecurrence" }`. Only what you send changes; the tick, the added date, the section, the place and anything nested stay. Dates are `YYYY-MM-DD`; a `clear...` flag set to `true` removes that field. The task comes back with its `id`, which is **new when the text or the due date changed**. A 400 if nothing is sent, or if `text` carries a date, priority or recurrence marker (send those as fields); a 409 if the page changed meanwhile |
 | Complete or reopen | `POST /api/v1/brains/{brainId}/tasks/{id}/complete`, `.../{id}/reopen` |
 | Move to a section | `POST /api/v1/brains/{brainId}/tasks/{id}/move` with `{ "section" }` |
 | Move to a person's To Discuss | `POST /api/v1/brains/{brainId}/tasks/{id}/discuss` with `{ "person" }` (a slug or a page path; the task and anything nested under it go to the top of **To Discuss** under **Topics** on their page, dated today; if either page changed meanwhile, a 409 and the task page is untouched) |
