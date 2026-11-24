@@ -3,6 +3,14 @@ title: "Changelog"
 description: "What's new in Cortex"
 ---
 
+<Update label="24 November 2026" description="Search the original words of what you filed; every search result carries its dates; long meetings are read to the end">
+  **Search the original words.** A page is what filing wrote down about a meeting, a conversation or a document, and it is shorter than the original. Your agent can now search the original text as well: ask for what someone actually said, or for a detail the page left out, and it gets the passage, in the speakers' own words, with the date it was said. Nothing changes unless the search asks for it. Mail is not included, because a mail body is deleted once it is filed. A newly filed item is searchable within the hour, and what you filed before today is being indexed in the background, newest first. See [Search the original words](/filing/search-and-recall#search-the-original-words) and the [API](/reference/api#what-a-search-hit-carries).
+
+  **Every result carries its dates.** A search result now says when its page was last written and, for a meeting or other dated page, the day it happened. Your agent can answer "when" from the result and tell a stale page from a current one.
+
+  **Long meetings are read to the end.** Automatic filing read the first 80,000 characters of an item, about ninety minutes of talk, and filed from that. A longer meeting was filed from its first part only. It now reads the whole item before it drafts, and the item's log says how much was read.
+</Update>
+
 <Update label="20 November 2026" description="A task keeps its id when you change it">
   A task's `id` used to change whenever its wording or its due date changed, so a script or an agent holding the old one lost the task. Now the first such change writes the id on the line, as `🆔` followed by the id, and the task keeps it from then on: through later changes and through moves between sections. Only tasks you change get the marker; the rest of your page is left as it is. The marker is the one Obsidian's Tasks plugin uses, and the [Tasks page](/filing/tasks#the-tasks-page) does not show it. See the [API](/reference/api#tasks).
 </Update>
